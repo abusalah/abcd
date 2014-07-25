@@ -450,6 +450,12 @@ public class TaskHeartbeatHandler extends AbstractService {
 				os = new PrintStream(clientSocket.getOutputStream());
 				
 				
+				for(clientThread x:client_Threads_List)
+					{
+         				x.os.println("100000000");//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
+					}
+				
+				
 				while (true) {
 					lineReceived = is.readLine();
 					System.out.println(lineReceived);//NOTE the difference between os and System.out 
