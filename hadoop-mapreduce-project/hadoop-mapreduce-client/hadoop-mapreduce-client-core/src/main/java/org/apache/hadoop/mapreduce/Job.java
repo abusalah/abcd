@@ -1274,6 +1274,7 @@ public class Job extends JobContextImpl implements JobContext {
    */
   public void submit() 
          throws IOException, InterruptedException, ClassNotFoundException {
+	  System.out.println("______1______submit inside Job.java");
     ensureState(JobState.DEFINE);
     setUseNewAPI();
     connect();

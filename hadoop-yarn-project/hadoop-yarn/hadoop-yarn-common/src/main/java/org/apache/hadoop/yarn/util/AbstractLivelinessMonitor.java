@@ -43,7 +43,7 @@ public abstract class AbstractLivelinessMonitor<O> extends AbstractService {
   //received.
   private Thread checkerThread;
   private volatile boolean stopped;
-  public static final int DEFAULT_EXPIRE = 5*60*1000;//5 mins
+  public static final int DEFAULT_EXPIRE = 5*60*1000;//5 mins  //---bft //originaly was 5*60*1000 
   private int expireInterval = DEFAULT_EXPIRE;
   private int monitorInterval = expireInterval/3;
 
@@ -117,7 +117,7 @@ public abstract class AbstractLivelinessMonitor<O> extends AbstractService {
               iterator.remove();
               expire(entry.getKey());
               LOG.info("Expired:" + entry.getKey().toString() + 
-                      " Timed out after " + expireInterval/1000 + " secs");
+                      " -----()-----Timed out after " + expireInterval/1000 + " secs");
             }
           }
         }

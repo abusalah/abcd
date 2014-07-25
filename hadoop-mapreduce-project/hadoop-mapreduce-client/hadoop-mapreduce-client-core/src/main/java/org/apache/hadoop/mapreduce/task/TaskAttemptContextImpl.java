@@ -38,7 +38,8 @@ public class TaskAttemptContextImpl extends JobContextImpl
   private final TaskAttemptID taskId;
   private String status = "";
   private StatusReporter reporter;
-
+  
+  
   public TaskAttemptContextImpl(Configuration conf, 
                                 TaskAttemptID taskId) {
     this(conf, taskId, new DummyReporter());

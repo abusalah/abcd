@@ -46,11 +46,14 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
        implements TaskInputOutputContext<KEYIN, VALUEIN, KEYOUT, VALUEOUT> {
   private RecordWriter<KEYOUT,VALUEOUT> output;
   private OutputCommitter committer;
+  
+  
 
   public TaskInputOutputContextImpl(Configuration conf, TaskAttemptID taskid,
                                     RecordWriter<KEYOUT,VALUEOUT> output,
                                     OutputCommitter committer,
                                     StatusReporter reporter) {
+	  
     super(conf, taskid, reporter);
     this.output = output;
     this.committer = committer;
@@ -86,6 +89,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
    */
   public void write(KEYOUT key, VALUEOUT value
                     ) throws IOException, InterruptedException {
+	  //System.out.println("++++++ inside write value.toString() = "+value.toString());
     output.write(key, value);
   }
 

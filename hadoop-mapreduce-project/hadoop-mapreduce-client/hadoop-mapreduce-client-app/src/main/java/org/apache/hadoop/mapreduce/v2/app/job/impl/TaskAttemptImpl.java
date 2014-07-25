@@ -1051,6 +1051,7 @@ public abstract class TaskAttemptImpl implements
   @SuppressWarnings("unchecked")
   @Override
   public void handle(TaskAttemptEvent event) {
+	  System.out.println("-_-_-_-_-_-_ inside handle insdie TaskAttemptImpl.java");
     if (LOG.isDebugEnabled()) {
       LOG.debug("Processing " + event.getTaskAttemptID() + " of type "
           + event.getType());
@@ -1604,6 +1605,9 @@ public abstract class TaskAttemptImpl implements
     @Override
     public void transition(TaskAttemptImpl taskAttempt, 
         TaskAttemptEvent evnt) {
+    	
+    	System.out.println("___________inside transition in TaskAttemptImpl.java_______________Thread.currentThread().getStackTrace() = ");
+  	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 
       TaskAttemptContainerLaunchedEvent event =
         (TaskAttemptContainerLaunchedEvent) evnt;
@@ -1955,12 +1959,12 @@ public abstract class TaskAttemptImpl implements
   private static class DiagnosticInformationUpdater 
         implements SingleArcTransition<TaskAttemptImpl, TaskAttemptEvent> {
     @Override
-    public void transition(TaskAttemptImpl taskAttempt, 
-        TaskAttemptEvent event) {
-      TaskAttemptDiagnosticsUpdateEvent diagEvent =
-          (TaskAttemptDiagnosticsUpdateEvent) event;
-      LOG.info("Diagnostics report from " + taskAttempt.attemptId + ": "
-          + diagEvent.getDiagnosticInfo());
+    public void transition(TaskAttemptImpl taskAttempt, TaskAttemptEvent event) {
+    	System.out.println("___________Inside transition_______________Thread.currentThread().getStackTrace() = ");
+  	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("-ste = "+ste);}
+      TaskAttemptDiagnosticsUpdateEvent diagEvent = (TaskAttemptDiagnosticsUpdateEvent) event;
+      System.out.println("Diagnostics report from " + taskAttempt.attemptId + ": " + diagEvent.getDiagnosticInfo());
+      LOG.info("Diagnostics report from " + taskAttempt.attemptId + ": " + diagEvent.getDiagnosticInfo());
       taskAttempt.addDiagnosticInfo(diagEvent.getDiagnosticInfo());
     }
   }

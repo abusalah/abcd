@@ -52,6 +52,7 @@ public class ApplicationMasterLauncher extends AbstractService implements
   
   @Override
   protected void serviceStart() throws Exception {
+	  System.out.println("___________inside serviceStart()___________");
     launcherHandlingThread.start();
     super.serviceStart();
   }

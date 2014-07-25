@@ -309,6 +309,7 @@ public class TestClientRedirect {
     @Override
     public SubmitApplicationResponse submitApplication(
         SubmitApplicationRequest request) throws IOException {
+    	System.out.println("________8___________submitApplication inside TestClientRedirect.java");
       throw new IOException("Test");
     }
 

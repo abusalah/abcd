@@ -465,6 +465,7 @@ public class JobHistoryEventHandler extends AbstractService
 
   @Override
   public void handle(JobHistoryEvent event) {
+	  System.out.println("-_-_-_-_-_-_ inside handle method in JobHistoryEventHandler class");
     try {
       if (isJobCompletionEvent(event.getHistoryEvent())) {
         // When the job is complete, flush slower but write faster.

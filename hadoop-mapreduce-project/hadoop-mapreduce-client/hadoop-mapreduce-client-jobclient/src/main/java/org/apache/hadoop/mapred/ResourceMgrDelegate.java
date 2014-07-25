@@ -279,6 +279,7 @@ public class ResourceMgrDelegate extends YarnClient {
   public ApplicationId
       submitApplication(ApplicationSubmissionContext appContext)
           throws YarnException, IOException {
+	  System.out.println("______4______submitApplication inside ResourceMgrDelegate.java");
     return client.submitApplication(appContext);
   }
 

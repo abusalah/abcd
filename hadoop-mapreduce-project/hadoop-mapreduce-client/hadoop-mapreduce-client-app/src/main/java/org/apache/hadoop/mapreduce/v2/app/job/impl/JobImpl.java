@@ -947,14 +947,16 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
     }
   }
 
-  protected void scheduleTasks(Set<TaskId> taskIDs,
-      boolean recoverTaskOutput) {
+  //________________________________________________________________________________________________________________
+  protected void scheduleTasks(Set<TaskId> taskIDs, boolean recoverTaskOutput) {
     for (TaskId taskID : taskIDs) {
       TaskInfo taskInfo = completedTasksFromPreviousRun.remove(taskID);
       if (taskInfo != null) {
+    	  System.out.println("_____________Inside scheduleTasks if (taskInfo != null), taskID = "+taskID);
         eventHandler.handle(new TaskRecoverEvent(taskID, taskInfo,
             committer, recoverTaskOutput));
       } else {
+    	  System.out.println("_____________Inside scheduleTasks if (taskInfo != null) else .... , taskID = "+taskID);
         eventHandler.handle(new TaskEvent(taskID, TaskEventType.T_SCHEDULE));
       }
     }
@@ -1055,6 +1057,7 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
     if (task.getType() == TaskType.MAP) {
       mapTasks.add(task.getID());
     } else if (task.getType() == TaskType.REDUCE) {
+    	//_____________________________________________________________________________________________________________
       reduceTasks.add(task.getID());
     }
     metrics.waitingTask(task);
@@ -1424,6 +1427,7 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
 
         job.makeUberDecision(inputLength);
         
+        //___________________________________________________________________________________________
         job.taskAttemptCompletionEvents =
             new ArrayList<TaskAttemptCompletionEvent>(
                 job.numMapTasks + job.numReduceTasks + 10);
@@ -1515,6 +1519,7 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
 
     private void createReduceTasks(JobImpl job) {
       for (int i = 0; i < job.numReduceTasks; i++) {
+    	  //_______________________________________________________________________________________________
         TaskImpl task =
             new ReduceTaskImpl(job.jobId, i,
                 job.eventHandler, 
@@ -1559,6 +1564,7 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
       job.setupProgress = 1.0f;
       job.scheduleTasks(job.mapTasks, job.numReduceTasks == 0);
       job.scheduleTasks(job.reduceTasks, true);
+      //________________________________________________________________________________________________________
 
       // If we have no tasks, just transition to job completed
       if (job.numReduceTasks == 0 && job.numMapTasks == 0) {
@@ -1595,6 +1601,7 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
       } else {
         job.startTime = job.clock.getTime();
       }
+      //____________________________________________________________________________________________________________
       JobInitedEvent jie =
         new JobInitedEvent(job.oldJobId,
              job.startTime,

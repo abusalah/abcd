@@ -266,19 +266,23 @@ public class RMAppManager implements EventHandler<RMAppManagerEvent>,
   protected void submitApplication(
       ApplicationSubmissionContext submissionContext, long submitTime,
       String user) throws YarnException {
+	  
+	  System.out.println("_______7____________submitApplication inside RMAppManager.java");
+	  
     ApplicationId applicationId = submissionContext.getApplicationId();
 
-    RMAppImpl application =
-        createAndPopulateNewRMApp(submissionContext, submitTime, user);
+    RMAppImpl application = createAndPopulateNewRMApp(submissionContext, submitTime, user);
     ApplicationId appId = submissionContext.getApplicationId();
 
     if (UserGroupInformation.isSecurityEnabled()) {
       Credentials credentials = null;
       try {
+    	  System.out.println("_______7____________insdie try");
         credentials = parseCredentials(submissionContext);
         this.rmContext.getDelegationTokenRenewer().addApplicationAsync(appId,
           credentials, submissionContext.getCancelTokensWhenComplete());
       } catch (Exception e) {
+    	  System.out.println("_______7____________insdie catch");
         LOG.warn("Unable to parse credentials.", e);
         // Sending APP_REJECTED is fine, since we assume that the
         // RMApp is in NEW state and thus we haven't yet informed the
@@ -289,6 +293,7 @@ public class RMAppManager implements EventHandler<RMAppManagerEvent>,
         throw RPCUtil.getRemoteException(e);
       }
     } else {
+    	System.out.println("_______7____________insdie else");
       // Dispatcher is not yet started at this time, so these START events
       // enqueued should be guaranteed to be first processed when dispatcher
       // gets started.

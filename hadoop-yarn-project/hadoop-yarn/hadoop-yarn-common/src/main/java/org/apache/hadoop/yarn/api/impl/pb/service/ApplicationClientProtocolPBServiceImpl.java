@@ -183,6 +183,7 @@ public class ApplicationClientProtocolPBServiceImpl implements ApplicationClient
   @Override
   public SubmitApplicationResponseProto submitApplication(RpcController arg0,
       SubmitApplicationRequestProto proto) throws ServiceException {
+	  System.out.println("________7____1____submitApplication inside ApplicationClientProtocolPBServiceImpl.java");
     SubmitApplicationRequestPBImpl request = new SubmitApplicationRequestPBImpl(proto);
     try {
       SubmitApplicationResponse response = real.submitApplication(request);

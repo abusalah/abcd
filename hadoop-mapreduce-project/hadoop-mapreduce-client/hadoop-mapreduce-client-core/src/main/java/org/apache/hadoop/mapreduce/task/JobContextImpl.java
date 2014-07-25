@@ -51,7 +51,7 @@ import org.apache.hadoop.security.UserGroupInformation;
 @InterfaceAudience.Private
 @InterfaceStability.Unstable
 public class JobContextImpl implements JobContext {
-
+	
   protected final org.apache.hadoop.mapred.JobConf conf;
   private JobID jobId;
   /**

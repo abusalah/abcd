@@ -73,6 +73,10 @@ class YarnChild {
   static volatile TaskAttemptID taskid = null;
 
   public static void main(String[] args) throws Throwable {
+	  
+  System.out.println("__________inside main of YarnChild.java________________Thread.currentThread().getStackTrace() = ");
+  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  
     Thread.setDefaultUncaughtExceptionHandler(new YarnUncaughtExceptionHandler());
     LOG.debug("Child starting");
 
@@ -83,8 +87,7 @@ class YarnChild {
 
     String host = args[0];
     int port = Integer.parseInt(args[1]);
-    final InetSocketAddress address =
-        NetUtils.createSocketAddrForHost(host, port);
+    final InetSocketAddress address = NetUtils.createSocketAddrForHost(host, port);
     final TaskAttemptID firstTaskid = TaskAttemptID.forName(args[2]);
     int jvmIdInt = Integer.parseInt(args[3]);
     JVMId jvmId = new JVMId(firstTaskid.getJobID(),

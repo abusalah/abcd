@@ -277,28 +277,24 @@ public class YARNRunner implements ClientProtocol {
   @Override
   public JobStatus submitJob(JobID jobId, String jobSubmitDir, Credentials ts)
   throws IOException, InterruptedException {
+	  
+	System.out.println("______3______submitJob inside YARNRunner.java___________here the MR AM starts_____and submits to the RM______ ");
     
     addHistoryToken(ts);
     
     // Construct necessary information to start the MR AM
-    ApplicationSubmissionContext appContext =
-      createApplicationSubmissionContext(conf, jobSubmitDir, ts);
+    ApplicationSubmissionContext appContext = createApplicationSubmissionContext(conf, jobSubmitDir, ts);
 
     // Submit to ResourceManager
     try {
-      ApplicationId applicationId =
-          resMgrDelegate.submitApplication(appContext);
+      ApplicationId applicationId = resMgrDelegate.submitApplication(appContext);
 
-      ApplicationReport appMaster = resMgrDelegate
-          .getApplicationReport(applicationId);
-      String diagnostics =
-          (appMaster == null ?
-              "application report is null" : appMaster.getDiagnostics());
+      ApplicationReport appMaster = resMgrDelegate.getApplicationReport(applicationId);
+      String diagnostics = (appMaster == null ? "application report is null" : appMaster.getDiagnostics());
       if (appMaster == null
           || appMaster.getYarnApplicationState() == YarnApplicationState.FAILED
           || appMaster.getYarnApplicationState() == YarnApplicationState.KILLED) {
-        throw new IOException("Failed to run job : " +
-            diagnostics);
+        throw new IOException("Failed to run job : " + diagnostics);
       }
       return clientCache.getClient(jobId).getJobStatus(jobId);
     } catch (YarnException e) {

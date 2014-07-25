@@ -116,7 +116,6 @@ import org.apache.hadoop.yarn.proto.YarnServiceProtos.GetApplicationAttemptRepor
 import org.apache.hadoop.yarn.proto.YarnServiceProtos.GetContainerReportRequestProto;
 import org.apache.hadoop.yarn.proto.YarnServiceProtos.GetContainersRequestProto;
 
-
 import com.google.protobuf.ServiceException;
 
 @Private
@@ -202,11 +201,10 @@ public class ApplicationClientProtocolPBClientImpl implements ApplicationClientP
   public SubmitApplicationResponse submitApplication(
       SubmitApplicationRequest request) throws YarnException,
       IOException {
-    SubmitApplicationRequestProto requestProto =
-        ((SubmitApplicationRequestPBImpl) request).getProto();
+	  System.out.println("________6________submitApplication inside ApplicationClientProtocolPBClientImpl.java");
+    SubmitApplicationRequestProto requestProto = ((SubmitApplicationRequestPBImpl) request).getProto();
     try {
-      return new SubmitApplicationResponsePBImpl(proxy.submitApplication(null,
-        requestProto));
+      return new SubmitApplicationResponsePBImpl(proxy.submitApplication(null,requestProto));
     } catch (ServiceException e) {
       RPCUtil.unwrapAndThrowException(e);
       return null;
@@ -295,7 +293,7 @@ public class ApplicationClientProtocolPBClientImpl implements ApplicationClientP
         ((RenewDelegationTokenRequestPBImpl) request).getProto();
     try {
       return new RenewDelegationTokenResponsePBImpl(proxy.renewDelegationToken(
-          null, requestProto));
+          null, requestProto)); 
     } catch (ServiceException e) {
       RPCUtil.unwrapAndThrowException(e);
       return null;

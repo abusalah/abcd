@@ -57,6 +57,10 @@ import org.apache.hadoop.util.Progress;
 import org.apache.hadoop.util.Progressable;
 import org.apache.hadoop.util.ReflectionUtils;
 
+//import com.google.inject.internal.cglib.proxy.CallbackGenerator.Context;
+
+//import com.google.inject.internal.cglib.proxy.CallbackGenerator.Context;
+
 /** A Reduce task. */
 @InterfaceAudience.Private
 @InterfaceStability.Unstable
@@ -388,6 +392,10 @@ public class ReduceTask extends Task {
     if (useNewApi) {
       runNewReducer(job, umbilical, reporter, rIter, comparator, 
                     keyClass, valueClass);
+      
+      //_____________________________________________________________________________________________________
+      //runNewReducer(job, umbilical, reporter, rIter, comparator, //---bft the problem here is it writes to the same output file
+      //        keyClass, valueClass);  //---bft so you need to cleanup the process first
     } else {
       runOldReducer(job, umbilical, reporter, rIter, comparator, 
                     keyClass, valueClass);
@@ -580,8 +588,7 @@ public class ReduceTask extends Task {
                      RawComparator<INKEY> comparator,
                      Class<INKEY> keyClass,
                      Class<INVALUE> valueClass
-                     ) throws IOException,InterruptedException, 
-                              ClassNotFoundException {
+                     ) throws IOException,InterruptedException, ClassNotFoundException {
     // wrap value iterator to report progress.
     final RawKeyValueIterator rawIter = rIter;
     rIter = new RawKeyValueIterator() {

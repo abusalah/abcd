@@ -1032,7 +1032,9 @@ abstract public class Task implements Writable, Configurable {
         } catch (IOException ie) {
           LOG.warn("Failure sending commit pending: " + 
                     StringUtils.stringifyException(ie));
+          System.out.println("]]]]]retries = "+retries);
           if (--retries == 0) {
+        	  System.out.println("]]]]]Entered --retries == 0");
             System.exit(67);
           }
         }

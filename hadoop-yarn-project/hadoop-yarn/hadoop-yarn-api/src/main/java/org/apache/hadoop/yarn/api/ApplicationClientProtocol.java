@@ -80,7 +80,7 @@ import org.apache.hadoop.yarn.exceptions.ApplicationNotFoundException;
  * to submit/abort jobs and to get information on applications, cluster metrics,
  * nodes, queues and ACLs.</p> 
  */
-@Public
+@Public     
 @Stable
 public interface ApplicationClientProtocol {
   /**

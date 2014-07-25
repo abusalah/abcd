@@ -199,9 +199,9 @@
  
   <modules>
     <module>hadoop-mapreduce-client-core</module>
+    <module>hadoop-mapreduce-client-app</module>
     <module>hadoop-mapreduce-client-common</module>
     <module>hadoop-mapreduce-client-shuffle</module>
-    <module>hadoop-mapreduce-client-app</module>
     <module>hadoop-mapreduce-client-jobclient</module>
     <module>hadoop-mapreduce-client-hs</module>
     <module>hadoop-mapreduce-client-hs-plugins</module>

@@ -18,14 +18,35 @@
 
 package org.apache.hadoop.mapreduce;
 
-import java.io.IOException;
+import java.io.*;
+import java.net.*;
 
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.task.annotation.Checkpointable;
+//import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
+//import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEventType;
+import org.apache.hadoop.yarn.event.EventHandler;
+//import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptDiagnosticsUpdateEvent;
 
+//import org.apache.hadoop.mapreduce.v2dfdfd//.app;//
+//import org.apache.hadoop.mapreduce.v2.app.*;
+
+
+
+
+
+
+
+
+
+
+
+
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
 
 /** 
  * Reduces a set of intermediate values which share a key to a smaller set of
@@ -122,12 +143,30 @@ import java.util.Iterator;
 @InterfaceAudience.Public
 @InterfaceStability.Stable
 public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
-
-  /**
+	
+	//was static
+	Socket clientSocket = null;
+	PrintStream os = null;
+	DataInputStream is = null;
+	BufferedReader inputLine = null;
+	boolean closed = false;
+	
+	
+   /**
    * The <code>Context</code> passed on to the {@link Reducer} implementations.
    */
-  public abstract class Context 
-    implements ReduceContext<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
+  public abstract class Context implements ReduceContext<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
+
+	  //int[] replicasHashes_2_set;//--- new for bft	  
+	  
+	  //System.out.println();//getNumReduceTasks()
+	  
+	  //public Context(){//--- new for bft
+		  //System.out.println("this.getNumReduceTasks() = "+this.getConfiguration());//getNumReduceTasks()
+		//  this.replicasHashes_2_set= new int[]{};
+	  //}
+	   //public long[] replicasHashes_2 = new long[getNumReduceTasks()];//--- new for bft... was not in the original code
+	   //public int[] replicasHashes_2_set = new int[getNumReduceTasks()/4];//--- new for bft... was not in the original code
   }
 
   /**
@@ -135,6 +174,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    */
   protected void setup(Context context
                        ) throws IOException, InterruptedException {
+	  
     // NOTHING
   }
 
@@ -147,6 +187,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   protected void reduce(KEYIN key, Iterable<VALUEIN> values, Context context
                         ) throws IOException, InterruptedException {
     for(VALUEIN value: values) {
+    	System.out.println("++++++ value.toString() = "+(VALUEOUT) value.toString());
       context.write((KEYOUT) key, (VALUEOUT) value);
     }
   }
@@ -165,18 +206,146 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    * control how the reduce task works.
    */
   public void run(Context context) throws IOException, InterruptedException {
+
+	  String reducerORmapper = context.getTaskAttemptID().toString().split("_")[3];
+	  int reducerNumber = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[4]);
+	  int unreplicatedReducerNumber = (int) Math.floor(reducerNumber/4);
+	  
+	  
+	  
+	  
     setup(context);
+    
     try {
-      while (context.nextKey()) {
+    	String KV=""; int i=0; long totalHash=0; String stringToSend=""; String stringReceived="";
+    	//System.out.println("+++ entered try");
+    	while (context.nextKey()) {
         reduce(context.getCurrentKey(), context.getValues(), context);
+        //System.out.println("context.getCurrentKey() = "+context.getCurrentKey()+" context.getCurrentValue() = "+context.getCurrentValue());
+        
+        KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();
+        
         // If a back up store is used, reset it
         Iterator<VALUEIN> iter = context.getValues().iterator();
-        if(iter instanceof ReduceContext.ValueIterator) {
-          ((ReduceContext.ValueIterator<VALUEIN>)iter).resetBackupStore();        
-        }
+        if(iter instanceof ReduceContext.ValueIterator) {((ReduceContext.ValueIterator<VALUEIN>)iter).resetBackupStore();}  
+        
+          
+        i++;
       }
-    } finally {
+      
+      
+      
+      if(reducerORmapper.equals("r"))
+      {
+	      
+    	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+KV.hashCode();
+    	  
+    	  
+    	  try {
+  			clientSocket = new Socket("localhost", 2222);
+  			inputLine = new BufferedReader(new InputStreamReader(System.in));
+  			os = new PrintStream(clientSocket.getOutputStream());
+  			is = new DataInputStream(clientSocket.getInputStream());
+  		} catch (UnknownHostException e) {
+  			System.err.println("Don't know about host " + "localhost");
+  		} catch (IOException e) {
+  			System.err.println("Couldn't get I/O for the connection to the host " + "localhost");
+  		}
+
+  		
+  		if (clientSocket != null && os != null && is != null) {
+  			try {
+
+  				// Create a thread to read from the server
+  				new Thread(new MultiThreadChatClient(unreplicatedReducerNumber)).start();//try sending is,closed if this didn't work
+  				os.println(stringToSend);
+  				while (true) {
+  					//os.println("YYYYYYYYYYYYYYYYYYYYYY");
+  					if(closed) break;
+  				}
+  				os.println("ok");
+  				os.close();
+  				is.close();
+  				clientSocket.close();
+  			} 
+  			catch (IOException e) {
+  				System.err.println("IOException:  " + e);
+  			}
+  		}
+//	      
+//	      Socket clientSocket;
+//		  String sentence;
+//		  String modifiedSentence=null;
+//		  //BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
+//		  
+//		  System.out.println("starting TCPClient");
+//		  while(true)
+//		  {
+//			   clientSocket = new Socket("localhost", 6789);
+//		  
+//		  
+//			      DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+//				  BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//				  //while(true)
+//				  
+//					  sentence = stringToSend;
+//					  outToServer.writeBytes(sentence + '\n' );//
+//					  if(sentence.equals("o")){break;}
+//					  
+//					  modifiedSentence = inFromServer.readLine();
+//					  System.out.println("FROM SERVER-------: " + modifiedSentence);
+//					  
+//					  if(Integer.parseInt(modifiedSentence)==unreplicatedReducerNumber)
+//						  {
+//						  	System.out.println("Received OK ------------------------");
+//						  	break;
+//						  }
+//				  
+//			  }
+//		  clientSocket.close();
+		  
+		  	      
+		  KV="";stringToSend="";
+      }
+      
+      System.out.println("\n");
+      
+      
+    } finally {    	
       cleanup(context);
     }
   }
+  
+  
+  public class MultiThreadChatClient extends Thread {
+	  int unreplicatedReducerNumber_ForClass;
+	  
+	  public MultiThreadChatClient(int unreplicatedReducerNumber_Local){
+		  this.unreplicatedReducerNumber_ForClass=unreplicatedReducerNumber_Local;
+	 }
+	  
+	  public void run() {
+			String responseLine;
+			System.out.println("Before while");
+			try {
+				while (true){//((responseLine = is.readLine()) != null) {
+					System.out.println("Entered while");
+					responseLine = is.readLine();
+					System.out.println("responseLine = "+responseLine);
+					if (Integer.parseInt(responseLine)==this.unreplicatedReducerNumber_ForClass)//indexOf("*** Bye") != -1)
+					{	
+						System.out.println("Entered XXX");
+						break;
+					}
+				}
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			closed = true;
+		}
+	  
+  }
+  
+  
 }

@@ -338,6 +338,8 @@ class JobSubmitter {
    */
   JobStatus submitJobInternal(Job job, Cluster cluster) 
   throws ClassNotFoundException, InterruptedException, IOException {
+	  
+	  System.out.println("______2______submitJobInternal inside JobSubmitter.java");
 
     //validate the jobs output specs 
     checkSpecs(job);
@@ -429,8 +431,7 @@ class JobSubmitter {
       // Now, actually submit the job (using the submit name)
       //
       printTokens(jobId, job.getCredentials());
-      status = submitClient.submitJob(
-          jobId, submitJobDir.toString(), job.getCredentials());
+      status = submitClient.submitJob(jobId, submitJobDir.toString(), job.getCredentials());
       if (status != null) {
         return status;
       } else {

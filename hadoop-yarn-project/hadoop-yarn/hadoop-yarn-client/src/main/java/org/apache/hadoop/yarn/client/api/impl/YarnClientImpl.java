@@ -180,13 +180,13 @@ public class YarnClientImpl extends YarnClient {
   public ApplicationId
       submitApplication(ApplicationSubmissionContext appContext)
           throws YarnException, IOException {
+	  System.out.println("________5________submitApplication inside YarnClientImpl.java");
     ApplicationId applicationId = appContext.getApplicationId();
     if (applicationId == null) {
       throw new ApplicationIdNotProvidedException(
           "ApplicationId is not provided in ApplicationSubmissionContext");
     }
-    SubmitApplicationRequest request =
-        Records.newRecord(SubmitApplicationRequest.class);
+    SubmitApplicationRequest request = Records.newRecord(SubmitApplicationRequest.class);
     request.setApplicationSubmissionContext(appContext);
 
     //TODO: YARN-1763:Handle RM failovers during the submitApplication call.
@@ -197,8 +197,7 @@ public class YarnClientImpl extends YarnClient {
 
     while (true) {
       try {
-        YarnApplicationState state =
-            getApplicationReport(applicationId).getYarnApplicationState();
+        YarnApplicationState state = getApplicationReport(applicationId).getYarnApplicationState();
         if (!state.equals(YarnApplicationState.NEW) &&
             !state.equals(YarnApplicationState.NEW_SAVING)) {
           LOG.info("Submitted application " + applicationId);

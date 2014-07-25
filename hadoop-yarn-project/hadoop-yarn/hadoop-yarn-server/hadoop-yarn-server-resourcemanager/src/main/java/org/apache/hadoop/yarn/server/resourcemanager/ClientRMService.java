@@ -484,6 +484,7 @@ public class ClientRMService extends AbstractService implements
   @Override
   public SubmitApplicationResponse submitApplication(
       SubmitApplicationRequest request) throws YarnException {
+	  System.out.println("________6______2_____submitApplication inside ClientRMService.java");
     ApplicationSubmissionContext submissionContext = request
         .getApplicationSubmissionContext();
     ApplicationId applicationId = submissionContext.getApplicationId();
