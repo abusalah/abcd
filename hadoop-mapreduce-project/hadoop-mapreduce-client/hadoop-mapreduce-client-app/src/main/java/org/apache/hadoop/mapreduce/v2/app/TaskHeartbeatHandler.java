@@ -493,17 +493,18 @@ public class TaskHeartbeatHandler extends AbstractService {
 	             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
 	   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
 	   					}
-	             		ii=0;
-	             		for(clientThread x:client_Threads_List)
-	   					{	
-	   						receivedOK = is.readLine();
-	   						if(receivedOK=="ok")
-	   						{
-	   							System.out.println("RECEIVED OK FROM ii = "+ii);
-	   							client_Threads_List.remove(ii);
-	   							}
-	   						ii++;
-	   					}
+	             		
+//	             		ii=0;
+//	             		for(clientThread x:client_Threads_List)
+//	   					{	
+//	   						receivedOK = is.readLine();
+//	   						if(receivedOK=="ok")
+//	   						{
+//	   							System.out.println("RECEIVED OK FROM ii = "+ii);
+//	   							client_Threads_List.remove(ii);
+//	   							}
+//	   						ii++;
+//	   					}
 	             		
 	             		
 	             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
