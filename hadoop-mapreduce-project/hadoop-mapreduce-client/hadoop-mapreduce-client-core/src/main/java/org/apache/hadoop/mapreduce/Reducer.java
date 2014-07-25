@@ -263,7 +263,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   					//os.println("YYYYYYYYYYYYYYYYYYYYYY");
   					if(closed) break;
   				}
-  				os.println("ok");
+  				//os.println("ok");
   				os.close();
   				is.close();
   				clientSocket.close();
