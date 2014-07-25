@@ -498,7 +498,10 @@ public class TaskHeartbeatHandler extends AbstractService {
 	   					{	
 	   						receivedOK = is.readLine();
 	   						if(receivedOK=="ok")
-	   						{client_Threads_List.remove(ii);}
+	   						{
+	   							System.out.println("RECEIVED OK FROM ii = "+ii);
+	   							client_Threads_List.remove(ii);
+	   							}
 	   						ii++;
 	   					}
 	             		
