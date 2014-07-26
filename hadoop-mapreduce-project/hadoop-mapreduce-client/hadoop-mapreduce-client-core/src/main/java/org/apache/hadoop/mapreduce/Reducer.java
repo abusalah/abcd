@@ -44,6 +44,7 @@ import org.apache.hadoop.yarn.event.EventHandler;
 
 
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -345,6 +346,12 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 					}
 				}
 			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			try {
+				Thread.sleep(2000);
+			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
