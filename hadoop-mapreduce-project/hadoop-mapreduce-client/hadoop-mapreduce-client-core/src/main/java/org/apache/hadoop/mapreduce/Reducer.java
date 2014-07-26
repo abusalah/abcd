@@ -145,11 +145,11 @@ import java.util.Set;
 public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	
 	//was static
-	Socket clientSocket = null;
-	PrintStream os = null;
-	DataInputStream is = null;
-	BufferedReader inputLine = null;
-	boolean closed = false;
+	public Socket clientSocket = null;
+	public PrintStream os = null;
+	public DataInputStream is = null;
+	public BufferedReader inputLine = null;
+	public boolean closed = false;
 	
 	
    /**
@@ -264,6 +264,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   					if(closed) break;
   				}
   				os.println("ok");
+  				System.out.println("AFTER SENDING OK BEFORE CLOSING");
   				os.close();
   				is.close();
   				clientSocket.close();
