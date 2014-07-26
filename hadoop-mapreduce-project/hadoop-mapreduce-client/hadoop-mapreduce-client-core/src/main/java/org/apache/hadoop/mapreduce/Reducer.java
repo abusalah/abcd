@@ -150,7 +150,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	public PrintStream os = null;
 	public DataInputStream is = null;
 	public BufferedReader inputLine = null;
-	public boolean closed = false;
+	private static boolean closed = false;
 	
 	
    /**
@@ -261,7 +261,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   				new Thread(new MultiThreadChatClient(unreplicatedReducerNumber)).start();//try sending is,closed if this didn't work
   				os.println(stringToSend);
   				while (true) {
-  					System.out.println("ENTERED while (true) and closed = "+ closed);
+  					//System.out.println("ENTERED while (true) and closed = "+ closed);
   					//os.println("YYYYYYYYYYYYYYYYYYYYYY");
   					if(closed)
   						{
@@ -351,6 +351,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 			}
 			
 			closed = true;
+			System.out.println("in MultiThreadChatClient closed = "+ closed);
 		}
 	  
   }
