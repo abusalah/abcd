@@ -263,8 +263,8 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   					//os.println("YYYYYYYYYYYYYYYYYYYYYY");
   					if(closed) break;
   				}
-  				os.println("ok");
-  				System.out.println("AFTER SENDING OK BEFORE CLOSING");
+  				//os.println("ok");
+  				System.out.println("AFTER THE TWO WHILES");
   				os.close();
   				is.close();
   				clientSocket.close();

@@ -500,6 +500,7 @@ public class TaskHeartbeatHandler extends AbstractService {
 	   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
 	   					}
 	             		
+	             		/*
 	             		ii=0;
 	             		for(clientThread x:client_Threads_List)
 	   					{	
@@ -513,7 +514,8 @@ public class TaskHeartbeatHandler extends AbstractService {
 	   							}
 	   						ii++;
 	   					}
-	             		System.out.println("=========AFTER RECEIVED OK=============	");
+	   					*/
+	             		System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
 	             		
 	             		
 	             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
