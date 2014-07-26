@@ -261,7 +261,11 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   				os.println(stringToSend);
   				while (true) {
   					//os.println("YYYYYYYYYYYYYYYYYYYYYY");
-  					if(closed) break;
+  					if(closed)
+  						{
+  							System.out.println("ENTERED if(closed)");
+  							break;
+  						}
   				}
   				//os.println("ok");
   				System.out.println("AFTER THE TWO WHILES");
@@ -335,7 +339,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 					System.out.println("responseLine = "+responseLine);
 					if (Integer.parseInt(responseLine)==this.unreplicatedReducerNumber_ForClass)//indexOf("*** Bye") != -1)
 					{	
-						System.out.println("Entered XXX");
+						System.out.println("Entered XXX------");
 						break;
 					}
 				}
