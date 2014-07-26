@@ -152,6 +152,8 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	public BufferedReader inputLine = null;
 	private static boolean closed = false;
 	
+	private final Object lock = new Object();
+	
 	
    /**
    * The <code>Context</code> passed on to the {@link Reducer} implementations.
@@ -263,11 +265,13 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   				while (true) {
   					//System.out.println("ENTERED while (true) and closed = "+ closed);
   					//os.println("YYYYYYYYYYYYYYYYYYYYYY");
+  					synchronized(lock){
   					if(closed)
   						{
   							System.out.println("ENTERED if(closed)");
   							break;
   						}
+  					}
   				}
   				//os.println("ok");
   				System.out.println("AFTER THE TWO WHILES");
@@ -349,8 +353,10 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			synchronized (lock) {
+				closed = true;
+			}
 			
-			closed = true;
 			System.out.println("in MultiThreadChatClient closed = "+ closed);
 		}
 	  
