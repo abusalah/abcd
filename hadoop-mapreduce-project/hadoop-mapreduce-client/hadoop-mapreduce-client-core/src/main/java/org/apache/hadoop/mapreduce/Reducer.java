@@ -160,16 +160,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    */
   public abstract class Context implements ReduceContext<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 
-	  //int[] replicasHashes_2_set;//--- new for bft	  
-	  
-	  //System.out.println();//getNumReduceTasks()
-	  
-	  //public Context(){//--- new for bft
-		  //System.out.println("this.getNumReduceTasks() = "+this.getConfiguration());//getNumReduceTasks()
-		//  this.replicasHashes_2_set= new int[]{};
-	  //}
-	   //public long[] replicasHashes_2 = new long[getNumReduceTasks()];//--- new for bft... was not in the original code
-	   //public int[] replicasHashes_2_set = new int[getNumReduceTasks()/4];//--- new for bft... was not in the original code
+	 
   }
 
   /**
@@ -198,8 +189,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   /**
    * Called once at the end of the task.
    */
-  protected void cleanup(Context context
-                         ) throws IOException, InterruptedException {
+  protected void cleanup(Context context) throws IOException, InterruptedException {
     // NOTHING
   }
 
@@ -259,20 +249,37 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   		if (clientSocket != null && os != null && is != null) {
   			try {
 
-  				// Create a thread to read from the server
+  				os.println(stringToSend);
+  				String responseLine;
+  				System.out.println("Before while");
+  				while(true){
+  					System.out.println("Entered while");
+					responseLine = is.readLine();
+					System.out.println("responseLine = "+responseLine);
+					if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)
+					{	
+						System.out.println("Entered XXX------");
+						break;
+					}
+  				}
+  				
+  				
+  				
+  				
+  				/* WORKING PERFECTLY
+  				 // Create a thread to read from the server
   				new Thread(new MultiThreadChatClient(unreplicatedReducerNumber)).start();//try sending is,closed if this didn't work
   				os.println(stringToSend);
-  				while (true) {
-  					//System.out.println("ENTERED while (true) and closed = "+ closed);
-  					//os.println("YYYYYYYYYYYYYYYYYYYYYY");
-  					synchronized(lock){
+  				
+  				 while (true) {
+  					synchronized(lock){//CHECK IF THIS CAUSES AN OVERHEAD
   					if(closed)
   						{
   							System.out.println("ENTERED if(closed)");
   							break;
   						}
   					}
-  				}
+  				}*/
   				//os.println("ok");
   				System.out.println("AFTER THE TWO WHILES");
   				os.close();
@@ -283,37 +290,6 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   				System.err.println("IOException:  " + e);
   			}
   		}
-//	      
-//	      Socket clientSocket;
-//		  String sentence;
-//		  String modifiedSentence=null;
-//		  //BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
-//		  
-//		  System.out.println("starting TCPClient");
-//		  while(true)
-//		  {
-//			   clientSocket = new Socket("localhost", 6789);
-//		  
-//		  
-//			      DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
-//				  BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
-//				  //while(true)
-//				  
-//					  sentence = stringToSend;
-//					  outToServer.writeBytes(sentence + '\n' );//
-//					  if(sentence.equals("o")){break;}
-//					  
-//					  modifiedSentence = inFromServer.readLine();
-//					  System.out.println("FROM SERVER-------: " + modifiedSentence);
-//					  
-//					  if(Integer.parseInt(modifiedSentence)==unreplicatedReducerNumber)
-//						  {
-//						  	System.out.println("Received OK ------------------------");
-//						  	break;
-//						  }
-//				  
-//			  }
-//		  clientSocket.close();
 		  
 		  	      
 		  KV="";stringToSend="";
@@ -364,3 +340,92 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   
   
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//
+//Socket clientSocket;
+//String sentence;
+//String modifiedSentence=null;
+////BufferedReader inFromUser = new BufferedReader( new InputStreamReader(System.in));
+//
+//System.out.println("starting TCPClient");
+//while(true)
+//{
+//	   clientSocket = new Socket("localhost", 6789);
+//
+//
+//	      DataOutputStream outToServer = new DataOutputStream(clientSocket.getOutputStream());
+//		  BufferedReader inFromServer = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
+//		  //while(true)
+//		  
+//			  sentence = stringToSend;
+//			  outToServer.writeBytes(sentence + '\n' );//
+//			  if(sentence.equals("o")){break;}
+//			  
+//			  modifiedSentence = inFromServer.readLine();
+//			  System.out.println("FROM SERVER-------: " + modifiedSentence);
+//			  
+//			  if(Integer.parseInt(modifiedSentence)==unreplicatedReducerNumber)
+//				  {
+//				  	System.out.println("Received OK ------------------------");
+//				  	break;
+//				  }
+//		  
+//	  }
+//clientSocket.close();
