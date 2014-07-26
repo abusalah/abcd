@@ -212,7 +212,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	  int unreplicatedReducerNumber = (int) Math.floor(reducerNumber/4);
 	  
 	  
-	  
+	  System.out.println("ENTERED run in Reducer.java");
 	  
     setup(context);
     
