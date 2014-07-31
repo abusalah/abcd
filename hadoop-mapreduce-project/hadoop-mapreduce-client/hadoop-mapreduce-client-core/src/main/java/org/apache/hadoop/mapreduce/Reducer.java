@@ -304,6 +304,8 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   }
   
   
+  
+  //no need ...
   public class MultiThreadChatClient extends Thread {
 	  int unreplicatedReducerNumber_ForClass;
 	  
