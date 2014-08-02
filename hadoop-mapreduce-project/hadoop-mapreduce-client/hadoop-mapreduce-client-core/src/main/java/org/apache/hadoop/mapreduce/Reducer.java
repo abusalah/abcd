@@ -46,6 +46,7 @@ import org.apache.hadoop.yarn.event.EventHandler;
 
 
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -224,9 +225,11 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)
 	  
 if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO ADD CASE 2
 {
+		
+	  int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4); 
 	  String reducerORmapper = context.getTaskAttemptID().toString().split("_")[3];
 	  int reducerNumber = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[4]);
-	  int unreplicatedReducerNumber = (int) Math.floor(reducerNumber/4);
+	  int unreplicatedReducerNumber = (int) Math.floor(reducerNumber/local_NUM_REPLICAS);
 	  
 	 
 	  System.out.println("ENTERED run in Reducer.java");

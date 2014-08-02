@@ -694,6 +694,7 @@ public class MapTask extends Task {
     @Override
     public void write(K key, V value) throws IOException, InterruptedException {
       int originalgetPartitionValue=0,newgetPartitionValue=0;
+      int local_NUM_REPLICAS = conf.getInt(MRJobConfig.NUM_REPLICAS,4); 
             
       System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
             
@@ -716,14 +717,14 @@ public class MapTask extends Task {
 		  }	      
       	  case 3://BFT: replicate mappers and reducers (both r times ?), single AM
 	      {    	  
-		      originalgetPartitionValue=partitioner.getPartition(key, value, partitions/4);
-		      newgetPartitionValue = (originalgetPartitionValue*4) + (Integer.parseInt(localMapID)%4);
+		      originalgetPartitionValue=partitioner.getPartition(key, value, partitions/local_NUM_REPLICAS);
+		      newgetPartitionValue = (originalgetPartitionValue*local_NUM_REPLICAS) + (Integer.parseInt(localMapID)%local_NUM_REPLICAS);
 		      break;
 	      }
       	  case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
 	      {    	  
-		      originalgetPartitionValue=partitioner.getPartition(key, value, partitions/4);
-		      newgetPartitionValue = (originalgetPartitionValue*4) + (Integer.parseInt(localMapID)%4);
+		      originalgetPartitionValue=partitioner.getPartition(key, value, partitions/local_NUM_REPLICAS);
+		      newgetPartitionValue = (originalgetPartitionValue*local_NUM_REPLICAS) + (Integer.parseInt(localMapID)%local_NUM_REPLICAS);
 		      break;
 	      }
       	  default://deal with it as No BFT

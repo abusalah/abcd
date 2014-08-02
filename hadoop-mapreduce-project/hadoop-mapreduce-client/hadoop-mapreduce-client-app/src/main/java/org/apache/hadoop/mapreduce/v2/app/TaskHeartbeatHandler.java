@@ -89,6 +89,7 @@ public class TaskHeartbeatHandler extends AbstractService {
   private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
   private static int[] replicasHashes_set;
   private static int local_BFT_flag=0;
+  private static int local_NUM_REPLICAS = 0;
   
   static Socket clientSocket = null;
   static ServerSocket serverSocket = null;
@@ -123,8 +124,9 @@ public class TaskHeartbeatHandler extends AbstractService {
     taskTimeOut = conf.getInt(MRJobConfig.TASK_TIMEOUT, 1 * 60 * 1000);///---bft //original was: 5 * 60 * 1000;
     taskTimeOutCheckInterval = conf.getInt(MRJobConfig.TASK_TIMEOUT_CHECK_INTERVAL_MS, 30 * 1000);
     replicasHashes = new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
-    replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/4];
+    replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS];
     local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
+    local_NUM_REPLICAS =conf.getInt(MRJobConfig.NUM_REPLICAS,4);
   }
 
   @Override
@@ -291,7 +293,7 @@ public class TaskHeartbeatHandler extends AbstractService {
 					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
 	                receivedTaskAttemptID = lineReceived.split(" ")[1];
 	                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
-	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/4); 
+	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
 	                replicasHashes[receivedReducerNumber]=receivedHash;
 	                replicasHashes_set[unreplicatedReducerNumber]+=1;
 	                
@@ -313,10 +315,10 @@ public class TaskHeartbeatHandler extends AbstractService {
 	                  }
 	                System.out.println("---------------------------------------------------------------------------");
 	                  
-	                if(replicasHashes_set[unreplicatedReducerNumber]==4)//TODO make >=4 in case it is restarted from HeartBeats
+	                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
 	                {
-	             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*4)+0] == replicasHashes[(unreplicatedReducerNumber*4)+1]);
-	             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*4)+2] == replicasHashes[(unreplicatedReducerNumber*4)+3]);
+	             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
+	             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
 	             	   allofthem = (firstandsecond == thirdandforth);
 	             	   if (allofthem==true)
 	             	   {
@@ -424,7 +426,7 @@ public class TaskHeartbeatHandler extends AbstractService {
 //	                	receivedReducerNumber = Integer.parseInt(line.split(" ")[0]);
 //		                receivedTaskAttemptID = line.split(" ")[1];
 //		                receivedHash = Long.parseLong(line.split(" ")[2]);
-//		                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/4); 
+//		                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
 //		                replicasHashes[receivedReducerNumber]=receivedHash;
 //		                replicasHashes_set[unreplicatedReducerNumber]+=1;
 //		                
@@ -446,10 +448,10 @@ public class TaskHeartbeatHandler extends AbstractService {
 //		                  }
 //		                System.out.println("---------------------------------------------------------------------------");
 //		                  
-//		                if(replicasHashes_set[unreplicatedReducerNumber]==4)
+//		                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)
 //		                {
-//		             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*4)+0] == replicasHashes[(unreplicatedReducerNumber*4)+1]);
-//		             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*4)+2] == replicasHashes[(unreplicatedReducerNumber*4)+3]);
+//		             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
+//		             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
 //		             	   allofthem = (firstandsecond == thirdandforth);
 //		             	   if (allofthem==true)
 //		             	   {
@@ -654,14 +656,14 @@ public class TaskHeartbeatHandler extends AbstractService {
 //	                receivedReducerNumber = Integer.parseInt(clientSentence.split(" ")[0]);
 //	                receivedTaskAttemptID = clientSentence.split(" ")[1];
 //	                receivedHash = Long.parseLong(clientSentence.split(" ")[2]);
-//	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/4); 
+//	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
 //	                replicasHashes[receivedReducerNumber]=receivedHash;
 //	                replicasHashes_set[unreplicatedReducerNumber]+=1;
 //	                
-//	                if(replicasHashes_set[unreplicatedReducerNumber]==4)
+//	                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)
 //	                {
-//	             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*4)+0] == replicasHashes[(unreplicatedReducerNumber*4)+1]);
-//	             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*4)+2] == replicasHashes[(unreplicatedReducerNumber*4)+3]);
+//	             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
+//	             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
 //	             	   allofthem = (firstandsecond == thirdandforth);
 //	             	   if (allofthem==true)
 //	             	   {
@@ -752,14 +754,14 @@ public class TaskHeartbeatHandler extends AbstractService {
 //               receivedReducerNumber = Integer.parseInt(clientSentence.split(" ")[0]);
 //               receivedTaskAttemptID = clientSentence.split(" ")[1];
 //               receivedHash = Long.parseLong(clientSentence.split(" ")[2]);
-//               unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/4); 
+//               unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
 //               replicasHashes[receivedReducerNumber]=receivedHash;
 //               replicasHashes_set[unreplicatedReducerNumber]+=1;
 //               
-//               if(replicasHashes_set[unreplicatedReducerNumber]==4)
+//               if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)
 //               {
-//            	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*4)+0] == replicasHashes[(unreplicatedReducerNumber*4)+1]);
-//            	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*4)+2] == replicasHashes[(unreplicatedReducerNumber*4)+3]);
+//            	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
+//            	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
 //            	   allofthem = (firstandsecond == thirdandforth);
 //            	   if (allofthem==true)
 //            	   {

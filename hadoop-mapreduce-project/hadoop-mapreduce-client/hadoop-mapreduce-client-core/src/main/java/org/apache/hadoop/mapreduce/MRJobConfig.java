@@ -33,12 +33,13 @@ public interface MRJobConfig {
 	
   public static final String BFT_FLAG = "mapred.job.bft";//---new for bft
   
+  public static final String NUM_REPLICAS = "mapred.job.numreplicas";//---new for bft
+  
   public static final String INPUT_FORMAT_CLASS_ATTR = "mapreduce.job.inputformat.class";
 
   public static final String MAP_CLASS_ATTR = "mapreduce.job.map.class";
 
-  public static final String MAP_OUTPUT_COLLECTOR_CLASS_ATTR
-                                  = "mapreduce.job.map.output.collector.class";
+  public static final String MAP_OUTPUT_COLLECTOR_CLASS_ATTR = "mapreduce.job.map.output.collector.class";
 
   public static final String COMBINE_CLASS_ATTR = "mapreduce.job.combine.class";
 

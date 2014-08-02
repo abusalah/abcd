@@ -47,6 +47,8 @@ public class SplitMetaInfoReader {
 			FileSystem fs, Configuration conf, Path jobSubmitDir)
 			throws IOException {
 		
+		int local_NUM_REPLICAS = conf.getInt(MRJobConfig.NUM_REPLICAS,4);
+		
 		 System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
 		 
 		
@@ -116,9 +118,9 @@ public class SplitMetaInfoReader {
 	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
 	        {
 	        	//JobSplit.TaskSplitMetaInfo[] 
-	        			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits * 4];// wasnumSplits				
+	        			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits * local_NUM_REPLICAS];// wasnumSplits				
 				// --------------note that we didn't change the original numSplits,
-				// //--------------we just replaced it with numSplits*4 where necessary
+				// //--------------we just replaced it with numSplits*local_NUM_REPLICAS where necessary
 				for (int i = 0; i < numSplits; i++) {
 					JobSplit.SplitMetaInfo splitMetaInfo = new JobSplit.SplitMetaInfo();
 					splitMetaInfo.readFields(in);
@@ -129,9 +131,9 @@ public class SplitMetaInfoReader {
 					// splitMetaInfo.getLocations(),
 					// splitMetaInfo.getInputDataLength());
 					// ----------------new code for bft replication:
-					for (int r = 0; r < 4; r++)// r=number of replicas
+					for (int r = 0; r < local_NUM_REPLICAS; r++)// r=number of replicas
 					{
-						allSplitMetaInfo[(4 * i) + r] = new JobSplit.TaskSplitMetaInfo(
+						allSplitMetaInfo[(local_NUM_REPLICAS * i) + r] = new JobSplit.TaskSplitMetaInfo(
 								splitIndex, splitMetaInfo.getLocations(),
 								splitMetaInfo.getInputDataLength());
 					}
@@ -141,9 +143,9 @@ public class SplitMetaInfoReader {
 	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
 	        {
 	        	//JobSplit.TaskSplitMetaInfo[] 
-	        			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits * 4];// was numSplits				
+	        			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits * local_NUM_REPLICAS];// was numSplits				
 				// --------------note that we didn't change the original numSplits,
-				// //--------------we just replaced it with numSplits*4 where necessary
+				// //--------------we just replaced it with numSplits*local_NUM_REPLICAS where necessary
 				for (int i = 0; i < numSplits; i++) {
 					JobSplit.SplitMetaInfo splitMetaInfo = new JobSplit.SplitMetaInfo();
 					splitMetaInfo.readFields(in);
@@ -154,9 +156,9 @@ public class SplitMetaInfoReader {
 					// splitMetaInfo.getLocations(),
 					// splitMetaInfo.getInputDataLength());
 					// ----------------new code for bft replication:
-					for (int r = 0; r < 4; r++)// r=number of replicas
+					for (int r = 0; r < local_NUM_REPLICAS; r++)// r=number of replicas
 					{
-						allSplitMetaInfo[(4 * i) + r] = new JobSplit.TaskSplitMetaInfo(
+						allSplitMetaInfo[(local_NUM_REPLICAS * i) + r] = new JobSplit.TaskSplitMetaInfo(
 								splitIndex, splitMetaInfo.getLocations(),
 								splitMetaInfo.getInputDataLength());
 					}
@@ -205,11 +207,11 @@ public class SplitMetaInfoReader {
 		
 		if(conf.getInt(MRJobConfig.BFT_FLAG, 1)==3)//BFT: replicate mappers and reducers (both r times ?), single AM
 		{
-			JobSplit.TaskSplitMetaInfo[] allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits * 4];// ----------numSplits*4
+			JobSplit.TaskSplitMetaInfo[] allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits * local_NUM_REPLICAS];// ----------numSplits*local_NUM_REPLICAS
 			// was
 			// numSplits
 			// --------------note that we didn't change the original numSplits,
-			// //--------------we just replaced it with numSplits*4 where necessary
+			// //--------------we just replaced it with numSplits*local_NUM_REPLICAS where necessary
 			for (int i = 0; i < numSplits; i++) {
 				JobSplit.SplitMetaInfo splitMetaInfo = new JobSplit.SplitMetaInfo();
 				splitMetaInfo.readFields(in);
@@ -222,9 +224,9 @@ public class SplitMetaInfoReader {
 				// splitMetaInfo.getLocations(),
 				// splitMetaInfo.getInputDataLength());
 				// ----------------new code for bft replication:
-				for (int r = 0; r < 4; r++)// r=number of replicas
+				for (int r = 0; r < local_NUM_REPLICAS; r++)// r=number of replicas
 				{
-					allSplitMetaInfo[(4 * i) + r] = new JobSplit.TaskSplitMetaInfo(
+					allSplitMetaInfo[(local_NUM_REPLICAS * i) + r] = new JobSplit.TaskSplitMetaInfo(
 							splitIndex, splitMetaInfo.getLocations(),
 							splitMetaInfo.getInputDataLength());
 				}
