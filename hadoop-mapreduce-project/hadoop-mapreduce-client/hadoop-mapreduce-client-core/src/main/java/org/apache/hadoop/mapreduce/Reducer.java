@@ -253,20 +253,16 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   				String responseLine;
   				System.out.println("Before while");
   				while(true){
-  					System.out.println("Entered while");
+  					//System.out.println("Entered while");
 					responseLine = is.readLine();
-					System.out.println("responseLine = "+responseLine);
+					//System.out.println("responseLine = "+responseLine);
 					if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)
 					{	
 						System.out.println("Entered XXX------");
 						break;
 					}
-  				}
-  				
-  				
-  				
-  				
-  				/* WORKING PERFECTLY
+  				}  				
+  				/* WORKING PERFECTLY .... need to uncomment class MultiThreadChatClient
   				 // Create a thread to read from the server
   				new Thread(new MultiThreadChatClient(unreplicatedReducerNumber)).start();//try sending is,closed if this didn't work
   				os.println(stringToSend);
@@ -303,100 +299,44 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
     }
   }
   
+}  
+  
+//  //works with the above WORKING PERFECTLY ... needs to be inside class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> brackets 
+//  public class MultiThreadChatClient extends Thread {
+//	  int unreplicatedReducerNumber_ForClass;
+//	  
+//	  public MultiThreadChatClient(int unreplicatedReducerNumber_Local){
+//		  this.unreplicatedReducerNumber_ForClass=unreplicatedReducerNumber_Local;
+//	 }
+//	  
+//	  public void run() {
+//			String responseLine;
+//			System.out.println("Before while");
+//			try {
+//				while (true){//((responseLine = is.readLine()) != null) {
+//					System.out.println("Entered while");
+//					responseLine = is.readLine();
+//					System.out.println("responseLine = "+responseLine);
+//					if (Integer.parseInt(responseLine)==this.unreplicatedReducerNumber_ForClass)//indexOf("*** Bye") != -1)
+//					{	
+//						System.out.println("Entered XXX------");
+//						break;
+//					}
+//				}
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			synchronized (lock) {
+//				closed = true;
+//			}
+//			
+//			System.out.println("in MultiThreadChatClient closed = "+ closed);
+//		}
+//	  
+//  }
   
   
-  //no need ...
-  public class MultiThreadChatClient extends Thread {
-	  int unreplicatedReducerNumber_ForClass;
-	  
-	  public MultiThreadChatClient(int unreplicatedReducerNumber_Local){
-		  this.unreplicatedReducerNumber_ForClass=unreplicatedReducerNumber_Local;
-	 }
-	  
-	  public void run() {
-			String responseLine;
-			System.out.println("Before while");
-			try {
-				while (true){//((responseLine = is.readLine()) != null) {
-					System.out.println("Entered while");
-					responseLine = is.readLine();
-					System.out.println("responseLine = "+responseLine);
-					if (Integer.parseInt(responseLine)==this.unreplicatedReducerNumber_ForClass)//indexOf("*** Bye") != -1)
-					{	
-						System.out.println("Entered XXX------");
-						break;
-					}
-				}
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			synchronized (lock) {
-				closed = true;
-			}
-			
-			System.out.println("in MultiThreadChatClient closed = "+ closed);
-		}
-	  
-  }
-  
-  
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

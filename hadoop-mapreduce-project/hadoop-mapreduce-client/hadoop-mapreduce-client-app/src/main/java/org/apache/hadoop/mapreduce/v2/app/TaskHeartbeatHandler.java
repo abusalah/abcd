@@ -127,8 +127,8 @@ public class TaskHeartbeatHandler extends AbstractService {
 
   @Override
   protected void serviceStart() throws Exception {
-	  System.out.println("___________inside serviceStart() in TaskHeartbeatHandler.java_______________Thread.currentThread().getStackTrace() = ");
-	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  //System.out.println("___________inside serviceStart() in TaskHeartbeatHandler.java_______________Thread.currentThread().getStackTrace() = ");
+	  //for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
     lostTaskCheckerThread = new Thread(new PingChecker());
     lostTaskCheckerThread.setName("TaskHeartbeatHandler PingChecker");
     lostTaskCheckerThread.start();
@@ -172,41 +172,18 @@ public class TaskHeartbeatHandler extends AbstractService {
   }
 
   private class PingChecker implements Runnable {
-
     @Override
     public void run() {
     	
-    	
       while (!stopped && !Thread.currentThread().isInterrupted()) {
     	  Iterator<Map.Entry<TaskAttemptId, ReportTime>> iterator = runningAttempts.entrySet().iterator();
-        
-    	  
-
         // avoid calculating current time everytime in loop
         long currentTime = clock.getTime();
 
         while (iterator.hasNext()) {
           Map.Entry<TaskAttemptId, ReportTime> entry = iterator.next();
-          
-          //System.out.println("-+ entry.getKey() = "+entry.getKey()+
-          //	  " entry.getValue().getLastProgress() = "+entry.getValue().getLastProgress()+"");
           boolean taskTimedOut = (taskTimeOut > 0) && 
               (currentTime > (entry.getValue().getLastProgress() + taskTimeOut));
-          
-          
-          //System.out.println("&&"+Integer.parseInt(entry.getKey().toString().split("_")[4]));
-          
-          /*
-          if(Integer.parseInt(entry.getKey().toString().split("_")[4])==5)//attempt_1405535839415_0001_r_000005_2
-          {
-        	  iterator.remove();
-              //eventHandler.handle(new TaskAttemptDiagnosticsUpdateEvent(entry
-              //    .getKey(), "AttemptID:" + entry.getKey().toString()
-              //    + " ----____---- Timed out after " + taskTimeOut / 1000 + " secs"));
-              eventHandler.handle(new TaskAttemptEvent(entry.getKey(),TaskAttemptEventType.TA_FAILMSG));        	  
-          }
-          */
-          
            
           if(taskTimedOut) {
             // task is lost, remove from the list and raise lost event
@@ -217,7 +194,6 @@ public class TaskHeartbeatHandler extends AbstractService {
             eventHandler.handle(new TaskAttemptEvent(entry.getKey(),TaskAttemptEventType.TA_TIMED_OUT));
           }
         }
-        //---IMP this was uncommented in the original code
         try {
           Thread.sleep(taskTimeOutCheckInterval);
         } catch (InterruptedException e) {
@@ -226,17 +202,171 @@ public class TaskHeartbeatHandler extends AbstractService {
         }
         
       }
+      
     }
   }
   
   
   
-  
+  public class ThreadedEchoServer4 implements Runnable {
+	  
+	  public void run(){
+			try {
+				serverSocket = new ServerSocket(2222);
+			} catch (IOException e) {
+				System.out.println(e);
+			}
+
+			while (true) {
+				try {
+					clientSocket = serverSocket.accept();
+					//for (int i = 0; i <= 9; i++) 
+					{
+						//if (t[i] == null) 
+						{
+							clientThread tt = new clientThread(clientSocket, client_Threads_List);
+							client_Threads_List.add(tt);
+							tt.start();
+							//t[i]=tt;//(t[i] = new clientThread(clientSocket, t)).start();
+							//t[i].start();
+							//break;
+						}
+					}
+				} catch (IOException e) {
+					System.out.println(e);
+				}
+			}
+		  
+		  
+	  }
+	  
+  }
   
   
   
     
-  
+  class clientThread extends Thread {
+
+		DataInputStream is = null;
+		PrintStream os = null;
+		Socket clientSocket = null;
+		clientThread t[];
+		ArrayList<clientThread> client_Threads_List;
+		
+		 int receivedReducerNumber=0;
+       String receivedTaskAttemptID ="";
+       long receivedHash= 0;
+       Integer unreplicatedReducerNumber=null;
+       boolean firstandsecond,thirdandforth,allofthem;
+       
+
+		/*//old constructor
+		public clientThread(Socket clientSocket, clientThread[] t) {
+			this.clientSocket = clientSocket;
+			this.t = t;
+		}
+		 */
+		public clientThread(Socket clientSocket, ArrayList<clientThread> client_Threads_List) {
+			this.clientSocket = clientSocket;
+			this.client_Threads_List = client_Threads_List;
+		}
+		
+		public void run() {
+			String lineReceived;
+			String receivedOK;
+			int ii =0;
+			try {
+				is = new DataInputStream(clientSocket.getInputStream());
+				os = new PrintStream(clientSocket.getOutputStream());
+				
+				while (true) {
+					lineReceived = is.readLine();
+					System.out.println(lineReceived);//NOTE the difference between os and System.out 
+					
+					
+					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
+	                receivedTaskAttemptID = lineReceived.split(" ")[1];
+	                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
+	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/4); 
+	                replicasHashes[receivedReducerNumber]=receivedHash;
+	                replicasHashes_set[unreplicatedReducerNumber]+=1;
+	                
+	                System.out.println("---------------------------------------------------------------------------");
+	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
+	                		"receivedHash = " + receivedHash +
+	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
+	                		);
+	                
+	                
+	                  for(int i =0;i<replicasHashes.length;i++)
+	                  {
+	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
+	                  }
+	                  for(int i =0;i<replicasHashes_set.length;i++)
+	                  {
+	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
+	                  }
+	                System.out.println("---------------------------------------------------------------------------");
+	                  
+	                if(replicasHashes_set[unreplicatedReducerNumber]==4)//TODO make >=4 in case it is restarted from HeartBeats
+	                {
+	             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*4)+0] == replicasHashes[(unreplicatedReducerNumber*4)+1]);
+	             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*4)+2] == replicasHashes[(unreplicatedReducerNumber*4)+3]);
+	             	   allofthem = (firstandsecond == thirdandforth);
+	             	   if (allofthem==true)
+	             	   {
+	             		   System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
+	             		for(clientThread x:client_Threads_List)
+	   					{
+	             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
+	   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
+	   					}
+	             		
+	             		/*
+	             		ii=0;
+	             		for(clientThread x:client_Threads_List)
+	   					{	
+	   						receivedOK = is.readLine();
+	   						if(receivedOK=="ok")
+	   						{
+	   							System.out.println("RECEIVED OK FROM ii = "+ii);
+	   							System.out.println("BEFORE client_Threads_List.size() = "+client_Threads_List.size());
+	   							client_Threads_List.remove(ii);
+	   							System.out.println("AFTER client_Threads_List.size() = "+client_Threads_List.size());
+	   							}
+	   						ii++;
+	   					}
+	   					*/
+	             		System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
+	             		
+	             		
+	             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
+	             		    //System.out.println("lineReceived = "+lineReceived);
+		                    //out.writeBytes(unreplicatedReducerNumber + "\n\r");
+		                    //out.flush();
+		                	
+	             		  
+	             		   
+	             	   }
+	                }
+	                if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
+						break;
+					
+				}
+				
+				is.close();
+				os.close();
+				clientSocket.close();
+			} catch (IOException e) {
+			}
+			;
+		}
+	}
+
+
+
+
   
   
   
@@ -353,41 +483,7 @@ public class TaskHeartbeatHandler extends AbstractService {
 //	}
   
   
-  public class ThreadedEchoServer4 implements Runnable {
-
-	  
-	  
-	  public void run(){
-			try {
-				serverSocket = new ServerSocket(2222);
-			} catch (IOException e) {
-				System.out.println(e);
-			}
-
-			while (true) {
-				try {
-					clientSocket = serverSocket.accept();
-					//for (int i = 0; i <= 9; i++) 
-					{
-						//if (t[i] == null) 
-						{
-							clientThread tt = new clientThread(clientSocket, client_Threads_List);
-							client_Threads_List.add(tt);
-							tt.start();
-							//t[i]=tt;//(t[i] = new clientThread(clientSocket, t)).start();
-							//t[i].start();
-							//break;
-						}
-					}
-				} catch (IOException e) {
-					System.out.println(e);
-				}
-			}
-		  
-		  
-	  }
-	  
-	  
+  
 	  
 //	    public ThreadedEchoServer4(){}
 //
@@ -411,161 +507,10 @@ public class TaskHeartbeatHandler extends AbstractService {
 //	            new EchoThread4(socket).start();//.run();
 //	        }
 //	    }
-	}
-
-
-  class clientThread extends Thread {
-
-		DataInputStream is = null;
-		PrintStream os = null;
-		Socket clientSocket = null;
-		clientThread t[];
-		ArrayList<clientThread> client_Threads_List;
-		
-		 int receivedReducerNumber=0;
-         String receivedTaskAttemptID ="";
-         long receivedHash= 0;
-         Integer unreplicatedReducerNumber=null;
-         boolean firstandsecond,thirdandforth,allofthem;
-         
-
-		/*//old constructor
-		public clientThread(Socket clientSocket, clientThread[] t) {
-			this.clientSocket = clientSocket;
-			this.t = t;
-		}
-		 */
-		public clientThread(Socket clientSocket, ArrayList<clientThread> client_Threads_List) {
-			this.clientSocket = clientSocket;
-			this.client_Threads_List = client_Threads_List;
-		}
-		
-		public void run() {
-			String lineReceived;
-			String receivedOK;
-			int ii =0;
-			//String name;
-			try {
-				is = new DataInputStream(clientSocket.getInputStream());
-				os = new PrintStream(clientSocket.getOutputStream());
-				
-				
-				for(clientThread x:client_Threads_List)
-					{
-         				x.os.println("100000000");//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
-					}
-				
-				
-				while (true) {
-					lineReceived = is.readLine();
-					System.out.println(lineReceived);//NOTE the difference between os and System.out 
-					
-					
-					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
-	                receivedTaskAttemptID = lineReceived.split(" ")[1];
-	                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
-	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/4); 
-	                replicasHashes[receivedReducerNumber]=receivedHash;
-	                replicasHashes_set[unreplicatedReducerNumber]+=1;
-	                
-	                System.out.println("---------------------------------------------------------------------------");
-	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
-	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
-	                		"receivedHash = " + receivedHash +
-	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
-	                		);
-	                
-	                
-	                  for(int i =0;i<replicasHashes.length;i++)
-	                  {
-	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
-	                  }
-	                  for(int i =0;i<replicasHashes_set.length;i++)
-	                  {
-	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
-	                  }
-	                System.out.println("---------------------------------------------------------------------------");
-	                  
-	                if(replicasHashes_set[unreplicatedReducerNumber]==4)//TODO make >=4 in case it is restarted from HeartBeats
-	                {
-	             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*4)+0] == replicasHashes[(unreplicatedReducerNumber*4)+1]);
-	             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*4)+2] == replicasHashes[(unreplicatedReducerNumber*4)+3]);
-	             	   allofthem = (firstandsecond == thirdandforth);
-	             	   if (allofthem==true)
-	             	   {
-	             		   System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
-	             		for(clientThread x:client_Threads_List)
-	   					{
-	             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
-	   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
-	   					}
-	             		
-	             		/*
-	             		ii=0;
-	             		for(clientThread x:client_Threads_List)
-	   					{	
-	   						receivedOK = is.readLine();
-	   						if(receivedOK=="ok")
-	   						{
-	   							System.out.println("RECEIVED OK FROM ii = "+ii);
-	   							System.out.println("BEFORE client_Threads_List.size() = "+client_Threads_List.size());
-	   							client_Threads_List.remove(ii);
-	   							System.out.println("AFTER client_Threads_List.size() = "+client_Threads_List.size());
-	   							}
-	   						ii++;
-	   					}
-	   					*/
-	             		System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
-	             		
-	             		
-	             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
-	             		    //System.out.println("lineReceived = "+lineReceived);
-		                    //out.writeBytes(unreplicatedReducerNumber + "\n\r");
-		                    //out.flush();
-		                	
-	             		  
-	             		   
-	             	   }
-	                }
-//	                for(clientThread x:client_Threads_List)
-//   					{
-//   						x.os.println();//unreplicatedReducerNumber);//x.os.println("XXXX");
-//   					}
-//             		
-	                
 	
-					
-					//for(clientThread x:client_Threads_List)
-					{
-						//os.println("XXXX");//x.os.println("XXXX");
-					}
-					if (lineReceived.startsWith("ww"))
-						break;
-					
-				}
-				
-				
-				//for (int i = 0; i <= 9; i++)
-				//	if (t[i] != null && t[i] != this)
-				//		t[i].os.println("*** The user is leaving the chat room !!! ***");//t[i].os.println("*** The user " + name + " is leaving the chat room !!! ***");
-
-				//os.println("*** Bye " + name + " ***");
-
-				//for (int i = 0; i <= 9; i++)
-					//if (t[i] == this)
-						//t[i] = null;
-				is.close();
-				os.close();
-				clientSocket.close();
-			} catch (IOException e) {
-			}
-			;
-		}
-	}
 
 
-
-  
+    
   
   
   
