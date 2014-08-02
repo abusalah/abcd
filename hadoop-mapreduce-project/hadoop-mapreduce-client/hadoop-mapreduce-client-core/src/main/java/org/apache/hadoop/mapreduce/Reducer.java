@@ -45,6 +45,7 @@ import org.apache.hadoop.yarn.event.EventHandler;
 
 
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -199,12 +200,35 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    * control how the reduce task works.
    */
   public void run(Context context) throws IOException, InterruptedException {
-
+	  
+	  
+	  
+if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)	 
+{
+	    setup(context);
+	    try {
+	      while (context.nextKey()) {
+	        reduce(context.getCurrentKey(), context.getValues(), context);
+	        // If a back up store is used, reset it
+	        Iterator<VALUEIN> iter = context.getValues().iterator();
+	        if(iter instanceof ReduceContext.ValueIterator) {
+	          ((ReduceContext.ValueIterator<VALUEIN>)iter).resetBackupStore();
+	        }
+	      }
+	    } finally {
+	      cleanup(context);
+	    }
+}
+	  
+	  
+	  
+if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO ADD CASE 2
+{
 	  String reducerORmapper = context.getTaskAttemptID().toString().split("_")[3];
 	  int reducerNumber = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[4]);
 	  int unreplicatedReducerNumber = (int) Math.floor(reducerNumber/4);
 	  
-	  
+	 
 	  System.out.println("ENTERED run in Reducer.java");
 	  
     setup(context);
@@ -298,6 +322,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
       cleanup(context);
     }
   }
+}
   
 }  
   

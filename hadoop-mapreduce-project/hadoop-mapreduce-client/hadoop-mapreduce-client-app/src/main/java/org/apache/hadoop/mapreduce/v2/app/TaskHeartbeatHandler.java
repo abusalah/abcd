@@ -88,6 +88,7 @@ public class TaskHeartbeatHandler extends AbstractService {
   
   private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
   private static int[] replicasHashes_set;
+  private static int local_BFT_flag=0;
   
   static Socket clientSocket = null;
   static ServerSocket serverSocket = null;
@@ -123,6 +124,7 @@ public class TaskHeartbeatHandler extends AbstractService {
     taskTimeOutCheckInterval = conf.getInt(MRJobConfig.TASK_TIMEOUT_CHECK_INTERVAL_MS, 30 * 1000);
     replicasHashes = new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
     replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/4];
+    local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
   }
 
   @Override
@@ -136,10 +138,12 @@ public class TaskHeartbeatHandler extends AbstractService {
     //verifierThread=new Thread(new Verifier());
     //verifierThread.setName("Verifier Thread");
     //verifierThread.start();
-    
-    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
-    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
-    ThreadedEchoServer4.start();
+    if(local_BFT_flag==3)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
+    {
+	    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
+	    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
+	    ThreadedEchoServer4.start();
+    }
     
     super.serviceStart();
   }
