@@ -1123,17 +1123,17 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
     	}
     	case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)     //deal with it as No BFT
         {
-        	numReducersReplicas=(int)getLong("mapred.job.numreplicas", 1);
+        	numReducersReplicas=(int)getLong("mapred.job.numreplicas", 4);
             break;
         }
         case 3://BFT: replicate mappers and reducers (both r times ?), single AM
         {
-        	numReducersReplicas=(int)getLong("mapred.job.numreplicas", 1);;
+        	numReducersReplicas=(int)getLong("mapred.job.numreplicas", 4);;
         	break;
         }
         case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times) 
         {
-        	numReducersReplicas=(int)getLong("mapred.job.numreplicas", 1);;
+        	numReducersReplicas=(int)getLong("mapred.job.numreplicas", 4);;
         	break;
         }
         default://deal with it as No BFT

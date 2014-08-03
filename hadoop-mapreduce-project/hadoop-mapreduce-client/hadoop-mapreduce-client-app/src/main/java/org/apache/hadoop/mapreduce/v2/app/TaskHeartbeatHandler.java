@@ -317,9 +317,19 @@ public class TaskHeartbeatHandler extends AbstractService {
 	                  
 	                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
 	                {
-	             	   firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
-	             	   thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
-	             	   allofthem = (firstandsecond == thirdandforth);
+	                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
+	                	{
+	                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
+	                		{
+	                			allofthem=true;
+	                		}else {
+	                			allofthem=false;//CAREFUL ... if you didn't add break here, allofthem can become true in the next round and gives a wrong allofthem=true (I.L)
+	                			break;//TODO ... need to add what to do when the replicas don't match  
+	                		}
+	                	}
+	             	   //firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
+	             	   //thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
+	             	   //allofthem = (firstandsecond == thirdandforth);
 	             	   if (allofthem==true)
 	             	   {
 	             		   System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
