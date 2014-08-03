@@ -319,6 +319,8 @@ public class TaskHeartbeatHandler extends AbstractService {
 	                {
 	                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
 	                	{
+	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
+	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
 	                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
 	                		{
 	                			allofthem=true;
