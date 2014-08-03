@@ -47,6 +47,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.MRJobConfig;
+import static org.apache.hadoop.mapreduce.MRJobConfig.BFT_FLAG;
 import org.apache.hadoop.mapreduce.v2.api.records.TaskAttemptId;
 import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptDiagnosticsUpdateEvent;
 import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
@@ -123,7 +124,7 @@ public class TaskHeartbeatHandler extends AbstractService {
     super.serviceInit(conf);
     taskTimeOut = conf.getInt(MRJobConfig.TASK_TIMEOUT, 1 * 60 * 1000);///---bft //original was: 5 * 60 * 1000;
     taskTimeOutCheckInterval = conf.getInt(MRJobConfig.TASK_TIMEOUT_CHECK_INTERVAL_MS, 30 * 1000);
-    local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
+    local_BFT_flag =conf.getInt(org.apache.hadoop.mapreduce.MRJobConfig.BFT_FLAG, 1);
     local_NUM_REPLICAS =conf.getInt(MRJobConfig.NUM_REPLICAS,4);
     replicasHashes = new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
     replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS];    
