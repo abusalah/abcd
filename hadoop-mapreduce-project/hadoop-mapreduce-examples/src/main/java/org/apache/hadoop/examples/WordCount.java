@@ -156,7 +156,7 @@ public class WordCount {
 	    
 	    
 	    
-	    long startTime = System.currentTimeMillis();
+	    long startTime = System.currentTimeMillis()/1000;
 	    long elapsedTime = 0L;
 	    		
 	  for (int i=0;i<r3;i++)
@@ -179,16 +179,16 @@ public class WordCount {
 	    
 
 	    
-	    try {
-	        Thread.sleep(2000);
-	    } catch(InterruptedException ex) {
-	        Thread.currentThread().interrupt();
-	    }
+//	    try {
+//	        Thread.sleep(2000);
+//	    } catch(InterruptedException ex) {
+//	        Thread.currentThread().interrupt();
+//	    }
 	    
 	    
 	  }
-	  elapsedTime = (new Date()).getTime() - startTime;	  
-	  System.out.println("\n\n----------- elapsedTime = "+elapsedTime+"\n\n");
+	  elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
+	  System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
 	  
 	  //for (int iiii=0;iiii<conf[0].replicasHashes_333_set.length;iiii++)
       {
