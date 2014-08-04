@@ -308,11 +308,11 @@ public class TaskHeartbeatHandler extends AbstractService {
 	                
 	                  for(int i =0;i<replicasHashes.length;i++)
 	                  {
-	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
+	               	   System.out.println("			____replicasHashes i = "+i+" is "+replicasHashes[i]);
 	                  }
 	                  for(int i =0;i<replicasHashes_set.length;i++)
 	                  {
-	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
+	               	   System.out.println("			____replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
 	                  }
 	                System.out.println("---------------------------------------------------------------------------");
 	                  
