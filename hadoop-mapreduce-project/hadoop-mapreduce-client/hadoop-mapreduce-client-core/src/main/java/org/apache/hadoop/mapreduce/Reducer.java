@@ -283,10 +283,13 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
   					//System.out.println("Entered while");
 					responseLine = is.readLine();
 					//System.out.println("responseLine = "+responseLine);
-					if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)
-					{	
-						System.out.println("Entered XXX------");
-						break;
+					if(responseLine!=null && !responseLine.isEmpty())
+					{
+						if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)
+						{	
+							System.out.println("Entered XXX------");
+							break;
+						}
 					}
   				}  				
   				/* WORKING PERFECTLY .... need to uncomment class MultiThreadChatClient
