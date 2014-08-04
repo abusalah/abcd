@@ -86,7 +86,7 @@ public class TaskHeartbeatHandler extends AbstractService {
   
   private static final Log LOG = LogFactory.getLog(TaskHeartbeatHandler.class);
   
-  private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
+  private static String[] replicasHashes;  //private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
   private static int[] replicasHashes_set;
   private static int local_BFT_flag=0;
   private static int local_NUM_REPLICAS = 0;
@@ -125,7 +125,7 @@ public class TaskHeartbeatHandler extends AbstractService {
     taskTimeOutCheckInterval = conf.getInt(MRJobConfig.TASK_TIMEOUT_CHECK_INTERVAL_MS, 30 * 1000);
     local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
     local_NUM_REPLICAS =conf.getInt(MRJobConfig.NUM_REPLICAS,4);
-    replicasHashes = new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
+    replicasHashes = new String[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];//new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
     replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS];    
   }
 
@@ -261,7 +261,8 @@ public class TaskHeartbeatHandler extends AbstractService {
 		
 		 int receivedReducerNumber=0;
        String receivedTaskAttemptID ="";
-       long receivedHash= 0;
+       //long receivedHash= 0;
+       String receivedHash= null;
        Integer unreplicatedReducerNumber=null;
        boolean firstandsecond,thirdandforth,allofthem;
        
@@ -292,7 +293,7 @@ public class TaskHeartbeatHandler extends AbstractService {
 					
 					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
 	                receivedTaskAttemptID = lineReceived.split(" ")[1];
-	                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
+	                receivedHash = lineReceived.split(" ")[2]; //receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
 	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
 	                replicasHashes[receivedReducerNumber]=receivedHash;
 	                replicasHashes_set[unreplicatedReducerNumber]+=1;
