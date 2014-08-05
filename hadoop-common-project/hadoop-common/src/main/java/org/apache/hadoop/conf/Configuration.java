@@ -1150,7 +1150,7 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
     {//---replicate the reducers
     	if(name.equals("mapreduce.job.reduces"))
     	{
-    		System.out.println("---abc---defaultValue*numReducersReplicas = "+defaultValue*numReducersReplicas);return defaultValue*numReducersReplicas;
+    		System.out.println("---defaultValue*numReducersReplicas = "+defaultValue*numReducersReplicas);return defaultValue*numReducersReplicas;
 		}
       return defaultValue;
     }
@@ -1158,13 +1158,13 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
     if (hexString != null) {
     	if(name.equals("mapreduce.job.reduces"))
     	{
-    		System.out.println("---abc---Integer.parseInt(hexString, 16)*numReducersReplicas = "+Integer.parseInt(hexString, 16)*numReducersReplicas);return Integer.parseInt(hexString, 16)*numReducersReplicas;
+    		System.out.println("---Integer.parseInt(hexString, 16)*numReducersReplicas = "+Integer.parseInt(hexString, 16)*numReducersReplicas);return Integer.parseInt(hexString, 16)*numReducersReplicas;
 		}
       return Integer.parseInt(hexString, 16);
     }
     if(name.equals("mapreduce.job.reduces"))
     {
-    	System.out.println("---abc---Integer.parseInt(valueString)*numReducersReplicas = "+Integer.parseInt(valueString)*numReducersReplicas);return Integer.parseInt(valueString)*numReducersReplicas;
+    	System.out.println("---Integer.parseInt(valueString)*numReducersReplicas = "+Integer.parseInt(valueString)*numReducersReplicas);return Integer.parseInt(valueString)*numReducersReplicas;
 	}
     return Integer.parseInt(valueString);
   }

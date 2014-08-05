@@ -49,7 +49,7 @@ public class SplitMetaInfoReader {
 		
 		int local_NUM_REPLICAS = conf.getInt(MRJobConfig.NUM_REPLICAS,4);
 		
-		 System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
+		 //System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
 		 
 		
 		long maxMetaInfoSize = conf.getLong(MRJobConfig.SPLIT_METAINFO_MAXSIZE,

@@ -183,7 +183,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   protected void reduce(KEYIN key, Iterable<VALUEIN> values, Context context
                         ) throws IOException, InterruptedException {
     for(VALUEIN value: values) {
-    	System.out.println("++++++ value.toString() = "+(VALUEOUT) value.toString());
+    	//System.out.println("++++++ value.toString() = "+(VALUEOUT) value.toString());
       context.write((KEYOUT) key, (VALUEOUT) value);
     }
   }
@@ -232,7 +232,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 	  int unreplicatedReducerNumber = (int) Math.floor(reducerNumber/local_NUM_REPLICAS);
 	  
 	 
-	  System.out.println("ENTERED run in Reducer.java");
+	  //System.out.println("ENTERED run in Reducer.java");
 	  
     setup(context);
     
@@ -279,7 +279,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 
   				os.println(stringToSend);
   				String responseLine;
-  				System.out.println("Before while");
+  				//System.out.println("Before while");
   				while(true){
   					//System.out.println("Entered while");
 					responseLine = is.readLine();
@@ -322,7 +322,6 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 		  KV="";stringToSend="";
       }
       
-      System.out.println("\n");
       
       
     } finally {    	

@@ -287,7 +287,7 @@ public class TaskHeartbeatHandler extends AbstractService {
 				
 				while (true) {
 					lineReceived = is.readLine();
-					System.out.println(lineReceived);//NOTE the difference between os and System.out 
+					//System.out.println(lineReceived);//NOTE the difference between os and System.out 
 					
 					
 					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
@@ -297,31 +297,31 @@ public class TaskHeartbeatHandler extends AbstractService {
 	                replicasHashes[receivedReducerNumber]=receivedHash;
 	                replicasHashes_set[unreplicatedReducerNumber]+=1;
 	                
-	                System.out.println("---------------------------------------------------------------------------");
-	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
-	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
-	                		"receivedHash = " + receivedHash +
-	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
-	                		);
+	                //System.out.println("---------------------------------------------------------------------------");
+//	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+//	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
+//	                		"receivedHash = " + receivedHash +
+//	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
+//	                		);
 	                
 	                
-	                  for(int i =0;i<replicasHashes.length;i++)
-	                  {
-	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
-	                  }
-	                  for(int i =0;i<replicasHashes_set.length;i++)
-	                  {
-	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
-	                  }
-	                System.out.println("---------------------------------------------------------------------------");
+//	                  for(int i =0;i<replicasHashes.length;i++)
+//	                  {
+//	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
+//	                  }
+//	                  for(int i =0;i<replicasHashes_set.length;i++)
+//	                  {
+//	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
+//	                  }
+	                //System.out.println("---------------------------------------------------------------------------");
 	                  
 	                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
 	                {
 	                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
 	                	{
-	                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
-	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
+//	                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+//	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
+//	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
 	                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i].equals(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]))//==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
 	                		{
 	                			System.out.println("ENTERED allofthem=true;");

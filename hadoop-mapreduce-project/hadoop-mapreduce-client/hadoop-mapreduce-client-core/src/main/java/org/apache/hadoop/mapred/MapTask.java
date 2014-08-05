@@ -696,7 +696,7 @@ public class MapTask extends Task {
       int originalgetPartitionValue=0,newgetPartitionValue=0;
       int local_NUM_REPLICAS = conf.getInt(MRJobConfig.NUM_REPLICAS,4); 
             
-      System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
+      //System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
             
       String[] splittedTaskID = getTaskID().toString().split("_");
       String localMapID = splittedTaskID[4];
@@ -735,8 +735,8 @@ public class MapTask extends Task {
       	  }
       }
       
-      System.out.println("(Key : "+key+", Value : "+value+") from Mapper Task ID : "+getTaskID()+" is going to Reducer : "+newgetPartitionValue+
-    		  " where originally it should go to Reducer : "+originalgetPartitionValue);
+      //System.out.println("(Key : "+key+", Value : "+value+") from Mapper Task ID : "+getTaskID()+" is going to Reducer : "+newgetPartitionValue+
+    	//	  " where originally it should go to Reducer : "+originalgetPartitionValue);
       collector.collect(key, value, newgetPartitionValue);//---partitioner.getPartition(key, value, partitions);
     }
 
