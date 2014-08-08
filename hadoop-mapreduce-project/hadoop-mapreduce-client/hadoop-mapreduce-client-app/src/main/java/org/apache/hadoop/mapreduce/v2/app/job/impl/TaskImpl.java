@@ -586,16 +586,16 @@ public abstract class TaskImpl implements Task, EventHandler<TaskEvent> {
 
   // This is always called in the Write Lock
   private void addAndScheduleAttempt(Avataar avataar) {
-	  System.out.println("-_-_-_-_-_-_-_-_ inside addAndScheduleAttempt method in TaskImpl.java");
+	  //System.out.println("bft-_-_-_-_-_-_-_-_ inside addAndScheduleAttempt method in TaskImpl.java");
     TaskAttempt attempt = addAttempt(avataar);
     inProgressAttempts.add(attempt.getID());
     //schedule the nextAttemptNumber
     if (failedAttempts.size() > 0) {
-    	System.out.println("-_-_-_-_-_-_-_-_ inside addAndScheduleAttempt method in if (failedAttempts.size() > 0) in TaskImpl.java");
+    	//System.out.println("bft-_-_-_-_-_-_-_-_ inside addAndScheduleAttempt method in if (failedAttempts.size() > 0) in TaskImpl.java");
       eventHandler.handle(new TaskAttemptEvent(attempt.getID(),
           TaskAttemptEventType.TA_RESCHEDULE));
     } else {
-    	System.out.println("-_-_-_-_-_-_-_-_ inside addAndScheduleAttempt method in if (failedAttempts.size() > 0) else ... in TaskImpl.java");
+    	//System.out.println("bft-_-_-_-_-_-_-_-_ inside addAndScheduleAttempt method in if (failedAttempts.size() > 0) else ... in TaskImpl.java");
       eventHandler.handle(new TaskAttemptEvent(attempt.getID(),
           TaskAttemptEventType.TA_SCHEDULE));
     }
@@ -632,7 +632,7 @@ public abstract class TaskImpl implements Task, EventHandler<TaskEvent> {
 
   @Override
   public void handle(TaskEvent event) {
-	 System.out.println("----____-----____----____----____ inside handle inside TaskImpl.java");
+	 //System.out.println("bft----____-----____----____----____ inside handle inside TaskImpl.java");
     if (LOG.isDebugEnabled()) {
       LOG.debug("Processing " + event.getTaskID() + " of type "
           + event.getType());
@@ -880,7 +880,7 @@ public abstract class TaskImpl implements Task, EventHandler<TaskEvent> {
 
     @Override
     public void transition(TaskImpl task, TaskEvent event) {
-    	System.out.println("----____-----____----____----____ inside transition inside InitialScheduleTransition inside TaskImpl.java");
+    	//System.out.println("bft----____-----____----____----____ inside transition inside InitialScheduleTransition inside TaskImpl.java");
       task.addAndScheduleAttempt(Avataar.VIRGIN);
       task.scheduledTime = task.clock.getTime();
       task.sendTaskStartedEvent();

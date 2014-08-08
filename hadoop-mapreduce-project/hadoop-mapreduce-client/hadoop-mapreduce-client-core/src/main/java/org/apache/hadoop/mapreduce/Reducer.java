@@ -225,6 +225,8 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)
 	  
 if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO ADD CASE 2
 {
+	
+	System.out.println("context.getConfiguration().getAppMasterHost() = "+context.getConfiguration().getAppMasterHost());
 		
 	  int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4); 
 	  String reducerORmapper = context.getTaskAttemptID().toString().split("_")[3];
@@ -263,7 +265,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	  
     	  
     	  try {
-  			clientSocket = new Socket("mc07.cs.purdue.edu", 2222);
+  			clientSocket = new Socket(context.getConfiguration().getAppMasterHost(), 2222);//("mc07.cs.purdue.edu", 2222);
   			inputLine = new BufferedReader(new InputStreamReader(System.in));
   			os = new PrintStream(clientSocket.getOutputStream());
   			is = new DataInputStream(clientSocket.getInputStream());

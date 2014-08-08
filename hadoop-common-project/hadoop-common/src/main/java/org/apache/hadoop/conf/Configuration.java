@@ -168,9 +168,18 @@ import com.google.common.base.Preconditions;
 public class Configuration implements Iterable<Map.Entry<String,String>>,
                                       Writable {
 
-	//sdafpublic static int[] replicasHashes_333_set=new int[5];//---new for bft
-
+	public String appMasterHost = null; 	
+	public String getAppMasterHost() {
+		System.out.println("INSIDE getAppMasterHost() appMasterHost = "+appMasterHost);
+		return appMasterHost;
+		}
+	public void setAppMasterHost(String appMasterHost) {
+		System.out.println("INSIDE setAppMasterHost(String appMasterHost) appMasterHost = "+appMasterHost);
+		this.appMasterHost = appMasterHost;
+		}
 	
+	
+
 	private static final Log LOG =
     LogFactory.getLog(Configuration.class);
 

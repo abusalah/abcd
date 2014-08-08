@@ -952,11 +952,11 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
     for (TaskId taskID : taskIDs) {
       TaskInfo taskInfo = completedTasksFromPreviousRun.remove(taskID);
       if (taskInfo != null) {
-    	  System.out.println("_____________Inside scheduleTasks if (taskInfo != null), taskID = "+taskID);
+    	  //System.out.println("bft_____________Inside scheduleTasks if (taskInfo != null), taskID = "+taskID);
         eventHandler.handle(new TaskRecoverEvent(taskID, taskInfo,
             committer, recoverTaskOutput));
       } else {
-    	  System.out.println("_____________Inside scheduleTasks if (taskInfo != null) else .... , taskID = "+taskID);
+    	  //System.out.println("bft_____________Inside scheduleTasks if (taskInfo != null) else .... , taskID = "+taskID);
         eventHandler.handle(new TaskEvent(taskID, TaskEventType.T_SCHEDULE));
       }
     }
