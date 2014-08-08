@@ -44,6 +44,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.Element;
 
 import java.io.File;
+import java.net.InetAddress;
  
 
 
@@ -146,7 +147,16 @@ public class WordCount {
 	    
 	    Configuration[] conf = new Configuration[r3];
 	    for( int i=0; i<r3; i++ )
+	    {
 	    	conf[i] = new Configuration();
+	    	conf[i].appMasterHost=InetAddress.getLocalHost().getHostName();
+	    	Configuration.appMasterHost=InetAddress.getLocalHost().getHostName();
+	    	System.out.println("InetAddress.getLocalHost().getHostName() = "+InetAddress.getLocalHost().getHostName());
+	    	System.out.println("conf[i].appMasterHost = "+conf[i].appMasterHost);
+	    	System.out.println("Configuration.appMasterHost = "+Configuration.appMasterHost);
+	    	
+	    }
+	    	
 	    
 	    String[] otherArgs = new GenericOptionsParser(conf[0], args).getRemainingArgs();
 	    if (otherArgs.length != 2) {

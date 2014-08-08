@@ -228,10 +228,6 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 	
 	System.out.println("Configuration.appMasterHost = "+Configuration.appMasterHost);
 	
-	while(Configuration.appMasterHost==null)
-	{
-		
-	}
 		
 	  int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4); 
 	  String reducerORmapper = context.getTaskAttemptID().toString().split("_")[3];
