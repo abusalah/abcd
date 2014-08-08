@@ -168,16 +168,16 @@ import com.google.common.base.Preconditions;
 public class Configuration implements Iterable<Map.Entry<String,String>>,
                                       Writable {
 
-	public String appMasterHost = null; 	
+	public static String appMasterHost = null; 	/*
 	public String getAppMasterHost() {
-		System.out.println("INSIDE getAppMasterHost() this.appMasterHost = "+this.appMasterHost);
-		return this.appMasterHost;
+		System.out.println("INSIDE getAppMasterHost() this.appMasterHost = "+appMasterHost);
+		return appMasterHost;
 		}
 	public void setAppMasterHost(String appMasterHost) {
 		System.out.println("INSIDE setAppMasterHost(String appMasterHost) appMasterHost = "+appMasterHost);
 		this.appMasterHost = appMasterHost;
-		System.out.println("INSIDE setAppMasterHost(String appMasterHost) this.appMasterHost = "+this.appMasterHost);
-		}
+		System.out.println("INSIDE setAppMasterHost(String appMasterHost) appMasterHost = "+appMasterHost);
+		}*/
 	
 	
 

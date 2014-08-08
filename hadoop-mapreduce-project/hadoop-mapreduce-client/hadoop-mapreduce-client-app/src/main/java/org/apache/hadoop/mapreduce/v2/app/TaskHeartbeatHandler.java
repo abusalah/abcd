@@ -123,7 +123,9 @@ public class TaskHeartbeatHandler extends AbstractService {
   protected void serviceInit(Configuration conf) throws Exception {
     super.serviceInit(conf);
     System.out.println("InetAddress.getLocalHost().getHostName() = "+InetAddress.getLocalHost().getHostName());
-    conf.setAppMasterHost(InetAddress.getLocalHost().getHostName());
+    //conf.appMasterHost=InetAddress.getLocalHost().getHostName();
+    Configuration.appMasterHost=InetAddress.getLocalHost().getHostName();
+    System.out.println("Configuration.appMasterHost = "+Configuration.appMasterHost);
     taskTimeOut = conf.getInt(MRJobConfig.TASK_TIMEOUT, 1 * 60 * 1000);///---bft //original was: 5 * 60 * 1000;
     taskTimeOutCheckInterval = conf.getInt(MRJobConfig.TASK_TIMEOUT_CHECK_INTERVAL_MS, 30 * 1000);
     local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
