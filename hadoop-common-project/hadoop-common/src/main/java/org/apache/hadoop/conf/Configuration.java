@@ -170,12 +170,13 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
 
 	public String appMasterHost = null; 	
 	public String getAppMasterHost() {
-		System.out.println("INSIDE getAppMasterHost() appMasterHost = "+appMasterHost);
-		return appMasterHost;
+		System.out.println("INSIDE getAppMasterHost() this.appMasterHost = "+this.appMasterHost);
+		return this.appMasterHost;
 		}
 	public void setAppMasterHost(String appMasterHost) {
 		System.out.println("INSIDE setAppMasterHost(String appMasterHost) appMasterHost = "+appMasterHost);
 		this.appMasterHost = appMasterHost;
+		System.out.println("INSIDE setAppMasterHost(String appMasterHost) this.appMasterHost = "+this.appMasterHost);
 		}
 	
 	
