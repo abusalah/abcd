@@ -62,6 +62,7 @@ import org.apache.hadoop.yarn.api.ApplicationConstants;
 import org.apache.hadoop.yarn.api.ApplicationConstants.Environment;
 import org.apache.hadoop.yarn.api.records.ApplicationAttemptId;
 import org.apache.hadoop.yarn.util.ConverterUtils;
+import org.apache.hadoop.mapreduce.v2.app.MRAppMaster;
 import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler;
 
 /**
@@ -77,6 +78,8 @@ class YarnChild {
 	  
 	  
 	  System.out.println("TaskHeartbeatHandler.appMasterHost_in_TaskHeartbeatHandler = "+TaskHeartbeatHandler.appMasterHost_in_TaskHeartbeatHandler);
+	  
+	  System.out.println("MRAppMaster.appMasterHost_in_MRAppMaster = "+MRAppMaster.appMasterHost_in_MRAppMaster);
 	  
   System.out.println("__________inside main of YarnChild.java________________Thread.currentThread().getStackTrace() = ");
   for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}

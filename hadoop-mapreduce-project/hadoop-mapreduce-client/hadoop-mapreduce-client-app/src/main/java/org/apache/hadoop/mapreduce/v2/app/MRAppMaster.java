@@ -172,11 +172,13 @@ import com.google.common.annotations.VisibleForTesting;
 
 @SuppressWarnings("rawtypes")
 public class MRAppMaster extends CompositeService {
-
+	
+	
+public static String appMasterHost_in_MRAppMaster = null;
+	
   private static final Log LOG = LogFactory.getLog(MRAppMaster.class);
   
-  public static int[] replicasHashes_444_set=new int[5];
-
+  
   /**
    * Priority of the MRAppMaster shutdown hook.
    */
@@ -236,6 +238,8 @@ public class MRAppMaster extends CompositeService {
       long appSubmitTime, int maxAppAttempts) {
     this(applicationAttemptId, containerId, nmHost, nmPort, nmHttpPort,
         new SystemClock(), appSubmitTime, maxAppAttempts);
+    appMasterHost_in_MRAppMaster = InetAddress.getLocalHost().getHostName();
+    System.out.println("appMasterHost_in_MRAppMaster in MRAppMaster constructor = "+appMasterHost_in_MRAppMaster);
   }
 
   public MRAppMaster(ApplicationAttemptId applicationAttemptId,
