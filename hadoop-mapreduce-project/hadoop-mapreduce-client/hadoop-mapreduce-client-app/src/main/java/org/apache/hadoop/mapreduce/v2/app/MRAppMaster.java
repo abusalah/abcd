@@ -240,6 +240,7 @@ public static String appMasterHost_in_MRAppMaster = null;
         new SystemClock(), appSubmitTime, maxAppAttempts);
     appMasterHost_in_MRAppMaster = InetAddress.getLocalHost().getHostName();
     System.out.println("appMasterHost_in_MRAppMaster in MRAppMaster constructor = "+appMasterHost_in_MRAppMaster);
+    System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
   }
 
   public MRAppMaster(ApplicationAttemptId applicationAttemptId,
@@ -258,6 +259,8 @@ public static String appMasterHost_in_MRAppMaster = null;
     this.maxAppAttempts = maxAppAttempts;
     logSyncer = TaskLog.createLogSyncer();
     LOG.info("Created MRAppMaster for application " + applicationAttemptId);
+    System.out.println("appMasterHost_in_MRAppMaster in MRAppMaster constructor = "+appMasterHost_in_MRAppMaster);
+    System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
   }
   
   

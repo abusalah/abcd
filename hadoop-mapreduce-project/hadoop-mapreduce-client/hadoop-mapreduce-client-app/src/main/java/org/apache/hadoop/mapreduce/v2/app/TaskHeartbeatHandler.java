@@ -47,6 +47,8 @@ import java.util.concurrent.ConcurrentMap;
 
 
 
+
+
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -118,9 +120,10 @@ public class TaskHeartbeatHandler extends AbstractService {
 
   public TaskHeartbeatHandler(EventHandler eventHandler, Clock clock, int numThreads) {
     super("TaskHeartbeatHandler");
-    try {
+    try {    	
 		appMasterHost_in_TaskHeartbeatHandler=InetAddress.getLocalHost().getHostName();
 		System.out.println("appMasterHost_in_TaskHeartbeatHandler inside TaskHeartbeatHandler constructor = "+appMasterHost_in_TaskHeartbeatHandler);
+	    System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
 	} catch (UnknownHostException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
@@ -137,6 +140,7 @@ public class TaskHeartbeatHandler extends AbstractService {
     //conf.appMasterHost=InetAddress.getLocalHost().getHostName();
     Configuration.appMasterHost=InetAddress.getLocalHost().getHostName();
     System.out.println("Configuration.appMasterHost = "+Configuration.appMasterHost);
+    System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
     taskTimeOut = conf.getInt(MRJobConfig.TASK_TIMEOUT, 1 * 60 * 1000);///---bft //original was: 5 * 60 * 1000;
     taskTimeOutCheckInterval = conf.getInt(MRJobConfig.TASK_TIMEOUT_CHECK_INTERVAL_MS, 30 * 1000);
     local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
