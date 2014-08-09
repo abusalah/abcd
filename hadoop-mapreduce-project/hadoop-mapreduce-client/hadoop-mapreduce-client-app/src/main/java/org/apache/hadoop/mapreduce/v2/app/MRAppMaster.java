@@ -39,6 +39,7 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 import org.apache.commons.io.IOUtils;
+import org.apache.commons.lang.UnhandledException;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -238,7 +239,12 @@ public static String appMasterHost_in_MRAppMaster = null;
       long appSubmitTime, int maxAppAttempts) {
     this(applicationAttemptId, containerId, nmHost, nmPort, nmHttpPort,
         new SystemClock(), appSubmitTime, maxAppAttempts);
+    try{
     appMasterHost_in_MRAppMaster = InetAddress.getLocalHost().getHostName();
+    }catch(UnknownHostException e){
+    	e.printStackTrace();
+    }
+    
     System.out.println("appMasterHost_in_MRAppMaster in MRAppMaster constructor = "+appMasterHost_in_MRAppMaster);
     System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
   }
