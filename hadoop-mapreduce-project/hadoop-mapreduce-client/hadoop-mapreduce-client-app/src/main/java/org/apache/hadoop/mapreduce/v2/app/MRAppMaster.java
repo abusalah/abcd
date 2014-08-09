@@ -175,7 +175,7 @@ import com.google.common.annotations.VisibleForTesting;
 public class MRAppMaster extends CompositeService {
 	
 	
-public static String appMasterHost_in_MRAppMaster = null;
+public static String appMasterHost_in_MRAppMaster;
 	
   private static final Log LOG = LogFactory.getLog(MRAppMaster.class);
   
@@ -241,11 +241,13 @@ public static String appMasterHost_in_MRAppMaster = null;
         new SystemClock(), appSubmitTime, maxAppAttempts);
     try{
     appMasterHost_in_MRAppMaster = InetAddress.getLocalHost().getHostName();
+    MRAppMaster.appMasterHost_in_MRAppMaster= InetAddress.getLocalHost().getHostName();
     }catch(UnknownHostException e){
     	e.printStackTrace();
     }
     
     System.out.println("appMasterHost_in_MRAppMaster in MRAppMaster constructor = "+appMasterHost_in_MRAppMaster);
+    System.out.println("MRAppMaster.appMasterHost_in_MRAppMaster in MRAppMaster constructor = "+MRAppMaster.appMasterHost_in_MRAppMaster);
     System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
   }
 
@@ -265,7 +267,15 @@ public static String appMasterHost_in_MRAppMaster = null;
     this.maxAppAttempts = maxAppAttempts;
     logSyncer = TaskLog.createLogSyncer();
     LOG.info("Created MRAppMaster for application " + applicationAttemptId);
+    try{
+        appMasterHost_in_MRAppMaster = InetAddress.getLocalHost().getHostName();
+        MRAppMaster.appMasterHost_in_MRAppMaster= InetAddress.getLocalHost().getHostName();        
+        }catch(UnknownHostException e){
+        	e.printStackTrace();
+        }
+        
     System.out.println("appMasterHost_in_MRAppMaster in MRAppMaster constructor = "+appMasterHost_in_MRAppMaster);
+    System.out.println("MRAppMaster.appMasterHost_in_MRAppMaster in MRAppMaster constructor = "+MRAppMaster.appMasterHost_in_MRAppMaster);
     System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
   }
   
