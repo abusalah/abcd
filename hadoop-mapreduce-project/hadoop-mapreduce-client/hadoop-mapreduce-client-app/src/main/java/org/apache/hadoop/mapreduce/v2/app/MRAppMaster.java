@@ -176,6 +176,9 @@ public class MRAppMaster extends CompositeService {
 	
 	
 public static String appMasterHost_in_MRAppMaster;
+
+public static final Object lock = new Object();
+
 	
   private static final Log LOG = LogFactory.getLog(MRAppMaster.class);
   
@@ -240,8 +243,10 @@ public static String appMasterHost_in_MRAppMaster;
     this(applicationAttemptId, containerId, nmHost, nmPort, nmHttpPort,
         new SystemClock(), appSubmitTime, maxAppAttempts);
     try{
+    	synchronized(MRAppMaster.lock){
     appMasterHost_in_MRAppMaster = InetAddress.getLocalHost().getHostName();
     MRAppMaster.appMasterHost_in_MRAppMaster= InetAddress.getLocalHost().getHostName();
+    	}
     }catch(UnknownHostException e){
     	e.printStackTrace();
     }
@@ -268,8 +273,10 @@ public static String appMasterHost_in_MRAppMaster;
     logSyncer = TaskLog.createLogSyncer();
     LOG.info("Created MRAppMaster for application " + applicationAttemptId);
     try{
+    	synchronized(MRAppMaster.lock){
         appMasterHost_in_MRAppMaster = InetAddress.getLocalHost().getHostName();
-        MRAppMaster.appMasterHost_in_MRAppMaster= InetAddress.getLocalHost().getHostName();        
+        MRAppMaster.appMasterHost_in_MRAppMaster= InetAddress.getLocalHost().getHostName();
+    	}
         }catch(UnknownHostException e){
         	e.printStackTrace();
         }
