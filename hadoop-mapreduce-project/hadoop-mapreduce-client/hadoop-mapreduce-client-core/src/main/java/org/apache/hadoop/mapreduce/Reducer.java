@@ -227,6 +227,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 {
 	
 	System.out.println("Configuration.appMasterHost = "+Configuration.appMasterHost);
+	System.out.println("context.getConfiguration().appMasterHost = "+context.getConfiguration().appMasterHost);
 	
 		
 	  int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4); 

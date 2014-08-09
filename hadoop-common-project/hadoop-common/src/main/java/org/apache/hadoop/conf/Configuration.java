@@ -31,8 +31,10 @@ import java.io.OutputStreamWriter;
 import java.io.Reader;
 import java.io.Writer;
 import java.lang.ref.WeakReference;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.URL;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -57,6 +59,7 @@ import java.util.regex.PatternSyntaxException;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
+import java.net.InetAddress;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -91,6 +94,23 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.w3c.dom.Text;
 import org.xml.sax.SAXException;
+
+
+import java.io.BufferedReader;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.PrintStream;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.google.common.base.Preconditions;
 
@@ -168,7 +188,8 @@ import com.google.common.base.Preconditions;
 public class Configuration implements Iterable<Map.Entry<String,String>>,
                                       Writable {
 
-	public static String appMasterHost = null; 	/*
+	public static String appMasterHost = null;//InetAddress.getLocalHost().getHostName(); 
+	/*
 	public String getAppMasterHost() {
 		System.out.println("INSIDE getAppMasterHost() this.appMasterHost = "+appMasterHost);
 		return appMasterHost;
@@ -650,8 +671,15 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
   }
   
   /** A new configuration. */
-  public Configuration() {
+  public Configuration() {	   	
     this(true);
+    try {
+		appMasterHost = InetAddress.getLocalHost().getHostName();
+		System.out.println("\n\nappMasterHost in constructor = "+appMasterHost+"\n\n");
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     System.out.println("getInt(\"mapreduce.job.reduces\", 1)"+getInt("mapreduce.job.reduces", 1));
     //this.replicasHashes_333_set= new int[5];//---new for bft//maybe you need to initialize to all zeros
     
