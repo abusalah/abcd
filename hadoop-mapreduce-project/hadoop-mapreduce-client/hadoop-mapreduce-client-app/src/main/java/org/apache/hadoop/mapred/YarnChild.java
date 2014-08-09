@@ -62,6 +62,7 @@ import org.apache.hadoop.yarn.api.ApplicationConstants;
 import org.apache.hadoop.yarn.api.ApplicationConstants.Environment;
 import org.apache.hadoop.yarn.api.records.ApplicationAttemptId;
 import org.apache.hadoop.yarn.util.ConverterUtils;
+import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler;
 
 /**
  * The main() for MapReduce task processes.
@@ -73,6 +74,9 @@ class YarnChild {
   static volatile TaskAttemptID taskid = null;
 
   public static void main(String[] args) throws Throwable {
+	  
+	  
+	  System.out.println("TaskHeartbeatHandler.appMasterHost_in_TaskHeartbeatHandler = "+TaskHeartbeatHandler.appMasterHost_in_TaskHeartbeatHandler);
 	  
   System.out.println("__________inside main of YarnChild.java________________Thread.currentThread().getStackTrace() = ");
   for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}

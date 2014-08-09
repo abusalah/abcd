@@ -28,6 +28,7 @@ import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -35,6 +36,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 //import multiclient.EchoThread;
+
 
 
 
@@ -68,6 +70,8 @@ import java.lang.Math;
  */
 @SuppressWarnings({"unchecked", "rawtypes"})
 public class TaskHeartbeatHandler extends AbstractService {
+	
+	public static String appMasterHost_in_TaskHeartbeatHandler = null;
   
   private static class ReportTime {
     private long lastProgress;
@@ -114,6 +118,13 @@ public class TaskHeartbeatHandler extends AbstractService {
 
   public TaskHeartbeatHandler(EventHandler eventHandler, Clock clock, int numThreads) {
     super("TaskHeartbeatHandler");
+    try {
+		appMasterHost_in_TaskHeartbeatHandler=InetAddress.getLocalHost().getHostName();
+		System.out.println("appMasterHost_in_TaskHeartbeatHandler inside TaskHeartbeatHandler constructor = "+appMasterHost_in_TaskHeartbeatHandler);
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
     this.eventHandler = eventHandler;
     this.clock = clock;
     runningAttempts = new ConcurrentHashMap<TaskAttemptId, ReportTime>(16, 0.75f, numThreads);
