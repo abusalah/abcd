@@ -19,6 +19,8 @@
 package org.apache.hadoop.mapreduce.v2.app.job.impl;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -1519,6 +1521,15 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
 
     private void createReduceTasks(JobImpl job) {
       for (int i = 0; i < job.numReduceTasks; i++) {
+    	  try {
+			job.conf.appMasterHost=InetAddress.getLocalHost().getHostName();
+			Configuration.appMasterHost=InetAddress.getLocalHost().getHostName();
+		} catch (UnknownHostException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	  System.out.println("_________________________________+____________________________job.conf.appMasterHost = "+job.conf.appMasterHost);
+    	  
     	  //_______________________________________________________________________________________________
         TaskImpl task =
             new ReduceTaskImpl(job.jobId, i,

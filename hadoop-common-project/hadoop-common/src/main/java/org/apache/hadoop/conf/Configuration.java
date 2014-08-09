@@ -673,13 +673,13 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
   /** A new configuration. */
   public Configuration() {	   	
     this(true);
-    try {
-		appMasterHost = InetAddress.getLocalHost().getHostName();
-		System.out.println("\n\nappMasterHost in constructor = "+appMasterHost+"\n\n");
-	} catch (UnknownHostException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+//    try {
+//		appMasterHost = InetAddress.getLocalHost().getHostName();
+//		System.out.println("\n\nappMasterHost in constructor = "+appMasterHost+"\n\n");
+//	} catch (UnknownHostException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
     System.out.println("getInt(\"mapreduce.job.reduces\", 1)"+getInt("mapreduce.job.reduces", 1));
     //this.replicasHashes_333_set= new int[5];//---new for bft//maybe you need to initialize to all zeros
     
