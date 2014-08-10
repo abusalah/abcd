@@ -890,6 +890,24 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
     throw new IllegalStateException("Variable substitution depth too large: " 
                                     + MAX_SUBST + " " + expr);
   }
+  //______________________________________________________________________________________________________________________________________________________________________
+  public String getIPAddrServer(){
+	  String returnedValue="p";
+	try {
+		returnedValue = InetAddress.getLocalHost().getHostName();
+	} catch (UnknownHostException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	  return returnedValue;
+  }
+  
+  
+  
+  
+  
+  
+  
   
   /**
    * Get the value of the <code>name</code> property, <code>null</code> if

@@ -226,6 +226,9 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)
 if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO ADD CASE 2
 {
 	
+	String temptest;
+	temptest=context.getConfiguration().getIPAddrServer();
+	System.out.println("temptest = "+temptest);
 	System.out.println("Configuration.appMasterHost = "+Configuration.appMasterHost);
 	System.out.println("context.getConfiguration().appMasterHost = "+context.getConfiguration().appMasterHost);
 	
@@ -290,6 +293,8 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 					//System.out.println("responseLine = "+responseLine);
 					if(responseLine!=null && !responseLine.isEmpty())
 					{
+						//add if stmt for checking the server address, but first open a socket here for each Reducer for accepting server address
+						//clientSocket = serverSocket.accept();(put it above)
 						if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)
 						{	
 							System.out.println("Entered XXX------");
