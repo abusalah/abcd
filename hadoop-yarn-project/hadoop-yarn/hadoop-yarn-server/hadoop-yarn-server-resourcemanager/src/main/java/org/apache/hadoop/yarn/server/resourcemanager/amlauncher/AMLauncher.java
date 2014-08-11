@@ -102,7 +102,11 @@ public class AMLauncher implements Runnable {
     ContainerId masterContainerID = masterContainer.getId();
     ApplicationSubmissionContext applicationContext =
       application.getSubmissionContext();
-    LOG.info("Setting up container " + masterContainer
+    System.out.println("masterContainer.getNodeHttpAddress() = "+masterContainer.getNodeHttpAddress());
+    System.out.println("masterContainer.getNodeId() = "+masterContainer.getNodeId());
+    System.out.println("masterContainer.getId() = "+masterContainer.getId());
+    
+    LOG.info("_____________________MASTER CONTAINER___________________________Setting up container " + masterContainer
         + " for AM " + application.getAppAttemptId());  
     ContainerLaunchContext launchContext =
         createAMContainerLaunchContext(applicationContext, masterContainerID);

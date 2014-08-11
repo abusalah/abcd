@@ -72,6 +72,13 @@ public abstract class Container implements Comparable<Container> {
     Container container = Records.newRecord(Container.class);
     container.setId(containerId);
     container.setNodeId(nodeId);
+    System.out.println("^^^^^^^^^^^ INSIDE Container.java nodeHttpAddress = "=nodeHttpAddress);
+
+System.out.println("_________^^^^^^^_________Container.java________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+
+
     container.setNodeHttpAddress(nodeHttpAddress);
     container.setResource(resource);
     container.setPriority(priority);

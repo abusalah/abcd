@@ -181,6 +181,13 @@ public class ContainerPBImpl extends Container {
       builder.clearNodeHttpAddress();
       return;
     }
+    System.out.println("^^^^^^^^^^ INSDIE ContainerPBImpl.java nodeHttpAddress = "=nodeHttpAddress);
+
+    System.out.println("___________^^^^^^_______ContainerPBImpl.java________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+
+
     builder.setNodeHttpAddress(nodeHttpAddress);
   }
 
