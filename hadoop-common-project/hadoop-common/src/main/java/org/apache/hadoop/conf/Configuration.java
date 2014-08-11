@@ -673,6 +673,7 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
   /** A new configuration. */
   public Configuration() {	   	
     this(true);
+    //public static final String jdfd="xxx"
 //    try {
 //		appMasterHost = InetAddress.getLocalHost().getHostName();
 //		System.out.println("\n\nappMasterHost in constructor = "+appMasterHost+"\n\n");
@@ -895,6 +896,7 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
 	  String returnedValue="p";
 	try {
 		returnedValue = InetAddress.getLocalHost().getHostName();
+		System.out.println("^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^returnedValue inside Configuration.java file = "+ returnedValue);
 	} catch (UnknownHostException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();

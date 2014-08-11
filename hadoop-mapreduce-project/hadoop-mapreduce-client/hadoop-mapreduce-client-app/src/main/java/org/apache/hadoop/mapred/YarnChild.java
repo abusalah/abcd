@@ -77,13 +77,13 @@ class YarnChild {
 
   public static void main(String[] args) throws Throwable {
 	  
-	  System.out.println("TaskHeartbeatHandler.appMasterHost_in_TaskHeartbeatHandler = "+TaskHeartbeatHandler.appMasterHost_in_TaskHeartbeatHandler);
-	  System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
-	  
-	  synchronized(MRAppMaster.lock){
+	  synchronized(MRAppMaster.lock){	  
 	  System.out.println("MRAppMaster.appMasterHost_in_MRAppMaster = "+MRAppMaster.appMasterHost_in_MRAppMaster);
 	  System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
 	  }
+	  
+	  System.out.println("TaskHeartbeatHandler.appMasterHost_in_TaskHeartbeatHandler = "+TaskHeartbeatHandler.appMasterHost_in_TaskHeartbeatHandler);
+	  System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
 	  
   System.out.println("__________inside main of YarnChild.java________________Thread.currentThread().getStackTrace() = ");
   for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}

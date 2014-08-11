@@ -329,6 +329,8 @@ public abstract class Server {
    *  Returns null in case of an error.
    */
   public static String getRemoteAddress() {
+      System.out.println("%%%%%%%%%%%%%%%%% INSIDE getRemoteAddress method in Server.java");
+
     InetAddress addr = getRemoteIp();
     return (addr == null) ? null : addr.getHostAddress();
   }
@@ -391,11 +393,15 @@ public abstract class Server {
    */
   public static void bind(ServerSocket socket, InetSocketAddress address, 
                           int backlog) throws IOException {
+      System.out.println("%%%%%%%%%%%%%%%%% INSIDE bind method in Server.java");
+
     bind(socket, address, backlog, null, null);
   }
 
   public static void bind(ServerSocket socket, InetSocketAddress address, 
       int backlog, Configuration conf, String rangeConf) throws IOException {
+      System.out.println("%%%%%%%%%%%%%%%%% INSIDE bind method in Server.java");
+
     try {
       IntegerRanges range = null;
       if (rangeConf != null) {
@@ -555,6 +561,7 @@ public abstract class Server {
         CommonConfigurationKeysPublic.IPC_SERVER_LISTEN_QUEUE_SIZE_DEFAULT);
     
     public Listener() throws IOException {
+       System.out.println("%%%%%%%%%%%%%%%%% INSIDE Listener class in Server.java");
       address = new InetSocketAddress(bindAddress, port);
       // Create a new server socket and set to non blocking mode
       acceptChannel = ServerSocketChannel.open();

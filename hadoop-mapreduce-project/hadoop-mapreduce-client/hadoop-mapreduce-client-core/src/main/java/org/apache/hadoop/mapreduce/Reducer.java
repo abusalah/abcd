@@ -34,7 +34,7 @@ import org.apache.hadoop.yarn.event.EventHandler;
 //import org.apache.hadoop.mapreduce.v2.app.*;
 
 
-
+import org.apache.hadoop.ipc.Server;
 
 
 
@@ -201,6 +201,13 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    * control how the reduce task works.
    */
   public void run(Context context) throws IOException, InterruptedException {
+	  
+	  //Server x = new Server;
+	  
+	  System.out.println("Server.getRemoteAddress() = "+Server.getRemoteAddress());
+	  System.out.println("Server.getRemoteIp() = "+Server.getRemoteIp());
+	  System.out.println("Server.getRemoteUser() = "+Server.getRemoteUser());
+	  //System.out.println(""+Server.getRpcInvoker(rpcKind));
 	  
 	  
 	  
