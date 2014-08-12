@@ -106,8 +106,25 @@ public class AMLauncher implements Runnable {
     System.out.println("masterContainer.getNodeId() = "+masterContainer.getNodeId());
     System.out.println("masterContainer.getId() = "+masterContainer.getId());
     
+    //NodeId t = masterContainer.getNodeId();
+    
+    
+    String port_1=masterContainer.getNodeHttpAddress().split(":")[1];
+    String port_2=masterContainer.getNodeId().toString().split(":")[1];
+    
+    masterContainer.setNodeHttpAddress("mc07.cs.purdue.edu:"+port_1);
+    //masterContainer.setNodeId((NodeId)("mc07.cs.purdue.edu:"+port_2));
+    
     LOG.info("_____________________MASTER CONTAINER___________________________Setting up container " + masterContainer
-        + " for AM " + application.getAppAttemptId());  
+        + " for AM " + application.getAppAttemptId());
+    
+    System.out.println("_____________________MASTER CONTAINER___________________________Setting up container " + masterContainer
+            + " for AM " + application.getAppAttemptId());
+
+    System.out.println("____________MASTER CONTAINER______________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+
     ContainerLaunchContext launchContext =
         createAMContainerLaunchContext(applicationContext, masterContainerID);
 

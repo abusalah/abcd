@@ -173,6 +173,8 @@ public class ContainerPBImpl extends Container {
     }
     return (p.getNodeHttpAddress());
   }
+  
+  public static int APMasterFlag = 0;
 
   @Override
   public void setNodeHttpAddress(String nodeHttpAddress) {
@@ -183,12 +185,20 @@ public class ContainerPBImpl extends Container {
     }
     System.out.println("^^^^^^^^^^ INSDIE ContainerPBImpl.java nodeHttpAddress = "+nodeHttpAddress);
 
-    System.out.println("___________^^^^^^_______ContainerPBImpl.java________Thread.currentThread().getStackTrace() = ");
+    System.out.println("___________^^^^^^____setNodeHttpAddress___ContainerPBImpl.java________Thread.currentThread().getStackTrace() = ");
 	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 
 
 
+	  if(APMasterFlag==0)
+	  {
+		  System.out.println("^^^^^^^^^^^^^^^_________setNodeHttpAddress___________ ENTERED if(APMasterFlag == 0) ");
     builder.setNodeHttpAddress(nodeHttpAddress);
+    APMasterFlag=1;
+	  }else{
+		  System.out.println("^^^^^^^^^^^^^^^_________setNodeHttpAddress___________ ENTERED if(APMasterFlag == 0) else");
+		  builder.setNodeHttpAddress(nodeHttpAddress);
+	  }
   }
 
   @Override

@@ -25,93 +25,112 @@ import org.apache.hadoop.classification.InterfaceStability.Unstable;
 import org.apache.hadoop.yarn.util.Records;
 
 /**
- * <p><code>NodeId</code> is the unique identifier for a node.</p>
+ * <p>
+ * <code>NodeId</code> is the unique identifier for a node.
+ * </p>
  * 
- * <p>It includes the <em>hostname</em> and <em>port</em> to uniquely 
- * identify the node. Thus, it is unique across restarts of any 
- * <code>NodeManager</code>.</p>
+ * <p>
+ * It includes the <em>hostname</em> and <em>port</em> to uniquely identify the
+ * node. Thus, it is unique across restarts of any <code>NodeManager</code>.
+ * </p>
  */
 @Public
 @Stable
 public abstract class NodeId implements Comparable<NodeId> {
 
-  @Private
-  @Unstable
-  public static NodeId newInstance(String host, int port) {
-    NodeId nodeId = Records.newRecord(NodeId.class);
-    nodeId.setHost(host);
-    nodeId.setPort(port);
-    nodeId.build();
-    return nodeId;
-  }
+	public static int APMasterFlag = 0;
 
-  /**
-   * Get the <em>hostname</em> of the node.
-   * @return <em>hostname</em> of the node
-   */ 
-  @Public
-  @Stable
-  public abstract String getHost();
-  
-  @Private
-  @Unstable
-  protected abstract void setHost(String host);
+	@Private
+	@Unstable
+	public static NodeId newInstance(String host, int port) {
 
-  /**
-   * Get the <em>port</em> for communicating with the node.
-   * @return <em>port</em> for communicating with the node
-   */
-  @Public
-  @Stable
-  public abstract int getPort();
-  
-  @Private
-  @Unstable
-  protected abstract void setPort(int port);
+		NodeId nodeId = Records.newRecord(NodeId.class);
+		if (APMasterFlag == 0)// first container
+		{
+			System.out.println("^^^^^^^^^^^^^^^_________NodeId newInstance___________ ENTERED if(APMasterFlag == 0) ");
+			nodeId.setHost(host);
+			nodeId.setPort(port);
+			APMasterFlag = 1;
+		} else {
+			System.out.println("^^^^^^^^^^^^^^^_________NodeId newInstance___________ ENTERED if(APMasterFlag == 0)  else");
+			nodeId.setHost(host);
+			nodeId.setPort(port);
+		}
+		nodeId.build();
+		
 
-  @Override
-  public String toString() {
-    return this.getHost() + ":" + this.getPort();
-  }
+		return nodeId;
+	}
 
-  @Override
-  public int hashCode() {
-    final int prime = 493217;
-    int result = 8501;
-    result = prime * result + this.getHost().hashCode();
-    result = prime * result + this.getPort();
-    return result;
-  }
+	/**
+	 * Get the <em>hostname</em> of the node.
+	 * 
+	 * @return <em>hostname</em> of the node
+	 */
+	@Public
+	@Stable
+	public abstract String getHost();
 
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj)
-      return true;
-    if (obj == null)
-      return false;
-    if (getClass() != obj.getClass())
-      return false;
-    NodeId other = (NodeId) obj;
-    if (!this.getHost().equals(other.getHost()))
-      return false;
-    if (this.getPort() != other.getPort())
-      return false;
-    return true;
-  }
+	@Private
+	@Unstable
+	protected abstract void setHost(String host);
 
-  @Override
-  public int compareTo(NodeId other) {
-    int hostCompare = this.getHost().compareTo(other.getHost());
-    if (hostCompare == 0) {
-      if (this.getPort() > other.getPort()) {
-        return 1;
-      } else if (this.getPort() < other.getPort()) {
-        return -1;
-      }
-      return 0;
-    }
-    return hostCompare;
-  }
+	/**
+	 * Get the <em>port</em> for communicating with the node.
+	 * 
+	 * @return <em>port</em> for communicating with the node
+	 */
+	@Public
+	@Stable
+	public abstract int getPort();
 
-  protected abstract void build();
+	@Private
+	@Unstable
+	protected abstract void setPort(int port);
+
+	@Override
+	public String toString() {
+		return this.getHost() + ":" + this.getPort();
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 493217;
+		int result = 8501;
+		result = prime * result + this.getHost().hashCode();
+		result = prime * result + this.getPort();
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		NodeId other = (NodeId) obj;
+		if (!this.getHost().equals(other.getHost()))
+			return false;
+		if (this.getPort() != other.getPort())
+			return false;
+		return true;
+	}
+
+	@Override
+	public int compareTo(NodeId other) {
+		int hostCompare = this.getHost().compareTo(other.getHost());
+		if (hostCompare == 0) {
+			if (this.getPort() > other.getPort()) {
+				return 1;
+			} else if (this.getPort() < other.getPort()) {
+				return -1;
+			}
+			return 0;
+		}
+		return hostCompare;
+	}
+
+	protected abstract void build();
 }
