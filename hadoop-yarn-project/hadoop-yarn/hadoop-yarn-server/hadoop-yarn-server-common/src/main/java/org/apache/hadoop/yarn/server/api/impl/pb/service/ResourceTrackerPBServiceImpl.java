@@ -49,6 +49,15 @@ public class ResourceTrackerPBServiceImpl implements ResourceTrackerPB {
   public RegisterNodeManagerResponseProto registerNodeManager(
       RpcController controller, RegisterNodeManagerRequestProto proto)
       throws ServiceException {
+	  //bft___________________________________________________________________________________________________________
+	  System.out.println("INSIDE registerNodeManager function in ResourceTrackerPBServiceImpl.java "
+		  		+ " in org.apache.hadoop.yarn.server.api.impl.pb.service package "
+		  		+ " in hadoop-yarn-server-common");
+
+	System.out.println("____________registerNodeManager______________Thread.currentThread().getStackTrace() = ");
+		  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+
     RegisterNodeManagerRequestPBImpl request = new RegisterNodeManagerRequestPBImpl(proto);
     try {
       RegisterNodeManagerResponse response = real.registerNodeManager(request);

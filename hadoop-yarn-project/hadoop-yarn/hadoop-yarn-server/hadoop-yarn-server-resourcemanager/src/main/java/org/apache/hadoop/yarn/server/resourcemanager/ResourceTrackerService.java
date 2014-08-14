@@ -230,9 +230,16 @@ public class ResourceTrackerService extends AbstractService implements
 
   @SuppressWarnings("unchecked")
   @Override
-  public RegisterNodeManagerResponse registerNodeManager(
-      RegisterNodeManagerRequest request) throws YarnException,
+  public RegisterNodeManagerResponse registerNodeManager(RegisterNodeManagerRequest request) throws YarnException,
       IOException {
+	  System.out.println("INSIDE registerNodeManager function in ResourceTrackerService.java "
+	  		+ " in org.apache.hadoop.yarn.server.resourcemanager package "
+	  		+ " in hadoop-yarn-server-resourcemanager");
+
+System.out.println("____________registerNodeManager______________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+
     NodeId nodeId = request.getNodeId();
     String host = nodeId.getHost();
     int cmPort = nodeId.getPort();
@@ -297,7 +304,7 @@ public class ResourceTrackerService extends AbstractService implements
         .getCurrentKey());
     response.setNMTokenMasterKey(nmTokenSecretManager
         .getCurrentKey());    
-
+//bft________________________________________________________________________________________________________
     RMNode rmNode = new RMNodeImpl(nodeId, rmContext, host, cmPort, httpPort,
         resolve(host), ResourceOption.newInstance(capability, RMNode.OVER_COMMIT_TIMEOUT_MILLIS_DEFAULT),
         nodeManagerVersion);

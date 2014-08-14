@@ -63,6 +63,15 @@ public class FiCaSchedulerNode extends SchedulerNode {
   private final String nodeName;
 
   public FiCaSchedulerNode(RMNode node, boolean usePortForNodeName) {
+	  System.out.println("INSIDE FiCaSchedulerNode.java in "
+	  		+ "org.apache.hadoop.yarn.server.resourcemanger.scheduler.common.fica package"
+	  		+ " in hadoop-yarn-server-recourcemanager project");
+
+System.out.println("__________FiCaSchedulerNode.java_____Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+
+
     this.rmNode = node;
     this.availableResource.setMemory(node.getTotalCapability().getMemory());
     this.availableResource.setVirtualCores(node.getTotalCapability().getVirtualCores());

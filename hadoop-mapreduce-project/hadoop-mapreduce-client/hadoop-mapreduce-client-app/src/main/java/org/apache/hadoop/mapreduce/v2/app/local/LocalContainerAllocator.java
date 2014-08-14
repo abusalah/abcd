@@ -154,7 +154,7 @@ public class LocalContainerAllocator extends RMCommunicator
       System.out.println("nodeId = "+nodeId);
       System.out.println("this.nmHost = "+this.nmHost);
       System.out.println("this.nmHttpPort = "+this.nmHttpPort);
-      container.setNodeHttpAddress(this.nmHost + ":" + this.nmHttpPort);
+      //container.setNodeHttpAddress(this.nmHost + ":" + this.nmHttpPort);
       // send the container-assigned event to task attempt
 
       if (event.getAttemptID().getTaskId().getTaskType() == TaskType.MAP) {

@@ -56,6 +56,14 @@ public class RegisterNodeManagerRequestPBImpl extends RegisterNodeManagerRequest
   }
 
   public RegisterNodeManagerRequestPBImpl(RegisterNodeManagerRequestProto proto) {
+	//bft___________________________________________________________________________________________________________
+	  System.out.println("INSIDE RegisterNodeManagerRequestPBImpl function in RegisterNodeManagerRequestPBImpl.java "
+		  		+ " in org.apache.hadoop.yarn.server.api.protocolrecords.impl.pb.service package "
+		  		+ " in hadoop-yarn-server-common");
+
+	System.out.println("____________registerNodeManager______________Thread.currentThread().getStackTrace() = ");
+		  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
     this.proto = proto;
     viaProto = true;
   }

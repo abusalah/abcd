@@ -178,7 +178,14 @@ public class NodeStatusUpdaterImpl extends AbstractService implements
 
   @Override
   protected void serviceStart() throws Exception {
+	  System.out.println("INSIDE serviceStart() function in NodeStatusUpdaterImpl.java "
+		  		+ " in org.apache.hadoop.yarn.server.nodemanager package "
+		  		+ " in hadoop-yarn-server-nodemanager");
 
+	System.out.println("____________serviceStart()_____***_________Thread.currentThread().getStackTrace() = ");
+		  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+	  //bft_____________________________________________________________________________________
     // NodeManager is the last service to start, so NodeId is available.
     this.nodeId = this.context.getNodeId();
     this.httpPort = this.context.getHttpPort();
@@ -247,6 +254,14 @@ public class NodeStatusUpdaterImpl extends AbstractService implements
   protected void registerWithRM()
       throws YarnException, IOException {
     List<ContainerStatus> containerStatuses = getContainerStatuses();
+    //bft________________________________________________________________________________________________________
+    System.out.println("INSIDE registerWithRM() function in NodeStatusUpdaterImpl.java "
+	  		+ " in org.apache.hadoop.yarn.server.nodemanager package "
+	  		+ " in hadoop-yarn-server-nodemanager");
+
+System.out.println("____________serviceStart()______________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
     RegisterNodeManagerRequest request =
         RegisterNodeManagerRequest.newInstance(nodeId, httpPort, totalResource,
           nodeManagerVersionId, containerStatuses);

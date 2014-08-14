@@ -108,6 +108,14 @@ public class FiCaSchedulerApp extends SchedulerApplicationAttempt {
   synchronized public RMContainer allocate(NodeType type, FiCaSchedulerNode node,
       Priority priority, ResourceRequest request, 
       Container container) {
+	  
+	  System.out.println("INSIDE FiCaSchedulerApp.java in "
+		  		+ "org.apache.hadoop.yarn.server.resourcemanger.scheduler.common.fica package"
+		  		+ " in hadoop-yarn-server-recourcemanager project");
+
+	System.out.println("__________FiCaSchedulerApp.java_____Thread.currentThread().getStackTrace() = ");
+		  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
 
     if (isStopped) {
       return null;

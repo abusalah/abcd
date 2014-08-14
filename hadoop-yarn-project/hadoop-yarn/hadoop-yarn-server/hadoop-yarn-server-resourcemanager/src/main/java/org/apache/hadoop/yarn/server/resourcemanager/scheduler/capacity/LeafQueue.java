@@ -1286,7 +1286,7 @@ public class LeafQueue implements CSQueue {
     NodeId nodeId = node.getRMNode().getNodeID();
     ContainerId containerId = BuilderUtils.newContainerId(application
         .getApplicationAttemptId(), application.getNewContainerId());
-  
+  //bft_____________________________________________________________________________________________
     // Create the container
     Container container =
         BuilderUtils.newContainer(containerId, nodeId, node.getRMNode()
