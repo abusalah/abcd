@@ -588,6 +588,11 @@ public class ResourceManager extends CompositeService implements Recoverable {
           }
 
           try {
+        	  System.out.println("\n\n\n\n------HERE THE SCHEDULER STARTS FROM THE RESOURCE MANAGER------scheduler.handle(event);-------"
+        	  		+ " INSIDE ResourceManager.java in org.apache.hadoop.yarn.server.resourcemanager package "
+        	  		+ " in hadoop-yarn-server-resourcemanager project ----------"
+        	  		+ " it takes an event from an eventQueue and it handles it. "
+        	  		+ " This event is a task(or a container) for example   \n\n\n\n");
             scheduler.handle(event);
           } catch (Throwable t) {
             // An error occurred, but we are shutting down anyway.

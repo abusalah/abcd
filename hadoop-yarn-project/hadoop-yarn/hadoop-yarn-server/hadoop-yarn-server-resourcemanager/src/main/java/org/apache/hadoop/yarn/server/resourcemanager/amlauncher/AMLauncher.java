@@ -112,7 +112,7 @@ public class AMLauncher implements Runnable {
     String port_1=masterContainer.getNodeHttpAddress().split(":")[1];
     String port_2=masterContainer.getNodeId().toString().split(":")[1];
     
-    masterContainer.setNodeHttpAddress("mc07.cs.purdue.edu:"+port_1);
+    //masterContainer.setNodeHttpAddress("mc07.cs.purdue.edu:"+port_1);
     //masterContainer.setNodeId((NodeId)("mc07.cs.purdue.edu:"+port_2));
     
     LOG.info("_____________________MASTER CONTAINER___________________________Setting up container " + masterContainer

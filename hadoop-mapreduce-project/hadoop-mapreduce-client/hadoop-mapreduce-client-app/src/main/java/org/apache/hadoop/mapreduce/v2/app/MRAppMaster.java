@@ -1576,7 +1576,7 @@ public static final Object lock = new Object();
     conf.getCredentials().addAll(credentials);
     appMasterUgi.doAs(new PrivilegedExceptionAction<Object>() {
       @Override
-      public Object run() throws Exception {
+      public Object run() throws Exception {    	  
         appMaster.init(conf);
         appMaster.start();
         if(appMaster.errorHappenedShutDown) {

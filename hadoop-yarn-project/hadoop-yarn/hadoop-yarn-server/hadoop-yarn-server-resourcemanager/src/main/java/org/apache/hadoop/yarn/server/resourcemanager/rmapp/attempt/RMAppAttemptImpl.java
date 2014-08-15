@@ -835,10 +835,15 @@ public class RMAppAttemptImpl implements RMAppAttempt, Recoverable {
         appAttempt.retryFetchingAMContainer(appAttempt);
         return RMAppAttemptState.SCHEDULED;
       }
+      
+      
+      for(int i=0; i<amContainerAllocation.getContainers().size();i++){
+    	  System.out.println("$$$$$$$$$$"+i+"      "+amContainerAllocation.getContainers().get(i).getNodeHttpAddress());
+      }
 
       // Set the masterContainer
       appAttempt.setMasterContainer(amContainerAllocation.getContainers()
-        .get(0));
+        .get(2));//IMP original was get(0)//bft______________________________________________________________here add check for get(0).gethttp
       // The node set in NMTokenSecrentManager is used for marking whether the
       // NMToken has been issued for this node to the AM.
       // When AM container was allocated to RM itself, the node which allocates
