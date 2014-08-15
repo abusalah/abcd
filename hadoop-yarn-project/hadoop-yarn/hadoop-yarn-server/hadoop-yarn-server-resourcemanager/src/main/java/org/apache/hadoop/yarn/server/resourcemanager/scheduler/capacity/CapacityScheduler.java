@@ -655,6 +655,19 @@ public class CapacityScheduler extends AbstractYarnScheduler
   public Allocation allocate(ApplicationAttemptId applicationAttemptId,
       List<ResourceRequest> ask, List<ContainerId> release, 
       List<String> blacklistAdditions, List<String> blacklistRemovals) {
+	  
+	  for(ResourceRequest i:ask)
+	  {
+		  System.out.println("ask i.getNumContainers() = "+i.getNumContainers()
+				  + "  i.getResourceName() = "+i.getResourceName());
+	  }
+
+	  for(ContainerId i:release)
+	  {
+		  System.out.println("release i.getId() = "+i.getId()
+				  + "  i.getApplicationAttemptId() = "+i.getApplicationAttemptId());
+	  }
+
 
     FiCaSchedulerApp application = getApplicationAttempt(applicationAttemptId);
     if (application == null) {

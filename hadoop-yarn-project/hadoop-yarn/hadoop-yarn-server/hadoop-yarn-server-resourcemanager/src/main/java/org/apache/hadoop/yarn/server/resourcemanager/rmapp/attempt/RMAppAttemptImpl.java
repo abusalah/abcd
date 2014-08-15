@@ -36,6 +36,7 @@ import java.util.concurrent.locks.ReentrantReadWriteLock.WriteLock;
 import javax.crypto.SecretKey;
 
 import com.google.common.annotations.VisibleForTesting;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -817,6 +818,23 @@ public class RMAppAttemptImpl implements RMAppAttempt, Recoverable {
     @Override
     public RMAppAttemptState transition(RMAppAttemptImpl appAttempt,
         RMAppAttemptEvent event) {
+    	
+    	for(ResourceRequest i:EMPTY_CONTAINER_REQUEST_LIST)
+  	  {
+  		  System.out.println("EMPTY_CONTAINER_REQUEST_LIST i.getNumContainers() = "+i.getNumContainers()
+  				  + "  i.getResourceName() = "+i.getResourceName());
+  	  }
+
+  	  for(ContainerId i:EMPTY_CONTAINER_RELEASE_LIST)
+  	  {
+  		  System.out.println("EMPTY_CONTAINER_RELEASE_LIST i.getId() = "+i.getId()
+  				  + "  i.getApplicationAttemptId() = "+i.getApplicationAttemptId());
+  	  }
+
+
+    	
+    	
+    	
       // Acquire the AM container from the scheduler.
       Allocation amContainerAllocation =
           appAttempt.scheduler.allocate(appAttempt.applicationAttemptId,
@@ -843,7 +861,7 @@ public class RMAppAttemptImpl implements RMAppAttempt, Recoverable {
 
       // Set the masterContainer
       appAttempt.setMasterContainer(amContainerAllocation.getContainers()
-        .get(2));//IMP original was get(0)//bft______________________________________________________________here add check for get(0).gethttp
+        .get(0));//IMP original was get(0)//bft______________________________________________________________here add check for get(0).gethttp
       // The node set in NMTokenSecrentManager is used for marking whether the
       // NMToken has been issued for this node to the AM.
       // When AM container was allocated to RM itself, the node which allocates
