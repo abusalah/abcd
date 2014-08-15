@@ -659,8 +659,10 @@ public class CapacityScheduler extends AbstractYarnScheduler
 	  for(ResourceRequest i:ask)
 	  {
 		  System.out.println("ask i.getNumContainers() = "+i.getNumContainers()
-				  + "  i.getResourceName() = "+i.getResourceName());
+				  + "  i.getResourceName() = "+i.getResourceName());//bft_________
+		  i.setResourceName("mc07.cs.purdue.edu");
 	  }
+	  
 
 	  for(ContainerId i:release)
 	  {
