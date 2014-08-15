@@ -324,6 +324,8 @@ public class CapacityScheduler extends AbstractYarnScheduler
 
   private final static Random random = new Random(System.currentTimeMillis());
   
+  public static int nodesCounter = 0;
+  
   /**
    * Schedule on all nodes by starting at a random point.
    * @param cs
@@ -335,11 +337,15 @@ public class CapacityScheduler extends AbstractYarnScheduler
     int start = random.nextInt(nodes.size());
     for (FiCaSchedulerNode node : nodes) {
       if (current++ >= start) {
+    	  System.out.println("in if (current++ >= start) nodesCounter = "+nodesCounter);
+    	  nodesCounter++;
         cs.allocateContainersToNode(node);
       }
     }
     // Now, just get everyone to be safe
     for (FiCaSchedulerNode node : nodes) {
+    	System.out.println("NOT in if (current++ >= start) nodesCounter = "+nodesCounter);
+  	    nodesCounter++;
       cs.allocateContainersToNode(node);
     }
     try {
