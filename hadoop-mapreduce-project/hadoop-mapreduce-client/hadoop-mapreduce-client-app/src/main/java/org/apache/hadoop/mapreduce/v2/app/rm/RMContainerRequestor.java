@@ -329,6 +329,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
 
   private void addResourceRequest(Priority priority, String resourceName,
       Resource capability) {
+	  System.out.println("inside addResourceRequest in RMContainerRequestor.java resourceName = "+resourceName);
     Map<String, Map<Resource, ResourceRequest>> remoteRequests =
       this.remoteRequestsTable.get(priority);
     if (remoteRequests == null) {

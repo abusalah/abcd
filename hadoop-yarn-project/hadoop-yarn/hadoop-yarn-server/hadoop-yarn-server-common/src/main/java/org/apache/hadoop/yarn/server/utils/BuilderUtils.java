@@ -287,6 +287,8 @@ public class BuilderUtils {
 
   public static ResourceRequest newResourceRequest(Priority priority,
       String hostName, Resource capability, int numContainers) {
+	  System.out.println("inside BuilderUtils.java hostName = "+hostName);
+	  
     ResourceRequest request = recordFactory
         .newRecordInstance(ResourceRequest.class);
     request.setPriority(priority);

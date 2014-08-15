@@ -656,11 +656,16 @@ public class CapacityScheduler extends AbstractYarnScheduler
       List<ResourceRequest> ask, List<ContainerId> release, 
       List<String> blacklistAdditions, List<String> blacklistRemovals) {
 	  
+	  System.out.println("INSIDE allocate in CapacityScheduler.java ........ we need to know who called it so we setResourceName"
+	  		+ " correctly ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  
+	  
 	  for(ResourceRequest i:ask)
 	  {
 		  System.out.println("ask i.getNumContainers() = "+i.getNumContainers()
 				  + "  i.getResourceName() = "+i.getResourceName());//bft_________
-		  i.setResourceName("mc07.cs.purdue.edu");
+		  //i.setResourceName("mc07.cs.purdue.edu");
 	  }
 	  
 
