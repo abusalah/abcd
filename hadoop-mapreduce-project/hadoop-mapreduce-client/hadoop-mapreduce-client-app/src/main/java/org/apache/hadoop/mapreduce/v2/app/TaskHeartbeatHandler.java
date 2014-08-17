@@ -162,9 +162,10 @@ public class TaskHeartbeatHandler extends AbstractService {
     //verifierThread.start();
     if(local_BFT_flag==3)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
     {
-	    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
-	    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
-	    ThreadedEchoServer4.start();
+    	//IMP uncomment this for the verifier to launch from the appMaster
+//	    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
+//	    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
+//	    ThreadedEchoServer4.start();
     }
     
     super.serviceStart();
