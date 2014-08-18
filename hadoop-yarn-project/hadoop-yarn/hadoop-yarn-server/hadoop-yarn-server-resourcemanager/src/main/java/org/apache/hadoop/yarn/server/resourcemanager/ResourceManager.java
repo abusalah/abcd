@@ -585,6 +585,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   				try {
   		  		  System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class");
   					clientSocket = serverSocket.accept();
+  					System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class AFTER clientSocket = serverSocket.accept();");
   					//for (int i = 0; i <= 9; i++) 
   					{
   						//if (t[i] == null) 
