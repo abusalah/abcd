@@ -202,14 +202,6 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    */
   public void run(Context context) throws IOException, InterruptedException {
 	  
-	  //Server x = new Server;
-	  
-	  System.out.println("Server.getRemoteAddress() = "+Server.getRemoteAddress());
-	  System.out.println("Server.getRemoteIp() = "+Server.getRemoteIp());
-	  System.out.println("Server.getRemoteUser() = "+Server.getRemoteUser());
-	  //System.out.println(""+Server.getRpcInvoker(rpcKind));
-	  
-	  
 	  
 if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)	 
 {
@@ -232,12 +224,6 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)
 	  
 if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO ADD CASE 2
 {
-	
-	String temptest;
-	temptest=context.getConfiguration().getIPAddrServer();
-	System.out.println("temptest = "+temptest);
-	System.out.println("Configuration.appMasterHost = "+Configuration.appMasterHost);
-	System.out.println("context.getConfiguration().appMasterHost = "+context.getConfiguration().appMasterHost);
 	
 		
 	  int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4); 
@@ -273,6 +259,8 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
       if(reducerORmapper.equals("r"))
       {
 	      
+    	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
+    	  
     	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+KV.hashCode();
     	  
     	  
@@ -293,11 +281,11 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 
   				os.println(stringToSend);
   				String responseLine;
-  				//System.out.println("Before while");
+  				System.out.println("Before while");
   				while(true){
-  					//System.out.println("Entered while");
+  					System.out.println("Entered while");
 					responseLine = is.readLine();
-					//System.out.println("responseLine = "+responseLine);
+					System.out.println("responseLine = "+responseLine);
 					if(responseLine!=null && !responseLine.isEmpty())
 					{
 						//add if stmt for checking the server address, but first open a socket here for each Reducer for accepting server address

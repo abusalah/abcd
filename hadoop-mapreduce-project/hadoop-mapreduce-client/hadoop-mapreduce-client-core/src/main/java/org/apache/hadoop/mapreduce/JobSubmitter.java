@@ -353,8 +353,6 @@ class JobSubmitter {
     if (ip != null) {
       submitHostAddress = ip.getHostAddress();
       submitHostName = ip.getHostName();
-      System.out.println("^^^^^^^^^^^^^^^^^^^^ submitHostAddress in JobSubmitter.java = "+submitHostAddress);
-      System.out.println("^^^^^^^^^^^^^^^^^^^^ submitHostName in JobSubmitter.java = "+submitHostName);
       conf.set(MRJobConfig.JOB_SUBMITHOST,submitHostName);
       conf.set(MRJobConfig.JOB_SUBMITHOSTADDR,submitHostAddress);
     }

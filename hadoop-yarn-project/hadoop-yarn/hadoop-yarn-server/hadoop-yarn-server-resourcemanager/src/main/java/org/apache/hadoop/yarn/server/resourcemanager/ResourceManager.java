@@ -573,14 +573,17 @@ public class ResourceManager extends CompositeService implements Recoverable {
     public static class ThreadedEchoServer4 implements Runnable {
   	  
   	  public void run(){
+  		  System.out.println("inside run() inside ThreadedEchoServer4 class");
   			try {
   				serverSocket = new ServerSocket(7222);
   			} catch (IOException e) {
+  				System.out.println("\n\n\n\nserverSocket Exception\n\n\n");
   				System.out.println(e);
   			}
 
   			while (true) {
   				try {
+  		  		  System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class");
   					clientSocket = serverSocket.accept();
   					//for (int i = 0; i <= 9; i++) 
   					{
@@ -637,13 +640,15 @@ public class ResourceManager extends CompositeService implements Recoverable {
   			String lineReceived;
   			String receivedOK;
   			int ii =0;
+  			System.out.println("Inside run() inside clientThread class");
   			try {
   				is = new DataInputStream(clientSocket.getInputStream());
   				os = new PrintStream(clientSocket.getOutputStream());
+  				System.out.println("Inside try inside run() inside clientThread class");
   				
   				while (true) {
   					lineReceived = is.readLine();
-  					//System.out.println(lineReceived);//NOTE the difference between os and System.out 
+  					System.out.println("lineReceived inside ResourceManager = "+lineReceived);//NOTE the difference between os and System.out 
   					
   					
   					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
@@ -675,9 +680,9 @@ public class ResourceManager extends CompositeService implements Recoverable {
   	                {
   	                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
   	                	{
-//  	                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-//  	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
-//  	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
+  	                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+  	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
+  	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
   	                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i].equals(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]))//==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
   	                		{
   	                			System.out.println("ENTERED allofthem=true;");
@@ -806,11 +811,11 @@ public class ResourceManager extends CompositeService implements Recoverable {
           }
 
           try {
-        	  System.out.println("\n\n\n\n------HERE THE SCHEDULER STARTS FROM THE RESOURCE MANAGER------scheduler.handle(event);-------"
-        	  		+ " INSIDE ResourceManager.java in org.apache.hadoop.yarn.server.resourcemanager package "
-        	  		+ " in hadoop-yarn-server-resourcemanager project ----------"
-        	  		+ " it takes an event from an eventQueue and it handles it. "
-        	  		+ " This event is a task(or a container) for example   \n\n\n\n");
+//        	  System.out.println("\n\n\n\n------HERE THE SCHEDULER STARTS FROM THE RESOURCE MANAGER------scheduler.handle(event);-------"
+//        	  		+ " INSIDE ResourceManager.java in org.apache.hadoop.yarn.server.resourcemanager package "
+//        	  		+ " in hadoop-yarn-server-resourcemanager project ----------"
+//        	  		+ " it takes an event from an eventQueue and it handles it. "
+//        	  		+ " This event is a task(or a container) for example   \n\n\n\n");
         
         	  
             scheduler.handle(event);
