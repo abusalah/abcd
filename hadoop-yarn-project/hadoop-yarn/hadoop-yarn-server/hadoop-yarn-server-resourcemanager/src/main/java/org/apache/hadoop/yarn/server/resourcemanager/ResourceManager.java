@@ -37,10 +37,10 @@ import org.apache.hadoop.classification.InterfaceAudience.Private;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.ha.HAServiceProtocol;
 import org.apache.hadoop.ha.HAServiceProtocol.HAServiceState;
-import org.apache.hadoop.mapreduce.MRJobConfig;
-import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.PingChecker;
-import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.ThreadedEchoServer4;
-import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.clientThread;
+//import org.apache.hadoop.mapreduce.MRJobConfig;
+//import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.PingChecker;
+//import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.ThreadedEchoServer4;
+//import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.clientThread;
 import org.apache.hadoop.metrics2.lib.DefaultMetricsSystem;
 import org.apache.hadoop.metrics2.source.JvmMetrics;
 import org.apache.hadoop.security.Groups;
@@ -164,6 +164,8 @@ public class ResourceManager extends CompositeService implements Recoverable {
   /** End of Active services */
 
   private Configuration conf;
+  
+  public static Configuration myConf;
 
   private UserGroupInformation rmLoginUGI;
   
@@ -187,6 +189,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   @Override
   protected void serviceInit(Configuration conf) throws Exception {
     this.conf = conf;
+    myConf=conf;
     this.rmContext = new RMContextImpl();
 
     this.configurationProvider =
@@ -776,7 +779,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
       @Override
       public void run() {
     	  
-    	  Configuration myConf;
+    	  
     	  //myConf=conf;
     	  
     	  SchedulerEvent event;
@@ -796,13 +799,14 @@ public class ResourceManager extends CompositeService implements Recoverable {
         	  		+ " it takes an event from an eventQueue and it handles it. "
         	  		+ " This event is a task(or a container) for example   \n\n\n\n");
         	  
-        	    local_BFT_flag =myConf.getInt(MRJobConfig.BFT_FLAG, 1);
-        	    local_NUM_REPLICAS =myConf.getInt(MRJobConfig.NUM_REPLICAS,4);
-        	    replicasHashes = new Long[myConf.getInt(MRJobConfig.NUM_REDUCES, 1)];
-        	    replicasHashes_set = new int[myConf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS]; 
+        	    local_BFT_flag =myConf.getInt("mapred.job.bft", 1);
+        	    local_NUM_REPLICAS =myConf.getInt("mapred.job.numreplicas",4);
+        	    replicasHashes = new Long[myConf.getInt("mapred.reduce.tasks", 1)];
+        	    replicasHashes_set = new int[myConf.getInt("mapred.reduce.tasks", 1)/local_NUM_REPLICAS]; 
         	    
         	    System.out.println("local_BFT_flag = "+local_BFT_flag);
         	    System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+        	    System.out.println("myConf.getInt(\"mapred.reduce.tasks\", 1) = "+myConf.getInt("mapred.reduce.tasks", 1));
         	    
 
           	  
