@@ -165,7 +165,16 @@ public class ResourceManager extends CompositeService implements Recoverable {
 
   private Configuration conf;
   
-  public static Configuration myConf;
+  //public static Configuration myConf;
+  
+  private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
+  private static int[] replicasHashes_set;
+  private static int local_BFT_flag=0;
+  private static int local_NUM_REPLICAS = 0;
+  
+  public static Thread ThreadedEchoServer4;
+
+  
 
   private UserGroupInformation rmLoginUGI;
   
@@ -189,7 +198,6 @@ public class ResourceManager extends CompositeService implements Recoverable {
   @Override
   protected void serviceInit(Configuration conf) throws Exception {
     this.conf = conf;
-    myConf=conf;
     this.rmContext = new RMContextImpl();
 
     this.configurationProvider =
@@ -553,58 +561,20 @@ public class ResourceManager extends CompositeService implements Recoverable {
     }
   }
 
-  @Private
-  public static class SchedulerEventDispatcher extends AbstractService
-      implements EventHandler<SchedulerEvent> {
-
-    private final ResourceScheduler scheduler;
-    private final BlockingQueue<SchedulerEvent> eventQueue =
-      new LinkedBlockingQueue<SchedulerEvent>();
-    private final Thread eventProcessor;
-    private volatile boolean stopped = false;
-    private boolean shouldExitOnError = false;
-
-    public SchedulerEventDispatcher(ResourceScheduler scheduler) {
-      super(SchedulerEventDispatcher.class.getName());
-      this.scheduler = scheduler;
-      this.eventProcessor = new Thread(new EventProcessor());
-      this.eventProcessor.setName("ResourceManager Event Processor");
-    }
-
-    @Override
-    protected void serviceInit(Configuration conf) throws Exception {
-      this.shouldExitOnError =
-          conf.getBoolean(Dispatcher.DISPATCHER_EXIT_ON_ERROR_KEY,
-            Dispatcher.DEFAULT_DISPATCHER_EXIT_ON_ERROR);
-      super.serviceInit(conf);
-    }
-
-    @Override
-    protected void serviceStart() throws Exception {
-      this.eventProcessor.start();
-      super.serviceStart();
-    }
-    
     
     
     //bft_______new code________________________________________________________________________________________________________
-    private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
-    private static int[] replicasHashes_set;
-    private static int local_BFT_flag=0;
-    private static int local_NUM_REPLICAS = 0;
     
     static Socket clientSocket = null;
     static ServerSocket serverSocket = null;
     //static clientThread t[] = new clientThread[10];
     static ArrayList<clientThread> client_Threads_List = new ArrayList<clientThread>();  
-
-    private static Thread ThreadedEchoServer4;
     
-    public class ThreadedEchoServer4 implements Runnable {
+    public static class ThreadedEchoServer4 implements Runnable {
   	  
   	  public void run(){
   			try {
-  				serverSocket = new ServerSocket(2222);
+  				serverSocket = new ServerSocket(7222);
   			} catch (IOException e) {
   				System.out.println(e);
   			}
@@ -637,7 +607,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
     
     
       
-    class clientThread extends Thread {
+    public static class clientThread extends Thread {
 
   		DataInputStream is = null;
   		PrintStream os = null;
@@ -775,13 +745,56 @@ public class ResourceManager extends CompositeService implements Recoverable {
 
     //bft_______end new code____________________________________________________________________________________________________
 
+    
+    
+    
+    
+    
+    
+    
+    @Private
+    public static class SchedulerEventDispatcher extends AbstractService
+        implements EventHandler<SchedulerEvent> {
+
+      private final ResourceScheduler scheduler;
+      private final BlockingQueue<SchedulerEvent> eventQueue =
+        new LinkedBlockingQueue<SchedulerEvent>();
+      private final Thread eventProcessor;
+      private volatile boolean stopped = false;
+      private boolean shouldExitOnError = false;
+
+      public SchedulerEventDispatcher(ResourceScheduler scheduler) {
+        super(SchedulerEventDispatcher.class.getName());
+        this.scheduler = scheduler;
+        this.eventProcessor = new Thread(new EventProcessor());
+        this.eventProcessor.setName("ResourceManager Event Processor");
+      }
+
+      @Override
+      protected void serviceInit(Configuration conf) throws Exception {
+        this.shouldExitOnError =
+            conf.getBoolean(Dispatcher.DISPATCHER_EXIT_ON_ERROR_KEY,
+              Dispatcher.DEFAULT_DISPATCHER_EXIT_ON_ERROR);
+        super.serviceInit(conf);
+      }
+
+      @Override
+      protected void serviceStart() throws Exception {
+        this.eventProcessor.start();
+        super.serviceStart();
+      }
+      
+
+    
+    
+    
+    
+    
+    
+    
     private final class EventProcessor implements Runnable {
       @Override
       public void run() {
-    	  
-    	  
-    	  //myConf=conf;
-    	  
     	  SchedulerEvent event;
 
         while (!stopped && !Thread.currentThread().isInterrupted()) {
@@ -798,25 +811,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
         	  		+ " in hadoop-yarn-server-resourcemanager project ----------"
         	  		+ " it takes an event from an eventQueue and it handles it. "
         	  		+ " This event is a task(or a container) for example   \n\n\n\n");
-        	  
-        	    local_BFT_flag =myConf.getInt("mapred.job.bft", 1);
-        	    local_NUM_REPLICAS =myConf.getInt("mapred.job.numreplicas",4);
-        	    replicasHashes = new Long[myConf.getInt("mapred.reduce.tasks", 1)];
-        	    replicasHashes_set = new int[myConf.getInt("mapred.reduce.tasks", 1)/local_NUM_REPLICAS]; 
-        	    
-        	    System.out.println("local_BFT_flag = "+local_BFT_flag);
-        	    System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-        	    System.out.println("myConf.getInt(\"mapred.reduce.tasks\", 1) = "+myConf.getInt("mapred.reduce.tasks", 1));
-        	    
-
-          	  
-          	    if(local_BFT_flag==3)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
-          	    {
-          		    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
-          		    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
-          		    ThreadedEchoServer4.start();
-          	    }
-
+        
         	  
             scheduler.handle(event);
           } catch (Throwable t) {
@@ -1267,6 +1262,26 @@ public class ResourceManager extends CompositeService implements Recoverable {
         SHUTDOWN_HOOK_PRIORITY);
       resourceManager.init(conf);
       resourceManager.start();
+      
+	  
+	    local_BFT_flag =conf.getInt("mapred.job.bft", 1);
+	    local_NUM_REPLICAS =conf.getInt("mapred.job.numreplicas",4);
+	    replicasHashes = new Long[conf.getInt("mapred.reduce.tasks", 1)];
+	    replicasHashes_set = new int[conf.getInt("mapred.reduce.tasks", 1)/local_NUM_REPLICAS]; 
+	    
+	    System.out.println("local_BFT_flag = "+local_BFT_flag);
+	    System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+	    System.out.println("conf.getInt(\"mapred.reduce.tasks\", 1) = "+conf.getInt("mapred.reduce.tasks", 1));
+	    
+
+	  
+	    if(local_BFT_flag==3)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
+	    {
+		    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
+		    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
+		    ThreadedEchoServer4.start();
+	    }
+
     } catch (Throwable t) {
       LOG.fatal("Error starting ResourceManager", t);
       System.exit(-1);

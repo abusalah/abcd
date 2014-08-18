@@ -277,7 +277,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	  
     	  
     	  try {
-  			clientSocket = new Socket(Configuration.appMasterHost, 2222);//("mc07.cs.purdue.edu", 2222);
+  			clientSocket = new Socket("mc07.cs.purdue.edu", 7222);//("mc07.cs.purdue.edu", 2222);
   			inputLine = new BufferedReader(new InputStreamReader(System.in));
   			os = new PrintStream(clientSocket.getOutputStream());
   			is = new DataInputStream(clientSocket.getInputStream());
