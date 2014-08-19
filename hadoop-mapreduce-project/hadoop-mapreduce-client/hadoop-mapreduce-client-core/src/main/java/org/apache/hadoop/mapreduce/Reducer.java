@@ -265,7 +265,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	  
     	  
     	  try {
-  			clientSocket = new Socket("mc07.cs.purdue.edu", 7222);//("mc07.cs.purdue.edu", 2222);
+  			clientSocket = new Socket("mc07.cs.purdue.edu", 2222);//("mc07.cs.purdue.edu", 2222);
   			inputLine = new BufferedReader(new InputStreamReader(System.in));
   			os = new PrintStream(clientSocket.getOutputStream());
   			is = new DataInputStream(clientSocket.getInputStream());
@@ -273,6 +273,9 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
   			System.err.println("Don't know about host mc07.cs.purdue.edu");
   		} catch (IOException e) {
   			System.err.println("Couldn't get I/O for the connection to the host mc07.cs.purdue.edu");
+  			System.out.println("e.getMessage() = "+e.getMessage());
+  			System.out.println("e.toString() = "+e.toString());
+  			System.out.println("e.getCause() = "+e.getCause());  			
   		}
 
   		

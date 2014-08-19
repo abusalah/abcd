@@ -575,7 +575,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   	  public void run(){
   		  System.out.println("inside run() inside ThreadedEchoServer4 class");
   			try {
-  				serverSocket = new ServerSocket(7222);
+  				serverSocket = new ServerSocket(2222);
   			} catch (IOException e) {
   				System.out.println("\n\n\n\nserverSocket Exception\n\n\n");
   				System.out.println(e);
@@ -659,23 +659,23 @@ public class ResourceManager extends CompositeService implements Recoverable {
   	                replicasHashes[receivedReducerNumber]=receivedHash;
   	                replicasHashes_set[unreplicatedReducerNumber]+=1;
   	                
-  	                //System.out.println("---------------------------------------------------------------------------");
-//  	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
-//  	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
-//  	                		"receivedHash = " + receivedHash +
-//  	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
-//  	                		);
+  	                System.out.println("---------------------------------------------------------------------------");
+  	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+  	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
+  	                		"receivedHash = " + receivedHash +
+  	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
+  	                		);
   	                
   	                
-//  	                  for(int i =0;i<replicasHashes.length;i++)
-//  	                  {
-//  	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
-//  	                  }
-//  	                  for(int i =0;i<replicasHashes_set.length;i++)
-//  	                  {
-//  	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
-//  	                  }
-  	                //System.out.println("---------------------------------------------------------------------------");
+  	                  for(int i =0;i<replicasHashes.length;i++)
+  	                  {
+  	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
+  	                  }
+  	                  for(int i =0;i<replicasHashes_set.length;i++)
+  	                  {
+  	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
+  	                  }
+  	                System.out.println("---------------------------------------------------------------------------");
   	                  
   	                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
   	                {

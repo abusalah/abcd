@@ -149,12 +149,7 @@ public class WordCount {
 	    for( int i=0; i<r3; i++ )
 	    {
 	    	conf[i] = new Configuration();
-	    	conf[i].appMasterHost=InetAddress.getLocalHost().getHostName();
-	    	Configuration.appMasterHost=InetAddress.getLocalHost().getHostName();
-	    	System.out.println("InetAddress.getLocalHost().getHostName() = "+InetAddress.getLocalHost().getHostName());
-	    	System.out.println("conf[i].appMasterHost = "+conf[i].appMasterHost);
-	    	System.out.println("Configuration.appMasterHost = "+Configuration.appMasterHost);
-	    	
+	    		
 	    }
 	    	
 	    
