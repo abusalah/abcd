@@ -37,7 +37,7 @@ import org.apache.hadoop.classification.InterfaceAudience.Private;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.ha.HAServiceProtocol;
 import org.apache.hadoop.ha.HAServiceProtocol.HAServiceState;
-import org.apache.hadoop.mapreduce.MRJobConfig;
+//import org.apache.hadoop.mapreduce.MRJobConfig;
 //import org.apache.hadoop.mapreduce.MRJobConfig;
 //import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.PingChecker;
 //import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.ThreadedEchoServer4;
