@@ -37,6 +37,7 @@ import org.apache.hadoop.classification.InterfaceAudience.Private;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.ha.HAServiceProtocol;
 import org.apache.hadoop.ha.HAServiceProtocol.HAServiceState;
+import org.apache.hadoop.mapreduce.MRJobConfig;
 //import org.apache.hadoop.mapreduce.MRJobConfig;
 //import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.PingChecker;
 //import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler.ThreadedEchoServer4;
@@ -1269,15 +1270,20 @@ public class ResourceManager extends CompositeService implements Recoverable {
       resourceManager.init(conf);
       resourceManager.start();
       
+//      local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
+//      local_NUM_REPLICAS =conf.getInt(MRJobConfig.NUM_REPLICAS,4);
+//      replicasHashes = new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
+//      replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS];    
+      
 	  
 	    local_BFT_flag =conf.getInt("mapred.job.bft", 1);
 	    local_NUM_REPLICAS =conf.getInt("mapred.job.numreplicas",4);
-	    replicasHashes = new Long[conf.getInt("mapred.reduce.tasks", 1)];
-	    replicasHashes_set = new int[conf.getInt("mapred.reduce.tasks", 1)/local_NUM_REPLICAS]; 
+	    replicasHashes = new Long[conf.getInt("mapreduce.job.reduces", 1)];
+	    replicasHashes_set = new int[conf.getInt("mapreduce.job.reduces", 1)/local_NUM_REPLICAS]; 
 	    
 	    System.out.println("local_BFT_flag = "+local_BFT_flag);
 	    System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-	    System.out.println("conf.getInt(\"mapred.reduce.tasks\", 1) = "+conf.getInt("mapred.reduce.tasks", 1));
+	    System.out.println("conf.getInt(\"mapreduce.job.reduces\", 1) = "+conf.getInt("mapreduce.job.reduces", 1));
 	    
 
 	  
