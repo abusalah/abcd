@@ -582,7 +582,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   				System.out.println(e);
   			}
 
-  			while (true) {
+  			while (!Thread.currentThread().isInterrupted()) {
   				try {
   		  		  System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class");
   					clientSocket = serverSocket.accept();
@@ -603,6 +603,15 @@ public class ResourceManager extends CompositeService implements Recoverable {
   					System.out.println(e);
   				}
   			}
+  			try {
+  				System.out.println("ENTERED before serverSocket.close() ");
+				serverSocket.close();
+				System.out.println("ENTERED after serverSocket.close() ");
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+  			System.out.println("END OF interruption of ThreadedEchoServer4 thread ");
   		  
   		  
   	  }
@@ -648,7 +657,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   				os = new PrintStream(clientSocket.getOutputStream());
   				System.out.println("Inside try inside run() inside clientThread class");
   				
-  				while (true) {
+  				while (true) {//(!stopped && !Thread.currentThread().isInterrupted())
   					lineReceived = is.readLine();
   					System.out.println("lineReceived inside ResourceManager = "+lineReceived);//NOTE the difference between os and System.out 
   					
@@ -734,7 +743,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   	             		   
   	             	   }
   	                }
-  	                //if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
+  	                if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
   						break;
   					
   				}
@@ -845,6 +854,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
     protected void serviceStop() throws Exception {
       this.stopped = true;
       this.eventProcessor.interrupt();
+      ThreadedEchoServer4.interrupt();
       try {
         this.eventProcessor.join();
       } catch (InterruptedException e) {
