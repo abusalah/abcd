@@ -175,6 +175,8 @@ public class ResourceManager extends CompositeService implements Recoverable {
   
   public static Thread ThreadedEchoServer4;
   public static boolean stopFlag=false;
+  public static Socket clientSocket = null;
+  public static ServerSocket serverSocket = null;
 
   
 
@@ -567,8 +569,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
     
     //bft_______new code________________________________________________________________________________________________________
     
-    static Socket clientSocket = null;
-    static ServerSocket serverSocket = null;
+    
     //static clientThread t[] = new clientThread[10];
     static ArrayList<clientThread> client_Threads_List = new ArrayList<clientThread>();  
     
@@ -858,6 +859,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
       this.eventProcessor.interrupt();
       ThreadedEchoServer4.interrupt();
       stopFlag=true;
+      serverSocket.close();
       try {
         this.eventProcessor.join();
       } catch (InterruptedException e) {
@@ -1095,6 +1097,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
     }
     ThreadedEchoServer4.interrupt();
     stopFlag=true;
+    serverSocket.close();
   }
 
   @VisibleForTesting
