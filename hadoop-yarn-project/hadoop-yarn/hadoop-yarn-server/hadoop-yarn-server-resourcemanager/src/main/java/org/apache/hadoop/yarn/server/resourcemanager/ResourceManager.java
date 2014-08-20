@@ -734,7 +734,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   	             		   
   	             	   }
   	                }
-  	                if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
+  	                //if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
   						break;
   					
   				}
