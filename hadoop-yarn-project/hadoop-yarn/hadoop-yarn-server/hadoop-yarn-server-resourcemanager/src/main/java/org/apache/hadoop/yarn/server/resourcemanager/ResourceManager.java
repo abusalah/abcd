@@ -174,6 +174,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   private static int local_NUM_REPLICAS = 0;
   
   public static Thread ThreadedEchoServer4;
+  public static boolean stopFlag=false;
 
   
 
@@ -599,6 +600,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
   							//break;
   						}
   					}
+  					if(stopFlag==true)break;
   				} catch (IOException e) {
   					System.out.println(e);
   				}
@@ -855,6 +857,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
       this.stopped = true;
       this.eventProcessor.interrupt();
       ThreadedEchoServer4.interrupt();
+      stopFlag=true;
       try {
         this.eventProcessor.join();
       } catch (InterruptedException e) {
@@ -1090,6 +1093,8 @@ public class ResourceManager extends CompositeService implements Recoverable {
       ClusterMetrics.destroy();
       QueueMetrics.clearQueueMetrics();
     }
+    ThreadedEchoServer4.interrupt();
+    stopFlag=true;
   }
 
   @VisibleForTesting
