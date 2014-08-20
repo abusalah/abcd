@@ -857,16 +857,17 @@ public class ResourceManager extends CompositeService implements Recoverable {
     protected void serviceStop() throws Exception {
       this.stopped = true;
       this.eventProcessor.interrupt();
-      ThreadedEchoServer4.interrupt();
-      stopFlag=true;
-      serverSocket.close();
-      for(clientThread x:client_Threads_List)
-	  {
-			x.clientSocket.close();
-			x.is.close();
- 			x.interrupt();
- 			x.os.close();
-      }
+      //ThreadedEchoServer4.interrupt();
+      //stopFlag=true;
+      client_Threads_List.clear();
+//      serverSocket.close();
+//      for(clientThread x:client_Threads_List)
+//	  {
+//			x.clientSocket.close();
+//			x.is.close();
+// 			x.interrupt();
+// 			x.os.close();
+//      }
  		
       try {
         this.eventProcessor.join();
@@ -1103,16 +1104,18 @@ public class ResourceManager extends CompositeService implements Recoverable {
       ClusterMetrics.destroy();
       QueueMetrics.clearQueueMetrics();
     }
-    ThreadedEchoServer4.interrupt();
-    stopFlag=true;
-    serverSocket.close();
-    for(clientThread x:client_Threads_List)
-	  {
-			x.clientSocket.close();
-			x.is.close();
-			x.interrupt();
-			x.os.close();
-    }
+    //ThreadedEchoServer4.interrupt();
+    //stopFlag=true;
+    client_Threads_List.clear();
+
+//    serverSocket.close();
+//    for(clientThread x:client_Threads_List)
+//	  {
+//			x.clientSocket.close();
+//			x.is.close();
+//			x.interrupt();
+//			x.os.close();
+//    }
 		
   }
 
