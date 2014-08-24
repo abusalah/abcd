@@ -168,15 +168,15 @@ public class ResourceManager extends CompositeService implements Recoverable {
   
   //public static Configuration myConf;
   
-  private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
-  private static int[] replicasHashes_set;
-  private static int local_BFT_flag=0;
-  private static int local_NUM_REPLICAS = 0;
-  
-  public static Thread ThreadedEchoServer4;
-  public static boolean stopFlag=false;
-  public static Socket clientSocket = null;
-  public static ServerSocket serverSocket = null;
+//  private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
+//  private static int[] replicasHashes_set;
+//  private static int local_BFT_flag=0;
+//  private static int local_NUM_REPLICAS = 0;
+//  
+//  public static Thread ThreadedEchoServer4;
+//  public static boolean stopFlag=false;
+//  public static Socket clientSocket = null;
+//  public static ServerSocket serverSocket = null;
 
   
 
@@ -567,204 +567,204 @@ public class ResourceManager extends CompositeService implements Recoverable {
 
     
     
-    //bft_______new code________________________________________________________________________________________________________
-    
-    
-    //static clientThread t[] = new clientThread[10];
-    public static ArrayList<clientThread> client_Threads_List = new ArrayList<clientThread>();  
-    
-    public static class ThreadedEchoServer4 implements Runnable {
-  	  
-  	  public void run(){
-  		  System.out.println("inside run() inside ThreadedEchoServer4 class");
-  			try {
-  				serverSocket = new ServerSocket(2222);
-  			} catch (IOException e) {
-  				System.out.println("\n\n\n\nserverSocket Exception\n\n\n");
-  				System.out.println(e);
-  			}
-
-  			while (!Thread.currentThread().isInterrupted()) {
-  				try {
-  		  		  System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class");
-  					clientSocket = serverSocket.accept();
-  					System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class AFTER clientSocket = serverSocket.accept();");
-  					//for (int i = 0; i <= 9; i++) 
-  					{
-  						//if (t[i] == null) 
-  						{
-  							clientThread tt = new clientThread(clientSocket, client_Threads_List);
-  							client_Threads_List.add(tt);
-  							tt.start();
-  							//t[i]=tt;//(t[i] = new clientThread(clientSocket, t)).start();
-  							//t[i].start();
-  							//break;
-  						}
-  					}
-  					if(stopFlag==true)break;
-  				} catch (IOException e) {
-  					System.out.println(e);
-  				}
-  			}
-  			try {
-  				System.out.println("ENTERED before serverSocket.close() ");
-				serverSocket.close();
-				System.out.println("ENTERED after serverSocket.close() ");
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-  			System.out.println("END OF interruption of ThreadedEchoServer4 thread ");
-  		  
-  		  
-  	  }
-  	  
-    }
-    
-    
-    
-      
-    public static class clientThread extends Thread {
-
-  		DataInputStream is = null;
-  		PrintStream os = null;
-  		Socket clientSocket = null;
-  		clientThread t[];
-  		ArrayList<clientThread> client_Threads_List;
-  		
-  		 int receivedReducerNumber=0;
-         String receivedTaskAttemptID ="";
-         long receivedHash= 0;
-         Integer unreplicatedReducerNumber=null;
-         boolean firstandsecond,thirdandforth,allofthem;
-         
-
-  		/*//old constructor
-  		public clientThread(Socket clientSocket, clientThread[] t) {
-  			this.clientSocket = clientSocket;
-  			this.t = t;
-  		}
-  		 */
-  		public clientThread(Socket clientSocket, ArrayList<clientThread> client_Threads_List) {
-  			this.clientSocket = clientSocket;
-  			this.client_Threads_List = client_Threads_List;
-  		}
-  		
-  		public void run() {
-  			String lineReceived;
-  			String receivedOK;
-  			int ii =0;
-  			System.out.println("Inside run() inside clientThread class");
-  			try {
-  				is = new DataInputStream(clientSocket.getInputStream());
-  				os = new PrintStream(clientSocket.getOutputStream());
-  				System.out.println("Inside try inside run() inside clientThread class");
-  				
-  				while (true) {//(!stopped && !Thread.currentThread().isInterrupted())
-  					lineReceived = is.readLine();
-  					System.out.println("lineReceived inside ResourceManager = "+lineReceived);//NOTE the difference between os and System.out 
-  					
-  					
-  					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
-  	                receivedTaskAttemptID = lineReceived.split(" ")[1];
-  	                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
-  	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
-  	                replicasHashes[receivedReducerNumber]=receivedHash;
-  	                replicasHashes_set[unreplicatedReducerNumber]+=1;
-  	                
-  	                System.out.println("---------------------------------------------------------------------------");
-  	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
-  	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
-  	                		"receivedHash = " + receivedHash +
-  	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
-  	                		);
-  	                
-  	                
-  	                  for(int i =0;i<replicasHashes.length;i++)
-  	                  {
-  	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
-  	                  }
-  	                  for(int i =0;i<replicasHashes_set.length;i++)
-  	                  {
-  	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
-  	                  }
-  	                System.out.println("---------------------------------------------------------------------------");
-  	                  
-  	                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
-  	                {
-  	                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
-  	                	{
-  	                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-  	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
-  	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
-  	                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i].equals(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]))//==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
-  	                		{
-  	                			System.out.println("ENTERED allofthem=true;");
-  	                			allofthem=true;
-  	                		}else {
-  	                			System.out.println("ENTERED allofthem=false;");
-  	                			allofthem=false;//CAREFUL ... if you didn't add break here, allofthem can become true in the next round and gives a wrong allofthem=true (I.L)
-  	                			break;//TODO ... need to add what to do when the replicas don't match  
-  	                		}
-  	                	}
-  	             	   //firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
-  	             	   //thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
-  	             	   //allofthem = (firstandsecond == thirdandforth);
-  	             	   if (allofthem==true)
-  	             	   {
-  	             		   System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
-  	             		for(clientThread x:client_Threads_List)
-  	   					{
-  	             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
-  	   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
-  	   					}
-  	             		
-  	             		/*
-  	             		ii=0;
-  	             		for(clientThread x:client_Threads_List)
-  	   					{	
-  	   						receivedOK = is.readLine();
-  	   						if(receivedOK=="ok")
-  	   						{
-  	   							System.out.println("RECEIVED OK FROM ii = "+ii);
-  	   							System.out.println("BEFORE client_Threads_List.size() = "+client_Threads_List.size());
-  	   							client_Threads_List.remove(ii);
-  	   							System.out.println("AFTER client_Threads_List.size() = "+client_Threads_List.size());
-  	   							}
-  	   						ii++;
-  	   					}
-  	   					*/
-  	             		System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
-  	             		
-  	             		
-  	             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
-  	             		    //System.out.println("lineReceived = "+lineReceived);
-  		                    //out.writeBytes(unreplicatedReducerNumber + "\n\r");
-  		                    //out.flush();
-  		                	
-  	             		  
-  	             		   
-  	             	   }
-  	                }
-  	                if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
-  						break;
-  					
-  				}
-  				
-  				is.close();
-  				os.close();
-  				clientSocket.close();
-  			} catch (IOException e) {
-  			}
-  			;
-  		}
-  	}
-
-
-
-    //bft_______end new code____________________________________________________________________________________________________
-
-    
+//    //bft_______new code________________________________________________________________________________________________________
+//    
+//    
+//    //static clientThread t[] = new clientThread[10];
+//    public static ArrayList<clientThread> client_Threads_List = new ArrayList<clientThread>();  
+//    
+//    public static class ThreadedEchoServer4 implements Runnable {
+//  	  
+//  	  public void run(){
+//  		  System.out.println("inside run() inside ThreadedEchoServer4 class");
+//  			try {
+//  				serverSocket = new ServerSocket(2222);
+//  			} catch (IOException e) {
+//  				System.out.println("\n\n\n\nserverSocket Exception\n\n\n");
+//  				System.out.println(e);
+//  			}
+//
+//  			while (!Thread.currentThread().isInterrupted()) {
+//  				try {
+//  		  		  System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class");
+//  					clientSocket = serverSocket.accept();
+//  					System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class AFTER clientSocket = serverSocket.accept();");
+//  					//for (int i = 0; i <= 9; i++) 
+//  					{
+//  						//if (t[i] == null) 
+//  						{
+//  							clientThread tt = new clientThread(clientSocket, client_Threads_List);
+//  							client_Threads_List.add(tt);
+//  							tt.start();
+//  							//t[i]=tt;//(t[i] = new clientThread(clientSocket, t)).start();
+//  							//t[i].start();
+//  							//break;
+//  						}
+//  					}
+//  					//if(stopFlag==true)break;
+//  				} catch (IOException e) {
+//  					System.out.println(e);
+//  				}
+//  			}
+////  			try {
+////  				System.out.println("ENTERED before serverSocket.close() ");
+////				serverSocket.close();
+////				System.out.println("ENTERED after serverSocket.close() ");
+////			} catch (IOException e) {
+////				// TODO Auto-generated catch block
+////				e.printStackTrace();
+////			}
+////  			System.out.println("END OF interruption of ThreadedEchoServer4 thread ");
+//  		  
+//  		  
+//  	  }
+//  	  
+//    }
+//    
+//    
+//    
+//      
+//    public static class clientThread extends Thread {
+//
+//  		DataInputStream is = null;
+//  		PrintStream os = null;
+//  		Socket clientSocket = null;
+//  		clientThread t[];
+//  		ArrayList<clientThread> client_Threads_List;
+//  		
+//  		 int receivedReducerNumber=0;
+//         String receivedTaskAttemptID ="";
+//         long receivedHash= 0;
+//         Integer unreplicatedReducerNumber=null;
+//         boolean firstandsecond,thirdandforth,allofthem;
+//         
+//
+//  		/*//old constructor
+//  		public clientThread(Socket clientSocket, clientThread[] t) {
+//  			this.clientSocket = clientSocket;
+//  			this.t = t;
+//  		}
+//  		 */
+//  		public clientThread(Socket clientSocket, ArrayList<clientThread> client_Threads_List) {
+//  			this.clientSocket = clientSocket;
+//  			this.client_Threads_List = client_Threads_List;
+//  		}
+//  		
+//  		public void run() {
+//  			String lineReceived;
+//  			String receivedOK;
+//  			int ii =0;
+//  			System.out.println("Inside run() inside clientThread class");
+//  			try {
+//  				is = new DataInputStream(clientSocket.getInputStream());
+//  				os = new PrintStream(clientSocket.getOutputStream());
+//  				System.out.println("Inside try inside run() inside clientThread class");
+//  				
+//  				while (true) {//(!stopped && !Thread.currentThread().isInterrupted())
+//  					lineReceived = is.readLine();
+//  					System.out.println("lineReceived inside ResourceManager = "+lineReceived);//NOTE the difference between os and System.out 
+//  					
+//  					
+//  					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
+//  	                receivedTaskAttemptID = lineReceived.split(" ")[1];
+//  	                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
+//  	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
+//  	                replicasHashes[receivedReducerNumber]=receivedHash;
+//  	                replicasHashes_set[unreplicatedReducerNumber]+=1;
+//  	                
+//  	                System.out.println("---------------------------------------------------------------------------");
+//  	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+//  	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
+//  	                		"receivedHash = " + receivedHash +
+//  	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
+//  	                		);
+//  	                
+//  	                
+//  	                  for(int i =0;i<replicasHashes.length;i++)
+//  	                  {
+//  	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
+//  	                  }
+//  	                  for(int i =0;i<replicasHashes_set.length;i++)
+//  	                  {
+//  	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
+//  	                  }
+//  	                System.out.println("---------------------------------------------------------------------------");
+//  	                  
+//  	                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
+//  	                {
+//  	                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
+//  	                	{
+//  	                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+//  	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
+//  	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
+//  	                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i].equals(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]))//==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
+//  	                		{
+//  	                			System.out.println("ENTERED allofthem=true;");
+//  	                			allofthem=true;
+//  	                		}else {
+//  	                			System.out.println("ENTERED allofthem=false;");
+//  	                			allofthem=false;//CAREFUL ... if you didn't add break here, allofthem can become true in the next round and gives a wrong allofthem=true (I.L)
+//  	                			break;//TODO ... need to add what to do when the replicas don't match  
+//  	                		}
+//  	                	}
+//  	             	   //firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
+//  	             	   //thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
+//  	             	   //allofthem = (firstandsecond == thirdandforth);
+//  	             	   if (allofthem==true)
+//  	             	   {
+//  	             		   System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
+//  	             		for(clientThread x:client_Threads_List)
+//  	   					{
+//  	             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
+//  	   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
+//  	   					}
+//  	             		
+//  	             		/*
+//  	             		ii=0;
+//  	             		for(clientThread x:client_Threads_List)
+//  	   					{	
+//  	   						receivedOK = is.readLine();
+//  	   						if(receivedOK=="ok")
+//  	   						{
+//  	   							System.out.println("RECEIVED OK FROM ii = "+ii);
+//  	   							System.out.println("BEFORE client_Threads_List.size() = "+client_Threads_List.size());
+//  	   							client_Threads_List.remove(ii);
+//  	   							System.out.println("AFTER client_Threads_List.size() = "+client_Threads_List.size());
+//  	   							}
+//  	   						ii++;
+//  	   					}
+//  	   					*/
+//  	             		System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
+//  	             		
+//  	             		
+//  	             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
+//  	             		    //System.out.println("lineReceived = "+lineReceived);
+//  		                    //out.writeBytes(unreplicatedReducerNumber + "\n\r");
+//  		                    //out.flush();
+//  		                	
+//  	             		  
+//  	             		   
+//  	             	   }
+//  	                }
+//  	                if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
+//  						break;
+//  					
+//  				}
+//  				
+//  				is.close();
+//  				os.close();
+//  				clientSocket.close();
+//  			} catch (IOException e) {
+//  			}
+//  			;
+//  		}
+//  	}
+//
+//
+//
+//    //bft_______end new code____________________________________________________________________________________________________
+//
+//    
     
     
     
@@ -859,7 +859,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
       this.eventProcessor.interrupt();
       //ThreadedEchoServer4.interrupt();
       //stopFlag=true;
-      client_Threads_List.clear();
+      //client_Threads_List.clear();
 //      serverSocket.close();
 //      for(clientThread x:client_Threads_List)
 //	  {
@@ -1106,7 +1106,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
     }
     //ThreadedEchoServer4.interrupt();
     //stopFlag=true;
-    client_Threads_List.clear();
+    //client_Threads_List.clear();
 
 //    serverSocket.close();
 //    for(clientThread x:client_Threads_List)
@@ -1313,23 +1313,23 @@ public class ResourceManager extends CompositeService implements Recoverable {
 //      replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS];    
       
 	  
-	    local_BFT_flag =conf.getInt("mapred.job.bft", 1);
-	    local_NUM_REPLICAS =conf.getInt("mapred.job.numreplicas",4);
-	    replicasHashes = new Long[conf.getInt("mapreduce.job.reduces", 1)];
-	    replicasHashes_set = new int[conf.getInt("mapreduce.job.reduces", 1)/local_NUM_REPLICAS]; 
-	    
-	    System.out.println("local_BFT_flag = "+local_BFT_flag);
-	    System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-	    System.out.println("conf.getInt(\"mapreduce.job.reduces\", 1) = "+conf.getInt("mapreduce.job.reduces", 1));
-	    
-
-	  
-	    if(local_BFT_flag==3)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
-	    {
-		    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
-		    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
-		    ThreadedEchoServer4.start();
-	    }
+//	    local_BFT_flag =conf.getInt("mapred.job.bft", 1);
+//	    local_NUM_REPLICAS =conf.getInt("mapred.job.numreplicas",4);
+//	    replicasHashes = new Long[conf.getInt("mapreduce.job.reduces", 1)];
+//	    replicasHashes_set = new int[conf.getInt("mapreduce.job.reduces", 1)/local_NUM_REPLICAS]; 
+//	    
+//	    System.out.println("local_BFT_flag = "+local_BFT_flag);
+//	    System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+//	    System.out.println("conf.getInt(\"mapreduce.job.reduces\", 1) = "+conf.getInt("mapreduce.job.reduces", 1));
+//	    
+//
+//	  
+//	    if(local_BFT_flag==3)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
+//	    {
+//		    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
+//		    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
+//		    ThreadedEchoServer4.start();
+//	    }
 
     } catch (Throwable t) {
       LOG.fatal("Error starting ResourceManager", t);
