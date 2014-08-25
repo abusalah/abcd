@@ -213,8 +213,10 @@ public class YARNRunner implements ClientProtocol {
 				System.out.println("Inside try inside run() inside clientThread class");
 				
 				while (true) {//(!stopped && !Thread.currentThread().isInterrupted())
-					lineReceived = is.readLine();
-					System.out.println("lineReceived inside ResourceManager = "+lineReceived);//NOTE the difference between os and System.out 
+					lineReceived = is.readLine();//NOTE the difference between os and System.out
+					if(lineReceived!=null && !lineReceived.isEmpty())
+					{
+					System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
 					
 					
 					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
@@ -306,6 +308,7 @@ public class YARNRunner implements ClientProtocol {
 				is.close();
 				os.close();
 				clientSocket.close();
+				}
 			} catch (IOException e) {
 			}
 			;
