@@ -243,8 +243,8 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
         reduce(context.getCurrentKey(), context.getValues(), context);
         //System.out.println("context.getCurrentKey() = "+context.getCurrentKey()+" context.getCurrentValue() = "+context.getCurrentValue());
         
-        ///KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();
-        KV="p";
+        KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();
+        //KV="p";
         
         // If a back up store is used, reset it
         Iterator<VALUEIN> iter = context.getValues().iterator();
