@@ -214,7 +214,7 @@ public class YARNRunner implements ClientProtocol {
 				
 				while (true) {//(!stopped && !Thread.currentThread().isInterrupted())
 					lineReceived = is.readLine();//NOTE the difference between os and System.out
-					//if(lineReceived!=null && !lineReceived.isEmpty())
+					if(lineReceived!=null && !lineReceived.isEmpty())
 					{
 						System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
 						
