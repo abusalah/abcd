@@ -303,8 +303,8 @@ public class YARNRunner implements ClientProtocol {
 	                }
 	                //if(lineReceived!=null && !lineReceived.isEmpty())
 	                {
-			                //if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
-							//	break;
+			                if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
+								break;
 	                }
 				
 				
