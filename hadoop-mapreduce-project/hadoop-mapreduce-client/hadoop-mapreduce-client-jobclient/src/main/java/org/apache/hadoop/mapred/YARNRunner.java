@@ -271,7 +271,7 @@ public class YARNRunner implements ClientProtocol {
 	             		for(clientThread x:client_Threads_List)
 	   					{
 	             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
-	   						x.os.println(unreplicatedReducerNumber+"\n\r");//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
+	   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
 	   					}
 	             		
 	             		/*
@@ -306,9 +306,9 @@ public class YARNRunner implements ClientProtocol {
 					
 				
 				
-				is.close();
-				os.close();
-				clientSocket.close();
+//				is.close();
+//				os.close();
+//				clientSocket.close();
 				}
 			} catch (IOException e) {
 			}
