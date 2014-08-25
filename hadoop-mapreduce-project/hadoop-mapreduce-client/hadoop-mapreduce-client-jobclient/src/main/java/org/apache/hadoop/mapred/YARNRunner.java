@@ -216,22 +216,23 @@ public class YARNRunner implements ClientProtocol {
 					lineReceived = is.readLine();//NOTE the difference between os and System.out
 					if(lineReceived!=null && !lineReceived.isEmpty())
 					{
-					System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
-					
-					
-					receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
-	                receivedTaskAttemptID = lineReceived.split(" ")[1];
-	                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
-	                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
-	                replicasHashes[receivedReducerNumber]=receivedHash;
-	                replicasHashes_set[unreplicatedReducerNumber]+=1;
-	                
-	                System.out.println("---------------------------------------------------------------------------");
-	                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
-	                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
-	                		"receivedHash = " + receivedHash +
-	                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
-	                		);
+						System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
+						
+						
+						receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
+		                receivedTaskAttemptID = lineReceived.split(" ")[1];
+		                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
+		                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
+		                replicasHashes[receivedReducerNumber]=receivedHash;
+		                replicasHashes_set[unreplicatedReducerNumber]+=1;
+		                
+		                System.out.println("---------------------------------------------------------------------------");
+		                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+		                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
+		                		"receivedHash = " + receivedHash +
+		                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
+		                		);
+					}
 	                
 	                
 	                  for(int i =0;i<replicasHashes.length;i++)
@@ -303,7 +304,7 @@ public class YARNRunner implements ClientProtocol {
 	                if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
 						break;
 					
-				}
+				
 				
 				is.close();
 				os.close();
