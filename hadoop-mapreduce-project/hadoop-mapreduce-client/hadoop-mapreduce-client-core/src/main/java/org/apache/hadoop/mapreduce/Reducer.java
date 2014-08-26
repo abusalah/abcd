@@ -241,9 +241,13 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	//System.out.println("+++ entered try");
     	while (context.nextKey()) {
         reduce(context.getCurrentKey(), context.getValues(), context);
-        //System.out.println("context.getCurrentKey() = "+context.getCurrentKey()+" context.getCurrentValue() = "+context.getCurrentValue());
         
-        KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();
+        //KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();// first hashing method
+        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
+        totalHash+=KV.hashCode();
+        System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
+                " totalHash = "+totalHash);
+                
         //KV="p";
         
         // If a back up store is used, reset it
@@ -261,7 +265,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
     	  
-    	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+KV.hashCode();
+    	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+totalHash;
     	  
     	  
     	  try {
@@ -326,7 +330,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
   		}
 		  
 		  	      
-		  KV="";stringToSend="";
+		  KV="";stringToSend="";totalHash=0;
       }
       
       
