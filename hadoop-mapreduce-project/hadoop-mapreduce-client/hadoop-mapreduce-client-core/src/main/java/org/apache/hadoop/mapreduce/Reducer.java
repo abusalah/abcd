@@ -242,13 +242,15 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	while (context.nextKey()) {
         reduce(context.getCurrentKey(), context.getValues(), context);
         
-        //KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();// first hashing method
-        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
-        totalHash+=KV.hashCode();
-        System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
-                " totalHash = "+totalHash);
-                
-        //KV="p";
+        if(reducerORmapper.equals("r"))
+        {
+	        //KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();// first hashing method
+	        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
+	        totalHash+=KV.hashCode();
+	        System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
+	                " totalHash = "+totalHash);
+	        //KV="p";
+        }
         
         // If a back up store is used, reset it
         Iterator<VALUEIN> iter = context.getValues().iterator();
