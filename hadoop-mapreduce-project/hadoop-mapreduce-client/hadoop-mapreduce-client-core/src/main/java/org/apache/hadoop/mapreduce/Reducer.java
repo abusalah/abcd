@@ -248,7 +248,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 	        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
 	        totalHash+=KV.hashCode();
 	        System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
-	                " totalHash = "+totalHash);
+	        		" KV.hashCode() = "+KV.hashCode()+" totalHash = "+totalHash);
 	        //KV="p";
         }
         
@@ -267,6 +267,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
     	  
+    	  totalHash=0;//just for now for testing    	  
     	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+totalHash;
     	  
     	  
