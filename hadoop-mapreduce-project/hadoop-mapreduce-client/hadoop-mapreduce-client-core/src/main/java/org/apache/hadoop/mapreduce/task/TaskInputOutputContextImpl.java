@@ -89,7 +89,8 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
    */
   public void write(KEYOUT key, VALUEOUT value
                     ) throws IOException, InterruptedException {
-	  //System.out.println("++++++ inside write value.toString() = "+value.toString());
+	  System.out.println("++++++ inside write in TaskInputOutputContextImpl key.toString() = "
+                    +key.toString()+"value.toString() = "+value.toString());
     output.write(key, value);
   }
 
