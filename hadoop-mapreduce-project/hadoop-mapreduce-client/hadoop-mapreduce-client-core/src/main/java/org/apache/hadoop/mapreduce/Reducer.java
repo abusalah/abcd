@@ -246,12 +246,10 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     		
     		System.out.println("context.nextKeyValue = "+context.nextKeyValue());
     		
-    		KEYIN xxx = context.getCurrentKey();
-    		System.out.println("context.nextKey() = "+context.nextKey());
-    		
-    		if(context.nextKey()==false)
-            {finalValue=1;System.out.println("Entered if(context.nextKey()==false) finalValue = "+finalValue);}
-        reduce(xxx, context.getValues(), context);
+    		//KEYIN xxx = context.getCurrentKey();
+    		if(context.nextKeyValue()==false)
+            {finalValue=1;System.out.println("Entered if(context.nextKeyValue()==false) finalValue = "+finalValue);}
+        reduce(context.getCurrentKey(), context.getValues(), context);
         
         if(reducerORmapper.equals("r"))
         {
