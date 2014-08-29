@@ -243,9 +243,11 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	String KV=""; int i=0; long totalHash=0; String stringToSend=""; String stringReceived="";
     	//System.out.println("+++ entered try");
     	while (context.nextKey()) {
+    		KEYIN xxx = context.getCurrentKey();
+    		
     		if(context.nextKey()==false)
             {finalValue=1;System.out.println("Entered if(context.nextKey()==false) finalValue = "+finalValue);}
-        reduce(context.getCurrentKey(), context.getValues(), context);
+        reduce(xxx, context.getValues(), context);
         
         if(reducerORmapper.equals("r"))
         {
