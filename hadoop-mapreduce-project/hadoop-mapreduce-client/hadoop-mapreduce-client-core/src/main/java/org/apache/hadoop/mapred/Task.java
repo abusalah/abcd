@@ -1329,8 +1329,8 @@ abstract public class Task implements Writable, Configurable {
         throws IOException {
       outCounter.increment(1);
       writer.append(key, value);
-      System.out.println("------ inside collect in  CombineOutputCollector class in Task.java key.toString() = "
-              +key.toString()+"value.toString() = "+value.toString());
+      //System.out.println("------ inside collect in  CombineOutputCollector class in Task.java key.toString() = "
+      //        +key.toString()+" value.toString() = "+value.toString());
       if ((outCounter.getValue() % progressBar) == 0) {
         progressable.progress();
       }

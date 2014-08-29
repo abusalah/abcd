@@ -183,7 +183,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   protected void reduce(KEYIN key, Iterable<VALUEIN> values, Context context
                         ) throws IOException, InterruptedException {
     for(VALUEIN value: values) {
-    	//System.out.println("++++++ value.toString() = "+(VALUEOUT) value.toString());
+    	System.out.println("+++___+++ key.toString() = " +key.toString()+"value.toString() = "+value.toString());
       context.write((KEYOUT) key, (VALUEOUT) value);
     }
   }
@@ -247,8 +247,8 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 	        //KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();// first hashing method
 	        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
 	        totalHash+=KV.hashCode();
-	        System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
-	        		" KV.hashCode() = "+KV.hashCode()+" totalHash = "+totalHash);
+	        //System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
+	        //		" KV.hashCode() = "+KV.hashCode()+" totalHash = "+totalHash);
 	        //KV="p";
         }
         
