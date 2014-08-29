@@ -182,8 +182,9 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   @SuppressWarnings("unchecked")
   protected void reduce(KEYIN key, Iterable<VALUEIN> values, Context context
                         ) throws IOException, InterruptedException {
+	  System.out.println("ENTERED reduce in Reducerclass ");
     for(VALUEIN value: values) {
-    	System.out.println("+++___+++ key.toString() = " +key.toString()+"value.toString() = "+value.toString());
+    	System.out.println("+++___+++ key.toString() = " +key.toString()+" value.toString() = "+value.toString());
       context.write((KEYOUT) key, (VALUEOUT) value);
     }
   }
