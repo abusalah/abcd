@@ -80,6 +80,10 @@ public class WordCount {
       }
       result.set(sum);
       context.write(key, result);
+
+	  //System.out.println("this.local_taskID = "+this.local_taskID);
+	  System.out.println("++++++ inside write in IntSumReducer class in WordCount.java key.toString() = "
+                    +key.toString()+" result = "+result);
     }
   }
 
