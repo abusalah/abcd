@@ -156,6 +156,8 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	
 	private final Object lock = new Object();
 	
+	public static int finalValue=0;
+	
 	
    /**
    * The <code>Context</code> passed on to the {@link Reducer} implementations.
@@ -182,9 +184,9 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   @SuppressWarnings("unchecked")
   protected void reduce(KEYIN key, Iterable<VALUEIN> values, Context context
                         ) throws IOException, InterruptedException {
-	  System.out.println("ENTERED reduce in Reducerclass ");
+	  //System.out.println("ENTERED reduce in Reducerclass ");
     for(VALUEIN value: values) {
-    	System.out.println("+++___+++ key.toString() = " +key.toString()+" value.toString() = "+value.toString());
+    	//System.out.println("+++___+++ key.toString() = " +key.toString()+" value.toString() = "+value.toString());
       context.write((KEYOUT) key, (VALUEOUT) value);
     }
   }
@@ -241,6 +243,8 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	String KV=""; int i=0; long totalHash=0; String stringToSend=""; String stringReceived="";
     	//System.out.println("+++ entered try");
     	while (context.nextKey()) {
+    		if(context.nextKey()==false)
+            {finalValue=1;System.out.println("Entered if(context.nextKey()==false) finalValue = "+finalValue);}
         reduce(context.getCurrentKey(), context.getValues(), context);
         
         if(reducerORmapper.equals("r"))
@@ -256,6 +260,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
         // If a back up store is used, reset it
         Iterator<VALUEIN> iter = context.getValues().iterator();
         if(iter instanceof ReduceContext.ValueIterator) {((ReduceContext.ValueIterator<VALUEIN>)iter).resetBackupStore();}  
+        
         
           
         i++;

@@ -115,10 +115,12 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 //	  System.out.println("___________inside write() in TaskInputOutputContextImpl.java_______________Thread.currentThread().getStackTrace() = ");
 //	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 //	  
-//	  System.out.println("this.local_taskID = "+this.local_taskID);
-//	  System.out.println("++++++ inside write in TaskInputOutputContextImpl key.toString() = "
-//                    +key.toString()+" value.toString() = "+value.toString());
-//	 
+	  System.out.println("this.local_taskID = "+this.local_taskID);
+	  System.out.println("++++++ inside write in TaskInputOutputContextImpl key.toString() = "
+                    +key.toString()+" value.toString() = "+value.toString());
+	 
+	  
+	  System.out.println("Reducer.finalValue = "+Reducer.finalValue);
     output.write(key, value);
     
 //    if(conf.getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO ADD CASE 2
