@@ -127,7 +127,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 		  System.out.println("this.local_taskID = "+this.local_taskID);
 		  System.out.println("++++++ inside write in TaskInputOutputContextImpl key.toString() = "
 		                +key.toString()+" value.toString() = "+value.toString()+" KV.hashCode() = "+KV.hashCode()
-		                + "total_hash = "+total_hash + " Reducer.external_total_hash = "+Reducer.external_total_hash);
+		                + " total_hash = "+total_hash + " Reducer.external_total_hash = "+Reducer.external_total_hash);
 	  }
 	  
 	  //System.out.println("Reducer.finalValue = "+Reducer.finalValue);

@@ -268,11 +268,13 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 	        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
 	        totalHash+=KV.hashCode();
 	        
-	        System.out.println("++++++ inside run in Reducer.java context.getCurrentKey().toString() = "
-	                +context.getCurrentKey().toString()+" context.getCurrentValue().toString() = "+
-	        		context.getCurrentValue().toString()+" KV.hashCode() = "+KV.hashCode()
-	                + "totalHash = "+totalHash + " external_total_hash = "+external_total_hash);
-	        
+//	        System.out.println("++++++ inside run in Reducer.java context.getCurrentKey().toString() = "
+//	                +context.getCurrentKey().toString()+" context.getCurrentValue().toString() = "+
+//	        		context.getCurrentValue().toString()+" KV.hashCode() = "+KV.hashCode()
+//	                + "totalHash = "+totalHash + " external_total_hash = "+external_total_hash);
+//	        //Note that here context.getCurrentValue().toString() is not as 
+	        // value.toString() in TaskInputOutputContextImpl.java or in WordCount.java, 
+	        // because the values are not reduced yet.
 	        
 	        //System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
 	        //		" KV.hashCode() = "+KV.hashCode()+" totalHash = "+totalHash);
@@ -294,6 +296,9 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
       {
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
+    	  
+    	  System.out.println("++++++ inside run in Reducer.java context.getTaskAttemptID().toString() = "
+    	  +context.getTaskAttemptID().toString()+" external_total_hash = "+external_total_hash);
     	  
     	  totalHash=0;//just for now for testing    	  
     	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+totalHash;
