@@ -66,6 +66,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 	private final Object lock = new Object();
 	
 	public String local_taskID = null;
+	public String KV = null;
 	public long total_hash=0;
   
   
@@ -115,12 +116,21 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 //	  System.out.println("___________inside write() in TaskInputOutputContextImpl.java_______________Thread.currentThread().getStackTrace() = ");
 //	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 //	  
-	  System.out.println("this.local_taskID = "+this.local_taskID);
-	  System.out.println("++++++ inside write in TaskInputOutputContextImpl key.toString() = "
-                    +key.toString()+" value.toString() = "+value.toString());
-	 
+	  String reducerORmapper = this.local_taskID.split("_")[3];
 	  
-	  System.out.println("Reducer.finalValue = "+Reducer.finalValue);
+	  if(reducerORmapper.equals("r"))
+	  {
+		  KV=key.toString()+value.toString();
+		  total_hash+=KV.hashCode();
+		  Reducer.external_total_hash=total_hash;
+		  
+		  System.out.println("this.local_taskID = "+this.local_taskID);
+		  System.out.println("++++++ inside write in TaskInputOutputContextImpl key.toString() = "
+		                +key.toString()+" value.toString() = "+value.toString()+" KV.hashCode() = "+KV.hashCode()
+		                + "total_hash = "+total_hash + " Reducer.external_total_hash = "+Reducer.external_total_hash);
+	  }
+	  
+	  //System.out.println("Reducer.finalValue = "+Reducer.finalValue);
     output.write(key, value);
     
 //    if(conf.getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO ADD CASE 2

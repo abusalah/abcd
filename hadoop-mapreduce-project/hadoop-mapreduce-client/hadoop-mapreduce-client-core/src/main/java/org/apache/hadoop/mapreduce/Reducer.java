@@ -29,12 +29,14 @@ import org.apache.hadoop.mapreduce.task.annotation.Checkpointable;
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEventType;
 import org.apache.hadoop.yarn.event.EventHandler;
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptDiagnosticsUpdateEvent;
+//import org.apache.hadoop.mapreduce.ta.TaskAttemptContext;.
 
 //import org.apache.hadoop.mapreduce.v2dfdfd//.app;//
 //import org.apache.hadoop.mapreduce.v2.app.*;
 
 
 import org.apache.hadoop.ipc.Server;
+
 
 
 
@@ -157,6 +159,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	private final Object lock = new Object();
 	
 	public static int finalValue=0;
+	public static long external_total_hash = 0;
 	
 	
    /**
@@ -244,17 +247,19 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	//System.out.println("+++ entered try");
     	while (context.nextKey()) {
     		
-    		System.out.println("context.nextKeyValue = "+context.nextKeyValue());
+    		//System.out.println("context.nextKeyValue = "+context.nextKeyValue());
     		
     		//KEYIN xxx = context.getCurrentKey();
-    		try{
-    			context.nextKeyValue();
-    			}catch(Exception e){
-    				System.out.println("ENTERED Exception area ..... ");
-    			  finalValue=1;System.out.println("Entered if(context.nextKeyValue()==false) finalValue = "+finalValue);
-    			}
+//    		try{
+//    			context.nextKeyValue();
+//    			}catch(Exception e){
+//    				System.out.println("ENTERED Exception area ..... ");
+//    			  finalValue=1;System.out.println("Entered if(context.nextKeyValue()==false) finalValue = "+finalValue);
+//    			}
     		//else
-            
+   
+    		
+    		
         reduce(context.getCurrentKey(), context.getValues(), context);
         
         if(reducerORmapper.equals("r"))
@@ -262,6 +267,13 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 	        //KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();// first hashing method
 	        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
 	        totalHash+=KV.hashCode();
+	        
+	        System.out.println("++++++ inside run in Reducer.java context.getCurrentKey().toString() = "
+	                +context.getCurrentKey().toString()+" context.getCurrentValue().toString() = "+
+	        		context.getCurrentValue().toString()+" KV.hashCode() = "+KV.hashCode()
+	                + "totalHash = "+totalHash + " external_total_hash = "+external_total_hash);
+	        
+	        
 	        //System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
 	        //		" KV.hashCode() = "+KV.hashCode()+" totalHash = "+totalHash);
 	        //KV="p";
