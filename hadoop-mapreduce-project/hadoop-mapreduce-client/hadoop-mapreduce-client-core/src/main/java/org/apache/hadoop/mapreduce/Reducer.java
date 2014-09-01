@@ -301,7 +301,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	  +context.getTaskAttemptID().toString()+" external_total_hash = "+external_total_hash);
     	  
     	  totalHash=0;//just for now for testing    	  
-    	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+totalHash;
+    	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
     	  
     	  
     	  try {
