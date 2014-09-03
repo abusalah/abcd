@@ -228,14 +228,20 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)
 	  
 	  
 	  
-if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO ADD CASE 2
+if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
 {
 	
-		
-	  int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4); 
+	int unreplicatedReducerNumber =0;
+	   
 	  String reducerORmapper = context.getTaskAttemptID().toString().split("_")[3];
 	  int reducerNumber = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[4]);
-	  int unreplicatedReducerNumber = (int) Math.floor(reducerNumber/local_NUM_REPLICAS);
+	  long applicationNumber_1 = Long.parseLong(context.getTaskAttemptID().toString().split("_")[1]);
+	  int applicationNumber_2 = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[2]);
+	  if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)
+	  {
+		  int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4);
+		  unreplicatedReducerNumber = (int) Math.floor(reducerNumber/local_NUM_REPLICAS);
+	  }
 	  
 	 
 	  //System.out.println("ENTERED run in Reducer.java");
@@ -301,7 +307,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
     	  +context.getTaskAttemptID().toString()+" external_total_hash = "+external_total_hash);
     	  
     	  totalHash=0;//just for now for testing    	  
-    	  stringToSend=reducerNumber+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
+    	  stringToSend=context.getTaskAttemptID().toString()+" "+external_total_hash;
     	  
     	  
     	  try {
@@ -331,12 +337,26 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)//TODO NEED TO 
 					System.out.println("responseLine = "+responseLine);
 					if(responseLine!=null && !responseLine.isEmpty())
 					{
+						System.out.println("ENTERED if(responseLine!=null && !responseLine.isEmpty())");
 						//add if stmt for checking the server address, but first open a socket here for each Reducer for accepting server address
 						//clientSocket = serverSocket.accept();(put it above)
-						if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)
-						{	
-							System.out.println("Entered XXX------");
-							break;
+						if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)
+						{
+							System.out.println("ENTERED if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)");
+							if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)//here add if bft =...AM & unre
+							{	
+								System.out.println("Entered XXX------");
+								break;
+							}
+						}
+						if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
+						{
+							System.out.println("ENTERED if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)");
+							//if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)//here add if bft =...AM & unre
+							//{	
+							//	System.out.println("Entered XXX------");
+							//	break;
+							//}							
 						}
 					}
   				}  				

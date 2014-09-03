@@ -91,6 +91,7 @@ import org.apache.hadoop.yarn.security.client.RMDelegationTokenSelector;
 //import org.apache.hadoop.yarn.server.resourcemanager.ThreadedEchoServer4;
 //import org.apache.hadoop.yarn.server.resourcemanager.ResourceManager.clientThread;
 import org.apache.hadoop.yarn.util.ConverterUtils;
+import org.codehaus.jackson.map.ser.SerializerCache.TypeKey;
 
 import com.google.common.annotations.VisibleForTesting;
 
@@ -111,6 +112,11 @@ public class YARNRunner implements ClientProtocol {
   
   private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
   private static int[] replicasHashes_set;
+  private static Long[] temp_replicasHashes_forbft2;
+  //private static Long[] replicasHashes_forbft2;
+  //private static String[] applicationsNames;
+  private static Map<String, Long[]> AMsMap = new HashMap<String, Long[]>();
+
   private static int local_BFT_flag=0;
   private static int local_NUM_REPLICAS = 0;
   
@@ -186,6 +192,9 @@ public class YARNRunner implements ClientProtocol {
 		
 		 int receivedReducerNumber=0;
        String receivedTaskAttemptID ="";
+       long receivedApplicationNumber_1 =0;
+       int receivedApplicationNumber_2 =0;
+       String ApplicationName=null;
        long receivedHash= 0;
        Integer unreplicatedReducerNumber=null;
        boolean firstandsecond,thirdandforth,allofthem;
@@ -208,6 +217,8 @@ public class YARNRunner implements ClientProtocol {
 			int ii =0;
 			System.out.println("Inside run() inside clientThread class");
 			try {
+	            System.out.println(" "+clientSocket.getInetAddress()+" "+clientSocket.getRemoteSocketAddress()+" "+
+	            clientSocket.getLocalAddress()+" "+clientSocket.getPort()+" "+clientSocket.getLocalPort());
 				is = new DataInputStream(clientSocket.getInputStream());
 				os = new PrintStream(clientSocket.getOutputStream());
 				System.out.println("Inside try inside run() inside clientThread class");
@@ -219,88 +230,147 @@ public class YARNRunner implements ClientProtocol {
 						System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
 						
 						
-						receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
-		                receivedTaskAttemptID = lineReceived.split(" ")[1];
-		                receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
-		                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
-		                replicasHashes[receivedReducerNumber]=receivedHash;
-		                replicasHashes_set[unreplicatedReducerNumber]+=1;
-		                
-		                System.out.println("---------------------------------------------------------------------------");
-		                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
-		                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
-		                		"receivedHash = " + receivedHash +
-		                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber
-		                		);
+						//receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
+		                receivedTaskAttemptID = lineReceived.split(" ")[0];//was [1]
+		                receivedReducerNumber = Integer.parseInt(receivedTaskAttemptID.toString().split("_")[4]);
+		                receivedApplicationNumber_1=Long.parseLong(receivedTaskAttemptID.toString().split("_")[1]);
+		                receivedApplicationNumber_2=Integer.parseInt(receivedTaskAttemptID.toString().split("_")[2]);
+		                ApplicationName = Long.toString(receivedApplicationNumber_1)+"_"+Integer.toString(receivedApplicationNumber_2);
+		                receivedHash = Long.parseLong(lineReceived.split(" ")[1]);
+		                if(local_BFT_flag==3)
+		                {
+		                	System.out.println("ENTERED local_BFT_flag==3");
+			                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
+			                replicasHashes[receivedReducerNumber]=receivedHash;
+			                replicasHashes_set[unreplicatedReducerNumber]+=1;
+			                
+			                System.out.println("---------------------------------PRINTING------------------------------------------");
+			                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+			                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
+			                		"receivedHash = " + receivedHash +
+			                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber+
+			                		"ApplicationName = "+ApplicationName
+			                		);
+			                for(int i =0;i<replicasHashes.length;i++)
+			                  {
+			               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
+			                  }
+			                  for(int i =0;i<replicasHashes_set.length;i++)
+			                  {
+			               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
+			                  }
+			                System.out.println("---------------------------------------------------------------------------");
+			                
+			                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
+			                {
+			                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
+			                	{
+			                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+			                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
+			                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
+			                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i].equals(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]))//==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
+			                		{
+			                			System.out.println("ENTERED allofthem=true;");
+			                			allofthem=true;
+			                		}else {
+			                			System.out.println("ENTERED allofthem=false;");
+			                			allofthem=false;//CAREFUL ... if you didn't add break here, allofthem can become true in the next round and gives a wrong allofthem=true (I.L)
+			                			break;//TODO ... need to add what to do when the replicas don't match  
+			                		}
+			                	}
+			             	   //firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
+			             	   //thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
+			             	   //allofthem = (firstandsecond == thirdandforth);
+			             	   if (allofthem==true)
+			             	   {
+			             		   System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
+			             		for(clientThread x:client_Threads_List)
+			   					{
+			             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
+			   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
+			   					}
+			             		
+			             		/*
+			             		ii=0;
+			             		for(clientThread x:client_Threads_List)
+			   					{	
+			   						receivedOK = is.readLine();
+			   						if(receivedOK=="ok")
+			   						{
+			   							System.out.println("RECEIVED OK FROM ii = "+ii);
+			   							System.out.println("BEFORE client_Threads_List.size() = "+client_Threads_List.size());
+			   							client_Threads_List.remove(ii);
+			   							System.out.println("AFTER client_Threads_List.size() = "+client_Threads_List.size());
+			   							}
+			   						ii++;
+			   					}
+			   					*/
+			             		System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
+			             		
+			             		
+			             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
+			             		    //System.out.println("lineReceived = "+lineReceived);
+				                    //out.writeBytes(unreplicatedReducerNumber + "\n\r");
+				                    //out.flush();
+				                	
+			             		  
+			             		   
+			             	   }
+			                }
+			                
+		                }
+		                if(local_BFT_flag==2)
+		                {
+		                	System.out.println("ENTERED local_BFT_flag==2");
+		                	
+		                	if(AMsMap.containsKey(ApplicationName))//we have the application
+		                	{
+			                	System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
+		                		//if(AMsMap.get(ApplicationName) != null)//this application has received reducers before
+		                		{
+		                			temp_replicasHashes_forbft2 = AMsMap.get(ApplicationName);
+		                			temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
+		                			AMsMap.put(ApplicationName, temp_replicasHashes_forbft2);
+		                			temp_replicasHashes_forbft2=null;
+		                		}
+		                		
+		                	}
+		                	else//first time to see the application, add it to the hashmap
+		                	{
+		                		System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
+		                		temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
+		                		AMsMap.put(ApplicationName, temp_replicasHashes_forbft2);
+	                			temp_replicasHashes_forbft2=null;		                		
+		                	}
+		                	
+		                	System.out.println("------------------------------------PRINTING---------------------------------------");
+			                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+			                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
+			                		"receivedHash = " + receivedHash +
+			                		"ApplicationName = "+ApplicationName+
+			                		"AMsMap.size()"+AMsMap.size()
+			                		);
+			                for (Map.Entry<String, Long[]> AppEntry: AMsMap.entrySet())
+			                {
+			                	System.out.println("AppEntry.getKey() = "+AppEntry.getKey());
+	                			temp_replicasHashes_forbft2=AppEntry.getValue();
+	                			for(int i =0;i<temp_replicasHashes_forbft2.length;i++)
+				                  {
+				               	   System.out.println("temp_replicasHashes_forbft2 i = "+i+" is "+temp_replicasHashes_forbft2[i]);
+				                  }
+	                			temp_replicasHashes_forbft2=null;		                		
+
+			                	
+			                }
+		                	System.out.println("---------------------------------------------------------------------------");
+
+			                
+		                }
 					}
 	                
 	                
-	                  for(int i =0;i<replicasHashes.length;i++)
-	                  {
-	               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
-	                  }
-	                  for(int i =0;i<replicasHashes_set.length;i++)
-	                  {
-	               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
-	                  }
-	                System.out.println("---------------------------------------------------------------------------");
 	                  
-	                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
-	                {
-	                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
-	                	{
-	                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
-	                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
-	                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i].equals(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]))//==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
-	                		{
-	                			System.out.println("ENTERED allofthem=true;");
-	                			allofthem=true;
-	                		}else {
-	                			System.out.println("ENTERED allofthem=false;");
-	                			allofthem=false;//CAREFUL ... if you didn't add break here, allofthem can become true in the next round and gives a wrong allofthem=true (I.L)
-	                			break;//TODO ... need to add what to do when the replicas don't match  
-	                		}
-	                	}
-	             	   //firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
-	             	   //thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
-	             	   //allofthem = (firstandsecond == thirdandforth);
-	             	   if (allofthem==true)
-	             	   {
-	             		   System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
-	             		for(clientThread x:client_Threads_List)
-	   					{
-	             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
-	   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
-	   					}
-	             		
-	             		/*
-	             		ii=0;
-	             		for(clientThread x:client_Threads_List)
-	   					{	
-	   						receivedOK = is.readLine();
-	   						if(receivedOK=="ok")
-	   						{
-	   							System.out.println("RECEIVED OK FROM ii = "+ii);
-	   							System.out.println("BEFORE client_Threads_List.size() = "+client_Threads_List.size());
-	   							client_Threads_List.remove(ii);
-	   							System.out.println("AFTER client_Threads_List.size() = "+client_Threads_List.size());
-	   							}
-	   						ii++;
-	   					}
-	   					*/
-	             		System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
-	             		
-	             		
-	             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
-	             		    //System.out.println("lineReceived = "+lineReceived);
-		                    //out.writeBytes(unreplicatedReducerNumber + "\n\r");
-		                    //out.flush();
-		                	
-	             		  
-	             		   
-	             	   }
-	                }
+	                
 	                //if(lineReceived!=null && !lineReceived.isEmpty())
 	                {
 			                if (lineReceived.startsWith("ww"))//TODO NEED TO HAVE A BETTER WAY TO CLOSE THE THREAD
@@ -512,7 +582,7 @@ public class YARNRunner implements ClientProtocol {
 	    
 
 	  
-	    if(local_BFT_flag==3)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
+	    if(local_BFT_flag==3 || local_BFT_flag==2)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
 	    {
 		    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
 		    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
