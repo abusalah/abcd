@@ -19,8 +19,11 @@
 package org.apache.hadoop.mapred;
 
 import java.io.DataInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.nio.ByteBuffer;
@@ -100,7 +103,11 @@ import com.google.common.annotations.VisibleForTesting;
  */
 @SuppressWarnings("unchecked")
 public class YARNRunner implements ClientProtocol {
+	
+	
+	public static PrintWriter writer;// = new PrintWriter("the-file-name.txt", "UTF-8");
 
+	
   private static final Log LOG = LogFactory.getLog(YARNRunner.class);
 
   private final RecordFactory recordFactory = RecordFactoryProvider.getRecordFactory(null);
@@ -140,7 +147,19 @@ public class YARNRunner implements ClientProtocol {
   public static class VerifierThreadClass implements Runnable {
 	  
 	  public void run(){
+		  
+		  try {//just to write the output to a file
+			writer = new PrintWriter("javaoutputfile.txt", "UTF-8");
+		} catch (FileNotFoundException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (UnsupportedEncodingException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		  
 		  System.out.println("inside run() inside ThreadedEchoServer4 class inside YARNRunner.java");
+		  writer.println("inside run() inside ThreadedEchoServer4 class inside YARNRunner.java");
 		  //temp_replicasHashes_forbft2_LIST = new ArrayList<Long>(local_NUM_REDUCES);
 		  try {
 				serverSocket = new ServerSocket(2222);
@@ -152,8 +171,10 @@ public class YARNRunner implements ClientProtocol {
 			while (!Thread.currentThread().isInterrupted()) {
 				try {
 		  		  System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class");
+		  		  writer.println("inside try inside while (true) inside ThreadedEchoServer4 class");
 					clientSocket = serverSocket.accept();
 					System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class AFTER clientSocket = serverSocket.accept();");
+					writer.println("inside try inside while (true) inside ThreadedEchoServer4 class AFTER clientSocket = serverSocket.accept();");
 					//for (int i = 0; i <= 9; i++) 
 					{
 						//if (t[i] == null) 
@@ -222,19 +243,19 @@ public class YARNRunner implements ClientProtocol {
 			String lineReceived;
 			String receivedOK;
 			int ii =0;
-			System.out.println("Inside run() inside clientThread class");
+			writer.println("Inside run() inside clientThread class");
 			try {
-	            System.out.println(" "+clientSocket.getInetAddress()+" "+clientSocket.getRemoteSocketAddress()+" "+
+	            writer.println(" "+clientSocket.getInetAddress()+" "+clientSocket.getRemoteSocketAddress()+" "+
 	            clientSocket.getLocalAddress()+" "+clientSocket.getPort()+" "+clientSocket.getLocalPort());
 				is = new DataInputStream(clientSocket.getInputStream());
 				os = new PrintStream(clientSocket.getOutputStream());
-				System.out.println("Inside try inside run() inside clientThread class");
+				writer.println("Inside try inside run() inside clientThread class");
 				
 				while (true) {//(!stopped && !Thread.currentThread().isInterrupted())
 					lineReceived = is.readLine();//NOTE the difference between os and System.out
 					if(lineReceived!=null && !lineReceived.isEmpty())
 					{
-						System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
+						writer.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
 						
 						
 						//receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
@@ -246,13 +267,13 @@ public class YARNRunner implements ClientProtocol {
 		                receivedHash = Long.parseLong(lineReceived.split(" ")[1]);
 		                if(local_BFT_flag==3)
 		                {
-		                	System.out.println("ENTERED local_BFT_flag==3");
+		                	writer.println("ENTERED local_BFT_flag==3");
 			                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
 			                replicasHashes[receivedReducerNumber]=receivedHash;
 			                replicasHashes_set[unreplicatedReducerNumber]+=1;
 			                
-			                System.out.println("---------------------------------PRINTING------------------------------------------");
-			                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+			                writer.println("---------------------------------PRINTING------------------------------------------");
+			                writer.println("receivedReducerNumber = "+receivedReducerNumber+
 			                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
 			                		"receivedHash = " + receivedHash +
 			                		"unreplicatedReducerNumber = "+unreplicatedReducerNumber+
@@ -260,27 +281,27 @@ public class YARNRunner implements ClientProtocol {
 			                		);
 			                for(int i =0;i<replicasHashes.length;i++)
 			                  {
-			               	   System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
+			               	   writer.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
 			                  }
 			                  for(int i =0;i<replicasHashes_set.length;i++)
 			                  {
-			               	   System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
+			               	   writer.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
 			                  }
-			                System.out.println("---------------------------------------------------------------------------");
+			                writer.println("---------------------------------------------------------------------------");
 			                
 			                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
 			                {
 			                	for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
 			                	{
-			                		System.out.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-			                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
-			                		System.out.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
+			                		writer.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+			                		writer.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
+			                		writer.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
 			                		if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i].equals(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]))//==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
 			                		{
-			                			System.out.println("ENTERED allofthem=true;");
+			                			writer.println("ENTERED allofthem=true;");
 			                			allofthem=true;
 			                		}else {
-			                			System.out.println("ENTERED allofthem=false;");
+			                			writer.println("ENTERED allofthem=false;");
 			                			allofthem=false;//CAREFUL ... if you didn't add break here, allofthem can become true in the next round and gives a wrong allofthem=true (I.L)
 			                			break;//TODO ... need to add what to do when the replicas don't match  
 			                		}
@@ -290,10 +311,10 @@ public class YARNRunner implements ClientProtocol {
 			             	   //allofthem = (firstandsecond == thirdandforth);
 			             	   if (allofthem==true)
 			             	   {
-			             		   System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
+			             		   writer.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
 			             		for(clientThread x:client_Threads_List)
 			   					{
-			             			System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
+			             			writer.println("client_Threads_List.size() = "+client_Threads_List.size());
 			   						x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");	   						
 			   					}
 			             		
@@ -304,19 +325,19 @@ public class YARNRunner implements ClientProtocol {
 			   						receivedOK = is.readLine();
 			   						if(receivedOK=="ok")
 			   						{
-			   							System.out.println("RECEIVED OK FROM ii = "+ii);
-			   							System.out.println("BEFORE client_Threads_List.size() = "+client_Threads_List.size());
+			   							writer.println("RECEIVED OK FROM ii = "+ii);
+			   							writer.println("BEFORE client_Threads_List.size() = "+client_Threads_List.size());
 			   							client_Threads_List.remove(ii);
-			   							System.out.println("AFTER client_Threads_List.size() = "+client_Threads_List.size());
+			   							writer.println("AFTER client_Threads_List.size() = "+client_Threads_List.size());
 			   							}
 			   						ii++;
 			   					}
 			   					*/
-			             		System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
+			             		writer.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
 			             		
 			             		
 			             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
-			             		    //System.out.println("lineReceived = "+lineReceived);
+			             		    //writer.println("lineReceived = "+lineReceived);
 				                    //out.writeBytes(unreplicatedReducerNumber + "\n\r");
 				                    //out.flush();
 				                	
@@ -328,39 +349,39 @@ public class YARNRunner implements ClientProtocol {
 		                }
 		                if(local_BFT_flag==2)
 		                {
-		                	System.out.println("ENTERED local_BFT_flag==2");
+		                	writer.println("ENTERED local_BFT_flag==2");
 		                	
 		                	if(AMsMap.containsKey(ApplicationName))//we have the application
 		                	{
-			                	System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
+			                	writer.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
 		                		//if(AMsMap.get(ApplicationName) != null)//this application has received reducers before
 		                		{
 		                			temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName);
-		                			System.out.println("---22");
+		                			writer.println("---22");
 		                			temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
 		                			//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
-		                			System.out.println("---33");
+		                			writer.println("---33");
 		                			AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_MAP);
-		                			System.out.println("---44");
+		                			writer.println("---44");
 		                			temp_replicasHashes_forbft2_MAP.clear();
-		                			System.out.println("---55");
+		                			writer.println("---55");
 		                		}
 		                		
 		                	}
 		                	else//first time to see the application, add it to the hashmap
 		                	{
-		                		System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
+		                		writer.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
 		                		temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
 		                		//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
-		                		System.out.println("---2");
+		                		writer.println("---2");
 		                		AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_MAP);
-		                		System.out.println("---3");
+		                		writer.println("---3");
 		                		temp_replicasHashes_forbft2_MAP.clear();
-	                			System.out.println("---4");
+	                			writer.println("---4");
 		                	}
 		                	
-		                	System.out.println("------------------------------------PRINTING---------------------------------------");
-			                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+		                	writer.println("------------------------------------PRINTING---------------------------------------");
+			                writer.println("receivedReducerNumber = "+receivedReducerNumber+
 			                		" receivedTaskAttemptID = " + receivedTaskAttemptID +
 			                	 	" receivedHash = " + receivedHash +
 			                		" ApplicationName = "+ApplicationName+
@@ -368,17 +389,17 @@ public class YARNRunner implements ClientProtocol {
 			                		);
 			                for (Map.Entry<String, Map<Integer, Long>> AppEntry: AMsMap.entrySet())
 			                {
-			                	System.out.println("AppEntry.getKey() = "+AppEntry.getKey());
+			                	writer.println("AppEntry.getKey() = "+AppEntry.getKey());
 			                	temp_replicasHashes_forbft2_MAP=AppEntry.getValue();
 	                			for(int i =0;i<temp_replicasHashes_forbft2_MAP.size();i++)
 				                  {
-				               	   System.out.println("temp_replicasHashes_forbft2_MAP.get(i) i = "+i+" is "+temp_replicasHashes_forbft2_MAP.get(i));
+				               	   writer.println("temp_replicasHashes_forbft2_MAP.get(i) i = "+i+" is "+temp_replicasHashes_forbft2_MAP.get(i));
 				                  }
 	                			temp_replicasHashes_forbft2_MAP.clear();		                		
 
 			                	
 			                }
-		                	System.out.println("---------------------------------------------------------------------------");
+		                	writer.println("---------------------------------------------------------------------------");
 
 			                
 		                }
