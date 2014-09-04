@@ -360,10 +360,10 @@ public class YARNRunner implements ClientProtocol {
 		                	
 		                	System.out.println("------------------------------------PRINTING---------------------------------------");
 			                System.out.println("receivedReducerNumber = "+receivedReducerNumber+
-			                		"receivedTaskAttemptID = " + receivedTaskAttemptID +
-			                		"receivedHash = " + receivedHash +
-			                		"ApplicationName = "+ApplicationName+
-			                		"AMsMap.size()"+AMsMap.size()
+			                		" receivedTaskAttemptID = " + receivedTaskAttemptID +
+			                	 	" receivedHash = " + receivedHash +
+			                		" ApplicationName = "+ApplicationName+
+			                		" AMsMap.size()"+AMsMap.size()
 			                		);
 			                for (Map.Entry<String, Map<Integer, Long>> AppEntry: AMsMap.entrySet())
 			                {
