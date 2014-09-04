@@ -334,7 +334,7 @@ public class YARNRunner implements ClientProtocol {
 		                		{
 		                			temp_replicasHashes_forbft2_LIST = AMsMap.get(ApplicationName);
 		                			System.out.println("---22");
-		                			temp_replicasHashes_forbft2_LIST.set(receivedReducerNumber, receivedHash);
+		                			temp_replicasHashes_forbft2_LIST.add(receivedReducerNumber, receivedHash);
 		                			//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 		                			System.out.println("---33");
 		                			AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_LIST);
@@ -347,7 +347,7 @@ public class YARNRunner implements ClientProtocol {
 		                	else//first time to see the application, add it to the hashmap
 		                	{
 		                		System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
-		                		temp_replicasHashes_forbft2_LIST.set(receivedReducerNumber, receivedHash);
+		                		temp_replicasHashes_forbft2_LIST.add(receivedReducerNumber, receivedHash);
 		                		//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 		                		System.out.println("---2");
 		                		AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_LIST);
