@@ -151,7 +151,7 @@ public class YARNRunner implements ClientProtocol {
 		  LOG.info("\n\n\n\n\n\n\n\n\n--------------------------------inside YARNRunner.java-----------------\n\n\n\n\n\n\n\n");
 		  
 		  try {//just to write the output to a file
-			writer = new PrintWriter("javaoutputfile.txt", "UTF-8");
+			writer = new PrintWriter("outputfileVerifierThreadClass.txt", "UTF-8");
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
