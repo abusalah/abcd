@@ -112,10 +112,12 @@ public class YARNRunner implements ClientProtocol {
   
   private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
   private static int[] replicasHashes_set;
-  private static Long[] temp_replicasHashes_forbft2;
+  private static Long[] temp_replicasHashes_forbft2 = new Long[2];
+  private static List<Long> temp_replicasHashes_forbft2_LIST = new ArrayList<Long>();
+
   //private static Long[] replicasHashes_forbft2;
   //private static String[] applicationsNames;
-  private static Map<String, Long[]> AMsMap = new HashMap<String, Long[]>();
+  private static Map<String, List<Long>> AMsMap = new HashMap<String, List<Long>>();
 
   private static int local_BFT_flag=0;
   private static int local_NUM_REPLICAS = 0;
@@ -328,13 +330,14 @@ public class YARNRunner implements ClientProtocol {
 			                	System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
 		                		//if(AMsMap.get(ApplicationName) != null)//this application has received reducers before
 		                		{
-		                			temp_replicasHashes_forbft2 = AMsMap.get(ApplicationName);
+		                			temp_replicasHashes_forbft2_LIST = AMsMap.get(ApplicationName);
 		                			System.out.println("---22");
-		                			temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
+		                			temp_replicasHashes_forbft2_LIST.set(receivedReducerNumber, receivedHash);
+		                			//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 		                			System.out.println("---33");
-		                			AMsMap.put(ApplicationName, temp_replicasHashes_forbft2);
+		                			AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_LIST);
 		                			System.out.println("---44");
-		                			temp_replicasHashes_forbft2=null;
+		                			temp_replicasHashes_forbft2_LIST.clear();
 		                			System.out.println("---55");
 		                		}
 		                		
@@ -342,11 +345,12 @@ public class YARNRunner implements ClientProtocol {
 		                	else//first time to see the application, add it to the hashmap
 		                	{
 		                		System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
-		                		temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
+		                		temp_replicasHashes_forbft2_LIST.set(receivedReducerNumber, receivedHash);
+		                		//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 		                		System.out.println("---2");
-		                		AMsMap.put(ApplicationName, temp_replicasHashes_forbft2);
+		                		AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_LIST);
 		                		System.out.println("---3");
-	                			temp_replicasHashes_forbft2=null;
+		                		temp_replicasHashes_forbft2_LIST.clear();
 	                			System.out.println("---4");
 		                	}
 		                	
@@ -357,15 +361,15 @@ public class YARNRunner implements ClientProtocol {
 			                		"ApplicationName = "+ApplicationName+
 			                		"AMsMap.size()"+AMsMap.size()
 			                		);
-			                for (Map.Entry<String, Long[]> AppEntry: AMsMap.entrySet())
+			                for (Map.Entry<String, List<Long>> AppEntry: AMsMap.entrySet())
 			                {
 			                	System.out.println("AppEntry.getKey() = "+AppEntry.getKey());
-	                			temp_replicasHashes_forbft2=AppEntry.getValue();
-	                			for(int i =0;i<temp_replicasHashes_forbft2.length;i++)
+			                	temp_replicasHashes_forbft2_LIST=AppEntry.getValue();
+	                			for(int i =0;i<temp_replicasHashes_forbft2_LIST.size();i++)
 				                  {
-				               	   System.out.println("temp_replicasHashes_forbft2 i = "+i+" is "+temp_replicasHashes_forbft2[i]);
+				               	   System.out.println("temp_replicasHashes_forbft2_LIST.get(i) i = "+i+" is "+temp_replicasHashes_forbft2_LIST.get(i));
 				                  }
-	                			temp_replicasHashes_forbft2=null;		                		
+	                			temp_replicasHashes_forbft2_LIST.clear();		                		
 
 			                	
 			                }
