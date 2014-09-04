@@ -121,6 +121,7 @@ public class YARNRunner implements ClientProtocol {
 
   private static int local_BFT_flag=0;
   private static int local_NUM_REPLICAS = 0;
+  private static int local_NUM_REDUCES = 0;
   
   public static Thread ThreadedEchoServer4;
   public static boolean stopFlag=false;
@@ -137,6 +138,7 @@ public class YARNRunner implements ClientProtocol {
 	  
 	  public void run(){
 		  System.out.println("inside run() inside ThreadedEchoServer4 class inside YARNRunner.java");
+		  temp_replicasHashes_forbft2_LIST = new ArrayList<Long>(local_NUM_REDUCES);
 			try {
 				serverSocket = new ServerSocket(2222);
 			} catch (IOException e) {
@@ -582,13 +584,15 @@ public class YARNRunner implements ClientProtocol {
   public JobStatus submitJob(JobID jobId, String jobSubmitDir, Credentials ts)
   throws IOException, InterruptedException {
 	  
-	  local_BFT_flag =conf.getInt("mapred.job.bft", 1);
-	    local_NUM_REPLICAS =conf.getInt("mapred.job.numreplicas",4);
+	    local_BFT_flag = conf.getInt("mapred.job.bft", 1);
+	    local_NUM_REPLICAS = conf.getInt("mapred.job.numreplicas",4);
+	    local_NUM_REDUCES = conf.getInt("mapreduce.job.reduces",1); 
 	    replicasHashes = new Long[conf.getInt("mapreduce.job.reduces", 1)];
 	    replicasHashes_set = new int[conf.getInt("mapreduce.job.reduces", 1)/local_NUM_REPLICAS]; 
 	    
 	    System.out.println("INSIDE YARNRUNNER.java local_BFT_flag = "+local_BFT_flag);
 	    System.out.println("INSIDE YARNRUNNER.java local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+	    System.out.println("INSIDE YARNRUNNER.java local_NUM_REDUCES = "+local_NUM_REDUCES);
 	    System.out.println("INSIDE YARNRUNNER.java conf.getInt(\"mapreduce.job.reduces\", 1) = "+conf.getInt("mapreduce.job.reduces", 1));
 	    
 
