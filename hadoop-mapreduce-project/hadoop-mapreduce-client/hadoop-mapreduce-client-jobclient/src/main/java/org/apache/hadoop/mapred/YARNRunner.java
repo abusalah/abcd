@@ -329,9 +329,13 @@ public class YARNRunner implements ClientProtocol {
 		                		//if(AMsMap.get(ApplicationName) != null)//this application has received reducers before
 		                		{
 		                			temp_replicasHashes_forbft2 = AMsMap.get(ApplicationName);
+		                			System.out.println("---22");
 		                			temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
+		                			System.out.println("---33");
 		                			AMsMap.put(ApplicationName, temp_replicasHashes_forbft2);
+		                			System.out.println("---44");
 		                			temp_replicasHashes_forbft2=null;
+		                			System.out.println("---55");
 		                		}
 		                		
 		                	}
@@ -339,8 +343,11 @@ public class YARNRunner implements ClientProtocol {
 		                	{
 		                		System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
 		                		temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
+		                		System.out.println("---2");
 		                		AMsMap.put(ApplicationName, temp_replicasHashes_forbft2);
-	                			temp_replicasHashes_forbft2=null;		                		
+		                		System.out.println("---3");
+	                			temp_replicasHashes_forbft2=null;
+	                			System.out.println("---4");
 		                	}
 		                	
 		                	System.out.println("------------------------------------PRINTING---------------------------------------");

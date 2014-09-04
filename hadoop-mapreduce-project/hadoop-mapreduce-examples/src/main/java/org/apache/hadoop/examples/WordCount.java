@@ -125,7 +125,7 @@ public class WordCount {
 	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
 	        {
 	        	System.out.println("------ENTERED case 2---------");
-	        	r3=8;
+	        	r3=4;
 	        	break;	        
 	        }
 	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
@@ -137,7 +137,7 @@ public class WordCount {
 	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
 	        {
 	        	System.out.println("------ENTERED case 4---------");
-	        	r3=8;
+	        	r3=4;
 	        	break;	        
 	        }
 	        default://deal with it as No BFT
