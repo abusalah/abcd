@@ -148,6 +148,8 @@ public class YARNRunner implements ClientProtocol {
 	  
 	  public void run(){
 		  
+		  LOG.info("\n\n\n\n\n\n\n\n\n--------------------------------inside YARNRunner.java-----------------\n\n\n\n\n\n\n\n");
+		  
 		  try {//just to write the output to a file
 			writer = new PrintWriter("javaoutputfile.txt", "UTF-8");
 		} catch (FileNotFoundException e1) {
@@ -158,8 +160,8 @@ public class YARNRunner implements ClientProtocol {
 			e1.printStackTrace();
 		}
 		  
-		  System.out.println("inside run() inside ThreadedEchoServer4 class inside YARNRunner.java");
-		  writer.println("inside run() inside ThreadedEchoServer4 class inside YARNRunner.java");
+		  System.out.println("inside run() inside VerifierThreadClass class inside YARNRunner.java");
+		  writer.println("inside run() inside VerifierThreadClass class inside YARNRunner.java");
 		  //temp_replicasHashes_forbft2_LIST = new ArrayList<Long>(local_NUM_REDUCES);
 		  try {
 				serverSocket = new ServerSocket(2222);
@@ -170,11 +172,11 @@ public class YARNRunner implements ClientProtocol {
 
 			while (!Thread.currentThread().isInterrupted()) {
 				try {
-		  		  System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class");
-		  		  writer.println("inside try inside while (true) inside ThreadedEchoServer4 class");
+		  		  System.out.println("inside try inside while (true) inside VerifierThreadClass class");
+		  		  writer.println("inside try inside while (true) inside VerifierThreadClass class");
 					clientSocket = serverSocket.accept();
-					System.out.println("inside try inside while (true) inside ThreadedEchoServer4 class AFTER clientSocket = serverSocket.accept();");
-					writer.println("inside try inside while (true) inside ThreadedEchoServer4 class AFTER clientSocket = serverSocket.accept();");
+					System.out.println("inside try inside while (true) inside VerifierThreadClass class AFTER clientSocket = serverSocket.accept();");
+					writer.println("inside try inside while (true) inside VerifierThreadClass class AFTER clientSocket = serverSocket.accept();");
 					//for (int i = 0; i <= 9; i++) 
 					{
 						//if (t[i] == null) 
@@ -200,7 +202,7 @@ public class YARNRunner implements ClientProtocol {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-//			System.out.println("END OF interruption of ThreadedEchoServer4 thread ");
+//			System.out.println("END OF interruption of VerifierThreadClass thread ");
 		  
 		  
 	  }
