@@ -109,6 +109,7 @@ public class YARNRunner implements ClientProtocol {
   private Configuration conf;
   private final FileContext defaultFileContext;
   
+  public static int bft2VerifierThreadFlag=0;
   
   private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
   private static int[] replicasHashes_set;
@@ -125,7 +126,7 @@ public class YARNRunner implements ClientProtocol {
   private static int local_NUM_REPLICAS = 0;
   private static int local_NUM_REDUCES = 0;
   
-  public static Thread ThreadedEchoServer4;
+  public static Thread VerifierThread;
   public static boolean stopFlag=false;
   public static Socket clientSocket = null;
   public static ServerSocket serverSocket = null;
@@ -136,7 +137,7 @@ public class YARNRunner implements ClientProtocol {
   //static clientThread t[] = new clientThread[10];
   public static ArrayList<clientThread> client_Threads_List = new ArrayList<clientThread>();  
   
-  public static class ThreadedEchoServer4 implements Runnable {
+  public static class VerifierThreadClass implements Runnable {
 	  
 	  public void run(){
 		  System.out.println("inside run() inside ThreadedEchoServer4 class inside YARNRunner.java");
@@ -598,14 +599,16 @@ public class YARNRunner implements ClientProtocol {
 	    System.out.println("INSIDE YARNRUNNER.java conf.getInt(\"mapreduce.job.reduces\", 1) = "+conf.getInt("mapreduce.job.reduces", 1));
 	    
 
-	  
+	  if(bft2VerifierThreadFlag==0)//just to launch one Verifier Thread
+	  {
 	    if(local_BFT_flag==3 || local_BFT_flag==2)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
 	    {
-		    ThreadedEchoServer4=new Thread(new ThreadedEchoServer4());
-		    ThreadedEchoServer4.setName("ThreadedEchoServer4 Thread");
-		    ThreadedEchoServer4.start();
+		    VerifierThread=new Thread(new VerifierThreadClass());
+		    VerifierThread.setName("Verifier Thread");
+		    VerifierThread.start();
 	    }
-
+	    bft2VerifierThreadFlag=1;
+	  }
 	  
 	System.out.println("______3______submitJob inside YARNRunner.java___________here the MR AM starts_____and submits to the RM______ ");
     
