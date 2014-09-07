@@ -312,9 +312,13 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getC
     	  
     	  try {
   			clientSocket = new Socket("mc07.cs.purdue.edu", 2222);//("mc07.cs.purdue.edu", 2222);
+  			System.out.println("--1");
   			inputLine = new BufferedReader(new InputStreamReader(System.in));
+  			System.out.println("--2");
   			os = new PrintStream(clientSocket.getOutputStream());
+  			System.out.println("--3");
   			is = new DataInputStream(clientSocket.getInputStream());
+  			System.out.println("--4");
   		} catch (UnknownHostException e) {
   			System.err.println("Don't know about host mc07.cs.purdue.edu");
   		} catch (IOException e) {
