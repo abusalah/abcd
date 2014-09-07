@@ -1299,26 +1299,73 @@ public class Job extends JobContextImpl implements JobContext {
   
   
   
-public class submitJobThreadClass implements Runnable  {
+public class submitJobThreadClass implements Runnable   {
 	  
 	  public void run(){
 		  
 		  
 		  System.out.println("______1______submit inside Job.java");
 		    ensureState(JobState.DEFINE);
-		    setUseNewAPI();
-		    connect();
-		    final JobSubmitter submitter = 
-		        getJobSubmitter(cluster.getFileSystem(), cluster.getClient());
-		    status = ugi.doAs(new PrivilegedExceptionAction<JobStatus>() {
-		      public JobStatus run() throws IOException, InterruptedException, 
-		      ClassNotFoundException {
-		        return submitter.submitJobInternal(Job.this, cluster);
-		      }
-		    });
+		    try {
+				setUseNewAPI();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    try {
+				connect();
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		    //JobSubmitter submitter = null;
+		    //final JobSubmitter submitter = getJobSubmitter(cluster.getFileSystem(), cluster.getClient());
+			try {
+				final JobSubmitter submitter = getJobSubmitter(cluster.getFileSystem(), cluster.getClient());
+				status = ugi.doAs(new PrivilegedExceptionAction<JobStatus>() {
+					  public JobStatus run() throws IOException, InterruptedException, 
+					  ClassNotFoundException {
+					    return submitter.submitJobInternal(Job.this, cluster);
+					  }
+					});
+			} catch (IOException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} catch (InterruptedException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+//		    try {
+//				status = ugi.doAs(new PrivilegedExceptionAction<JobStatus>() {
+//				  public JobStatus run() throws IOException, InterruptedException, 
+//				  ClassNotFoundException {
+//				    return submitter.submitJobInternal(Job.this, cluster);
+//				  }
+//				});
+//			} catch (IOException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			} catch (InterruptedException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		    state = JobState.RUNNING;
 		    LOG.info("The url to track the job: " + getTrackingURL());
-		    monitorAndPrintJob();//bft ......... this is new, it wasn't in the code before.
+		    try {
+				monitorAndPrintJob();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}//bft ......... this is new, it wasn't in the code before.
 	  
 	  }
 }
