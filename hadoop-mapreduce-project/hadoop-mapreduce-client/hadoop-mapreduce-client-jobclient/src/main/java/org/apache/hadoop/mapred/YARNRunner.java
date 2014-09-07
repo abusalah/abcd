@@ -151,7 +151,7 @@ public class YARNRunner implements ClientProtocol {
 		  LOG.info("\n\n\n\n\n\n\n\n\n--------------------------------inside YARNRunner.java-----------------\n\n\n\n\n\n\n\n");
 		  
 		  try {//just to write the output to a file
-			writer = new PrintWriter("outputfileVerifierThreadClass.txt", "UTF-8");
+			writer = new PrintWriter("outputfileVerifierThreadClass", "UTF-8");
 		} catch (FileNotFoundException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -177,6 +177,7 @@ public class YARNRunner implements ClientProtocol {
 					clientSocket = serverSocket.accept();
 					System.out.println("inside try inside while (true) inside VerifierThreadClass class AFTER clientSocket = serverSocket.accept();");
 					writer.println("inside try inside while (true) inside VerifierThreadClass class AFTER clientSocket = serverSocket.accept();");
+					writer.flush();
 					//for (int i = 0; i <= 9; i++) 
 					{
 						//if (t[i] == null) 
@@ -245,18 +246,24 @@ public class YARNRunner implements ClientProtocol {
 			String lineReceived;
 			String receivedOK;
 			int ii =0;
+			System.out.println("Inside run() inside clientThread class");
 			writer.println("Inside run() inside clientThread class");
 			try {
+				System.out.println(" "+clientSocket.getInetAddress()+" "+clientSocket.getRemoteSocketAddress()+" "+
+			            clientSocket.getLocalAddress()+" "+clientSocket.getPort()+" "+clientSocket.getLocalPort());
 	            writer.println(" "+clientSocket.getInetAddress()+" "+clientSocket.getRemoteSocketAddress()+" "+
-	            clientSocket.getLocalAddress()+" "+clientSocket.getPort()+" "+clientSocket.getLocalPort());
+	            		clientSocket.getLocalAddress()+" "+clientSocket.getPort()+" "+clientSocket.getLocalPort());
 				is = new DataInputStream(clientSocket.getInputStream());
 				os = new PrintStream(clientSocket.getOutputStream());
+				System.out.println("Inside try inside run() inside clientThread class");
 				writer.println("Inside try inside run() inside clientThread class");
+				writer.flush();
 				
 				while (true) {//(!stopped && !Thread.currentThread().isInterrupted())
 					lineReceived = is.readLine();//NOTE the difference between os and System.out
 					if(lineReceived!=null && !lineReceived.isEmpty())
 					{
+						System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
 						writer.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
 						
 						
@@ -269,6 +276,7 @@ public class YARNRunner implements ClientProtocol {
 		                receivedHash = Long.parseLong(lineReceived.split(" ")[1]);
 		                if(local_BFT_flag==3)
 		                {
+		                	writer.println("ENTERED local_BFT_flag==3");
 		                	writer.println("ENTERED local_BFT_flag==3");
 			                unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
 			                replicasHashes[receivedReducerNumber]=receivedHash;
@@ -290,6 +298,7 @@ public class YARNRunner implements ClientProtocol {
 			               	   writer.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
 			                  }
 			                writer.println("---------------------------------------------------------------------------");
+			                writer.flush();
 			                
 			                if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
 			                {
@@ -308,6 +317,7 @@ public class YARNRunner implements ClientProtocol {
 			                			break;//TODO ... need to add what to do when the replicas don't match  
 			                		}
 			                	}
+			                	writer.flush();
 			             	   //firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
 			             	   //thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
 			             	   //allofthem = (firstandsecond == thirdandforth);
@@ -336,6 +346,7 @@ public class YARNRunner implements ClientProtocol {
 			   					}
 			   					*/
 			             		writer.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============	");
+			             		writer.flush();
 			             		
 			             		
 			             		 //capitalizedSentence = clientSentence.toUpperCase() + '\n';
@@ -368,6 +379,7 @@ public class YARNRunner implements ClientProtocol {
 		                			temp_replicasHashes_forbft2_MAP.clear();
 		                			writer.println("---55");
 		                		}
+		                		writer.flush();
 		                		
 		                	}
 		                	else//first time to see the application, add it to the hashmap
@@ -380,6 +392,7 @@ public class YARNRunner implements ClientProtocol {
 		                		writer.println("---3");
 		                		temp_replicasHashes_forbft2_MAP.clear();
 	                			writer.println("---4");
+	                			writer.flush();
 		                	}
 		                	
 		                	writer.println("------------------------------------PRINTING---------------------------------------");
@@ -402,6 +415,7 @@ public class YARNRunner implements ClientProtocol {
 			                	
 			                }
 		                	writer.println("---------------------------------------------------------------------------");
+		                	writer.flush();
 
 			                
 		                }
