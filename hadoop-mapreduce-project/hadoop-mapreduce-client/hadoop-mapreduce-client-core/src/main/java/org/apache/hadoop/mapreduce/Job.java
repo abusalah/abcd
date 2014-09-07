@@ -33,7 +33,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.mapred.JobConf;
-import org.apache.hadoop.mapred.YARNRunner.VerifierThreadClass;
+//import org.apache.hadoop.mapred.YARNRunner.VerifierThreadClass;
 import org.apache.hadoop.mapreduce.filecache.DistributedCache;
 import org.apache.hadoop.mapreduce.protocol.ClientProtocol;
 import org.apache.hadoop.mapreduce.task.JobContextImpl;
