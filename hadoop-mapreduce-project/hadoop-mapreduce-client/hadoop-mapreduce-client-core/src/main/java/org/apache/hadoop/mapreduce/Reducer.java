@@ -209,7 +209,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   public void run(Context context) throws IOException, InterruptedException {
 	  
 	  
-if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)	 
+if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)	 
 {
 	    setup(context);
 	    try {
@@ -228,7 +228,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1|| context.getCo
 	  
 	  
 	  
-if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3) //|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
+if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2) //|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
 {
 	
 	int unreplicatedReducerNumber =0;
