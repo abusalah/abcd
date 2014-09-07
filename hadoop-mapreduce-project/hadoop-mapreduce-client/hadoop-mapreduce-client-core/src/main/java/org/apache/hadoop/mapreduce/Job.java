@@ -1284,14 +1284,18 @@ public class Job extends JobContextImpl implements JobContext {
     ensureState(JobState.DEFINE);
     setUseNewAPI();
     connect();
+    System.out.println("______11______");
     final JobSubmitter submitter = 
         getJobSubmitter(cluster.getFileSystem(), cluster.getClient());
+    System.out.println("______22______");
     status = ugi.doAs(new PrivilegedExceptionAction<JobStatus>() {
       public JobStatus run() throws IOException, InterruptedException, 
       ClassNotFoundException {
+    	  System.out.println("______33______");
         return submitter.submitJobInternal(Job.this, cluster);
       }
     });
+    System.out.println("______44______");
     state = JobState.RUNNING;
     LOG.info("The url to track the job: " + getTrackingURL());
     //monitorAndPrintJob();//bft ......... this is new, it wasn't in the code before.
