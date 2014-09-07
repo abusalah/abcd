@@ -170,6 +170,10 @@ public class YARNRunner implements ClientProtocol {
 				System.out.println("\n\n\n\nserverSocket Exception\n\n\n");
 				System.out.println(e);
 			}
+		  
+		  System.out.println("after serverSocket = new ServerSocket(2222);");
+		  writer.println("after serverSocket = new ServerSocket(2222);");
+		  writer.flush();
 
 			while (!Thread.currentThread().isInterrupted()) {
 				try {

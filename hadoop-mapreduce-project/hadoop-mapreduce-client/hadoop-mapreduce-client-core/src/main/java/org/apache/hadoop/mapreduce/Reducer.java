@@ -244,13 +244,13 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getC
 	  }
 	  
 	 
-	  //System.out.println("ENTERED run in Reducer.java");
+	  System.out.println("ENTERED run in Reducer.java");
 	  
     setup(context);
     
     try {
     	String KV=""; int i=0; long totalHash=0; String stringToSend=""; String stringReceived="";
-    	//System.out.println("+++ entered try");
+    	System.out.println("+++ entered try");
     	while (context.nextKey()) {
     		
     		//System.out.println("context.nextKeyValue = "+context.nextKeyValue());
