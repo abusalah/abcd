@@ -165,7 +165,7 @@ public class YARNRunner implements ClientProtocol {
 		  writer.flush();
 		  //temp_replicasHashes_forbft2_LIST = new ArrayList<Long>(local_NUM_REDUCES);
 		  try {
-				serverSocket = new ServerSocket(2222);
+				serverSocket = new ServerSocket(2226);
 			} catch (IOException e) {
 				System.out.println("\n\n\n\nserverSocket Exception\n\n\n");
 				System.out.println(e);
@@ -179,6 +179,7 @@ public class YARNRunner implements ClientProtocol {
 				try {
 		  		  System.out.println("inside try inside while (true) inside VerifierThreadClass class");
 		  		  writer.println("inside try inside while (true) inside VerifierThreadClass class");
+		  		  writer.flush();
 					clientSocket = serverSocket.accept();
 					System.out.println("inside try inside while (true) inside VerifierThreadClass class AFTER clientSocket = serverSocket.accept();");
 					writer.println("inside try inside while (true) inside VerifierThreadClass class AFTER clientSocket = serverSocket.accept();");
