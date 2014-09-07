@@ -33,6 +33,7 @@ import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.RawComparator;
 import org.apache.hadoop.mapred.JobConf;
+import org.apache.hadoop.mapred.YARNRunner.VerifierThreadClass;
 import org.apache.hadoop.mapreduce.filecache.DistributedCache;
 import org.apache.hadoop.mapreduce.protocol.ClientProtocol;
 import org.apache.hadoop.mapreduce.task.JobContextImpl;
@@ -1274,22 +1275,54 @@ public class Job extends JobContextImpl implements JobContext {
    */
   public void submit() 
          throws IOException, InterruptedException, ClassNotFoundException {
-	  System.out.println("______1______submit inside Job.java");
-    ensureState(JobState.DEFINE);
-    setUseNewAPI();
-    connect();
-    final JobSubmitter submitter = 
-        getJobSubmitter(cluster.getFileSystem(), cluster.getClient());
-    status = ugi.doAs(new PrivilegedExceptionAction<JobStatus>() {
-      public JobStatus run() throws IOException, InterruptedException, 
-      ClassNotFoundException {
-        return submitter.submitJobInternal(Job.this, cluster);
-      }
-    });
-    state = JobState.RUNNING;
-    LOG.info("The url to track the job: " + getTrackingURL());
-    //monitorAndPrintJob();//bft ......... this is new, it wasn't in the code before.
+	  
+	  
+	  Thread submitJobThread=new Thread(new submitJobThreadClass());
+	  submitJobThread.start();
+	  
+//	  System.out.println("______1______submit inside Job.java");
+//    ensureState(JobState.DEFINE);
+//    setUseNewAPI();
+//    connect();
+//    final JobSubmitter submitter = 
+//        getJobSubmitter(cluster.getFileSystem(), cluster.getClient());
+//    status = ugi.doAs(new PrivilegedExceptionAction<JobStatus>() {
+//      public JobStatus run() throws IOException, InterruptedException, 
+//      ClassNotFoundException {
+//        return submitter.submitJobInternal(Job.this, cluster);
+//      }
+//    });
+//    state = JobState.RUNNING;
+//    LOG.info("The url to track the job: " + getTrackingURL());
+//    //monitorAndPrintJob();//bft ......... this is new, it wasn't in the code before.
    }
+  
+  
+  
+public class submitJobThreadClass implements Runnable  {
+	  
+	  public void run(){
+		  
+		  
+		  System.out.println("______1______submit inside Job.java");
+		    ensureState(JobState.DEFINE);
+		    setUseNewAPI();
+		    connect();
+		    final JobSubmitter submitter = 
+		        getJobSubmitter(cluster.getFileSystem(), cluster.getClient());
+		    status = ugi.doAs(new PrivilegedExceptionAction<JobStatus>() {
+		      public JobStatus run() throws IOException, InterruptedException, 
+		      ClassNotFoundException {
+		        return submitter.submitJobInternal(Job.this, cluster);
+		      }
+		    });
+		    state = JobState.RUNNING;
+		    LOG.info("The url to track the job: " + getTrackingURL());
+		    monitorAndPrintJob();//bft ......... this is new, it wasn't in the code before.
+	  
+	  }
+}
+  
   
   /**
    * Submit the job to the cluster and wait for it to finish.
