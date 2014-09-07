@@ -162,6 +162,7 @@ public class YARNRunner implements ClientProtocol {
 		  
 		  System.out.println("inside run() inside VerifierThreadClass class inside YARNRunner.java");
 		  writer.println("inside run() inside VerifierThreadClass class inside YARNRunner.java");
+		  writer.flush();
 		  //temp_replicasHashes_forbft2_LIST = new ArrayList<Long>(local_NUM_REDUCES);
 		  try {
 				serverSocket = new ServerSocket(2222);
