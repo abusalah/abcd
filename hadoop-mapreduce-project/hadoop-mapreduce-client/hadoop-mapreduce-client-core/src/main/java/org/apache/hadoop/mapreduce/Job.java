@@ -1282,7 +1282,9 @@ public class Job extends JobContextImpl implements JobContext {
 	  
 	  System.out.println("______1______submit inside Job.java");
     ensureState(JobState.DEFINE);
+    System.out.println("______11___1___");
     setUseNewAPI();
+    System.out.println("______11___2___");
     connect();
     System.out.println("______11______");
     final JobSubmitter submitter = 
