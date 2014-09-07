@@ -1245,14 +1245,16 @@ public class Job extends JobContextImpl implements JobContext {
     }   
   }
 
-  private synchronized void connect()
+  private void connect() //IMP was synchronized
           throws IOException, InterruptedException, ClassNotFoundException {
+	  System.out.println("----entered 1");
     if (cluster == null) {
+    	System.out.println("----entered 2");
       cluster = 
         ugi.doAs(new PrivilegedExceptionAction<Cluster>() {
                    public Cluster run()
-                          throws IOException, InterruptedException, 
-                                 ClassNotFoundException {
+                          throws IOException, InterruptedException, ClassNotFoundException {
+                	   System.out.println("----entered 3");
                      return new Cluster(getConfiguration());
                    }
                  });
