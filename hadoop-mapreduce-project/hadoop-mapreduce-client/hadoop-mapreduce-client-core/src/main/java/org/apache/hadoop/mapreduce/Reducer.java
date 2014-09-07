@@ -228,7 +228,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1|| context.getCo
 	  
 	  
 	  
-if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 //|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
+if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3) //|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
 {
 	
 	int unreplicatedReducerNumber =0;
