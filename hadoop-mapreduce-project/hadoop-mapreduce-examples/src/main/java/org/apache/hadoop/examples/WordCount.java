@@ -102,6 +102,7 @@ public class WordCount {
 	    public void run() {
 	    	try {
 	    		System.out.println("Inside 3 this.local_job.getJar() = "+this.local_job.getJar());
+	    		this.local_job=new Job(this.local_job.getConfiguration(), "word count");
 				this.local_job.waitForCompletion(true);
 				
 			} catch (ClassNotFoundException e) {
