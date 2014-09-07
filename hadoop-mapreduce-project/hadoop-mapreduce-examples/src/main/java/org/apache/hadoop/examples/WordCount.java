@@ -86,6 +86,35 @@ public class WordCount {
       //              +key.toString()+" result = "+result);
     }
   }
+  
+  
+  
+  public static class MyRunnable implements Runnable {
+
+	    private Job local_job;
+
+	    public MyRunnable(Job sent_job) {
+	        this.local_job = sent_job;
+	    }
+
+	    public void run() {
+	    	try {
+				this.local_job.waitForCompletion(true);
+			} catch (ClassNotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}//.waitForCompletion(true);
+	        // code in the other thread, can reference "var" variable
+	    }
+	}
+
+
 
   public static void main(String[] args) throws Exception {
 	  int r3=0;//default//number of AM replicas
@@ -183,7 +212,12 @@ public class WordCount {
 	    FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 	    FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]+Integer.toString(i)));
 	    //System.exit(job.waitForCompletion(true) ? 0 : 1);
-	    job.submit();
+	    //job.submit();
+	   
+	    MyRunnable myRunnable = new MyRunnable(job);
+        Thread t = new Thread(myRunnable);
+        t.start();
+	    
 	    //job.waitForCompletion(true);//was true
 	    
 
