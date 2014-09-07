@@ -94,12 +94,16 @@ public class WordCount {
 	    private Job local_job;
 
 	    public MyRunnable(Job sent_job) {
+	    	System.out.println("Inside 1 sent_job.getJar() = "+sent_job.getJar());
 	        this.local_job = sent_job;
+	        System.out.println("Inside 2 sent_job.getJar() = "+sent_job.getJar());
 	    }
 
 	    public void run() {
 	    	try {
+	    		System.out.println("Inside 3 this.local_job.getJar() = "+this.local_job.getJar());
 				this.local_job.waitForCompletion(true);
+				
 			} catch (ClassNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -214,6 +218,8 @@ public class WordCount {
 	    //System.exit(job.waitForCompletion(true) ? 0 : 1);
 	    //job.submit();
 	   
+	    System.out.println("Before job.getJar() = "+job.getJar());
+	    
 	    MyRunnable myRunnable = new MyRunnable(job);
         Thread t = new Thread(myRunnable);
         t.start();
