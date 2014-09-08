@@ -217,7 +217,7 @@ public class WordCount {
 	    FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 	    FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]+Integer.toString(i)));
 	    //System.exit(job.waitForCompletion(true) ? 0 : 1);
-	    job.submit();
+	    //job.submit();
 	   
 //	    System.out.println("Before job.getJar() = "+job.getJar());
 //	    
@@ -225,7 +225,7 @@ public class WordCount {
 //        Thread t = new Thread(myRunnable);
 //        t.start();
 	    
-	    //job.waitForCompletion(true);//was true
+	    job.waitForCompletion(true);//was true
 	    
 
 	    
