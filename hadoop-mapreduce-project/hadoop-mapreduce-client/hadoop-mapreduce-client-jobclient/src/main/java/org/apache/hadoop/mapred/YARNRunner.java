@@ -644,6 +644,9 @@ public class YARNRunner implements ClientProtocol {
 
 	  if(bft2VerifierThreadFlag==0)//just to launch one Verifier Thread
 	  {
+		  System.out.println("ENTERED if(bft2VerifierThreadFlag==0)");
+		  writer.println("ENTERED if(bft2VerifierThreadFlag==0)");
+		  writer.flush();
 	    if(local_BFT_flag==3 || local_BFT_flag==2)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
 	    {
 		    VerifierThread=new Thread(new VerifierThreadClass());
