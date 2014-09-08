@@ -630,6 +630,9 @@ public class YARNRunner implements ClientProtocol {
   public JobStatus submitJob(JobID jobId, String jobSubmitDir, Credentials ts)
   throws IOException, InterruptedException {
 	  
+	  System.out.println("__________________inside submitJob in YARNRunner.java________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  
 	    local_BFT_flag = conf.getInt("mapred.job.bft", 1);
 	    local_NUM_REPLICAS = conf.getInt("mapred.job.numreplicas",4);
 	    local_NUM_REDUCES = conf.getInt("mapreduce.job.reduces",1); 
