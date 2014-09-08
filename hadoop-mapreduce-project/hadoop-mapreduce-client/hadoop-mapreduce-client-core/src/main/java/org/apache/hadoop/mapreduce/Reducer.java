@@ -311,6 +311,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getC
     	  
     	  
     	  try {
+    		System.out.println("--0");
   			clientSocket = new Socket("mc07.cs.purdue.edu", 2226);//("mc07.cs.purdue.edu", 2222);
   			System.out.println("--1");
   			inputLine = new BufferedReader(new InputStreamReader(System.in));
