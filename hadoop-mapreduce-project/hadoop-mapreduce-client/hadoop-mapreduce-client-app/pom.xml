@@ -44,6 +44,12 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-mapreduce-client-common</artifactId>
     </dependency>
+<dependency>
+    <groupId>org.apache.hadoop</groupId>
+        <artifactId>hadoop-mapreduce-client-core</artifactId>
+	        <scope>system</scope>
+		    <systemPath>/scratch/babusala/apache-hadoop-bft/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/target/hadoop-mapreduce-client-core-3.0.0-SNAPSHOT.jar</systemPath>
+		    </dependency>
     <dependency>
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-yarn-server-web-proxy</artifactId>
@@ -73,6 +79,7 @@
       <groupId>org.apache.hadoop</groupId>
       <artifactId>hadoop-mapreduce-client-shuffle</artifactId>
     </dependency>
+
   </dependencies>
 
   <build>
@@ -88,8 +95,31 @@
           </execution>
         </executions>
       </plugin>
+   <!-- <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+              <configuration>
+                      <archive>
+		                                          <manifest>
+                             <mainClass>hadoop-mapreduce-client-app</mainClass>
+                                                     </manifest>
+                                         </archive>
+                                     <descriptorRefs>
+    <descriptorRef>/scratch/babusala/apache-hadoop-bft/hadoop-mapreduce-project/hadoop-mapreduce-client/hadoop-mapreduce-client-core/target/hadoop-mapreduce-client-core-3.0.0-SNAPSHOT.jar</descriptorRef>
+                                        </descriptorRefs>
+                                      </configuration>
+<executions>
+    <execution>
+      <id>make-assembly</id>
+      <phase>package</phase>
+      <goals>
+        <goal>single</goal>
+      </goals>
+    </execution>
+    </executions>
+      </plugin>-->
     </plugins>
   </build>
+
 
   <profiles>
     <profile>

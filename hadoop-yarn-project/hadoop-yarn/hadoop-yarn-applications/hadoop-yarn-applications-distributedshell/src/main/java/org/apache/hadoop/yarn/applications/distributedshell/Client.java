@@ -389,7 +389,7 @@ public class Client {
     yarnClient.start();
 
     YarnClusterMetrics clusterMetrics = yarnClient.getYarnClusterMetrics();
-    LOG.info("Got Cluster metric info from ASM" 
+    LOG.info("-INSIDE hadoop-yarn-project hadoop-yarn hadoop-yarn-applications hadoop-yarn-applications-distributedshell ... hadoop yarn applications distributedshell Client.java- Got Cluster metric info from ASM" 
         + ", numNodeManagers=" + clusterMetrics.getNumNodeManagers());
 
     List<NodeReport> clusterNodeReports = yarnClient.getNodeReports(
