@@ -175,7 +175,7 @@ public class YARNRunner implements ClientProtocol {
 		  writer.println("after serverSocket = new ServerSocket(2222);");
 		  writer.flush();
 
-			while (!Thread.currentThread().isInterrupted()) {
+			while (true) {//!Thread.currentThread().isInterrupted()
 				try {
 		  		  System.out.println("inside try inside while (true) inside VerifierThreadClass class");
 		  		  writer.println("inside try inside while (true) inside VerifierThreadClass class");
