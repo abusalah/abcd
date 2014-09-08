@@ -652,9 +652,9 @@ public class YARNRunner implements ClientProtocol {
 		  //writer.flush();
 	    if(local_BFT_flag==3 || local_BFT_flag==2)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
 	    {
-		    VerifierThread=new Thread(new VerifierThreadClass());
-		    VerifierThread.setName("Verifier Thread");
-		    VerifierThread.start();
+//		    VerifierThread=new Thread(new VerifierThreadClass());
+//		    VerifierThread.setName("Verifier Thread");
+//		    VerifierThread.start();
 	    }
 	    bft2VerifierThreadFlag=1;
 	  }
