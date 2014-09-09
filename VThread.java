@@ -1,3 +1,4 @@
+//package ss2;
 
 import java.io.*;
 import java.net.*;
@@ -6,6 +7,7 @@ import java.util.*;
 
 public class VThread {
 	
+
 
 public static PrintWriter writer;
 
