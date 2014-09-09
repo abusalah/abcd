@@ -1,10 +1,19 @@
+package VThreadPackage;
 
-class sss {
+import java.io.*;
+import java.net.*;
+import java.nio.*;
+import java.util.*;
 
-int sdfdsafa =0;
+public class VThread {
+	
 
+
+public static PrintWriter writer;
 
     public static int bft2VerifierThreadFlag=0;
+    
+    int testdelete =1;
   
     private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
     private static int[] replicasHashes_set;
@@ -35,8 +44,8 @@ int sdfdsafa =0;
     public static class VerifierThreadClass implements Runnable {
 	  
 	public void run(){
+		
 	      
-	    LOG.info("\n\n\n\n\n\n\n\n\n--------------------------------inside YARNRunner.java-----------------\n\n\n\n\n\n\n\n");
 	      
 	    try {//just to write the output to a file
 		writer = new PrintWriter("outputfileVerifierThreadClass", "UTF-8");
@@ -160,14 +169,26 @@ int sdfdsafa =0;
 			    System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
 			    writer.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
 			    
+			    local_BFT_flag = Integer.parseInt(lineReceived.split(" ")[0].split("-")[0]);//conf.getInt("mapred.job.bft", 1);
+			    local_NUM_REPLICAS = Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
+			    local_NUM_REDUCES = Integer.parseInt(lineReceived.split(" ")[0].split("-")[2]);//conf.getInt("mapreduce.job.reduces",1); 
+			    replicasHashes = new Long[local_NUM_REDUCES];
+			    replicasHashes_set = new int[local_NUM_REDUCES/local_NUM_REPLICAS]; 
+			    
+			    System.out.println("INSIDE local_BFT_flag = "+local_BFT_flag);
+			    System.out.println("INSIDE local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+			    System.out.println("INSIDE local_NUM_REDUCES = "+local_NUM_REDUCES);
+			    
+
+			    
 			    
 			    //receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
-			    receivedTaskAttemptID = lineReceived.split(" ")[0];//was [1]
+			    receivedTaskAttemptID = lineReceived.split(" ")[1];//was [1]
 			    receivedReducerNumber = Integer.parseInt(receivedTaskAttemptID.toString().split("_")[4]);
 			    receivedApplicationNumber_1=Long.parseLong(receivedTaskAttemptID.toString().split("_")[1]);
 			    receivedApplicationNumber_2=Integer.parseInt(receivedTaskAttemptID.toString().split("_")[2]);
 			    ApplicationName = Long.toString(receivedApplicationNumber_1)+"_"+Integer.toString(receivedApplicationNumber_2);
-			    receivedHash = Long.parseLong(lineReceived.split(" ")[1]);
+			    receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
 			    if(local_BFT_flag==3)
 				{
 				    writer.println("ENTERED local_BFT_flag==3");
@@ -339,16 +360,30 @@ int sdfdsafa =0;
 
     //bft_______end new code____________________________________________________________________________________________________
 
-  
 
+	
 
+	public static void main(String[] args) {
+		
+		System.out.println("------ENTERED VThread--------");
+		
+		
+	  //if(bft2VerifierThreadFlag==0)//just to launch one Verifier Thread
+	  {
+		  //System.out.println("ENTERED if(bft2VerifierThreadFlag==0)");
+		  //writer.println("ENTERED if(bft2VerifierThreadFlag==0)");
+		  //writer.flush();
+	    //if(local_BFT_flag==3 || local_BFT_flag==2)//case 3 start the verification thread .... TODO NEED TO ADD CASE 2
+	    {
+		    VerifierThread=new Thread(new VerifierThreadClass());
+		    VerifierThread.setName("Verifier Thread");
+		    VerifierThread.start();
+	    }
+	    //bft2VerifierThreadFlag=1;
+	  }
+	  
+		
+		
+	}
 
-    public static void main(String[] args) {
-            System.out.println("------ENTERED sss--------");
-	        }
-
-
-		}
-
-
-
+}
