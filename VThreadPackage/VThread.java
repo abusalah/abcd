@@ -13,7 +13,7 @@ public static PrintWriter writer;
 
     public static int bft2VerifierThreadFlag=0;
     
-    int testdelete =12;
+    int testdelete =123;
   
     private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
     private static int[] replicasHashes_set;
