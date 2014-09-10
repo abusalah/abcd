@@ -12,8 +12,6 @@ public class VThread {
 public static PrintWriter writer;
 
     public static int bft2VerifierThreadFlag=0;
-    
-    int testdelete =123;
   
     private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
     private static int[] replicasHashes_set;
@@ -192,7 +190,7 @@ public static PrintWriter writer;
 			    if(local_BFT_flag==3)
 				{
 				    writer.println("ENTERED local_BFT_flag==3");
-				    writer.println("ENTERED local_BFT_flag==3");
+				    System.out.println("ENTERED local_BFT_flag==3");
 				    unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
 				    replicasHashes[receivedReducerNumber]=receivedHash;
 				    replicasHashes_set[unreplicatedReducerNumber]+=1;
@@ -204,14 +202,24 @@ public static PrintWriter writer;
 						   "unreplicatedReducerNumber = "+unreplicatedReducerNumber+
 						   "ApplicationName = "+ApplicationName
 						   );
+				    System.out.println("---------------------------------PRINTING------------------------------------------");
+				    System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+						   "receivedTaskAttemptID = " + receivedTaskAttemptID +
+						   "receivedHash = " + receivedHash +
+						   "unreplicatedReducerNumber = "+unreplicatedReducerNumber+
+						   "ApplicationName = "+ApplicationName
+						   );
 				    for(int i =0;i<replicasHashes.length;i++)
 					{
 					    writer.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
+					    System.out.println("replicasHashes i = "+i+" is "+replicasHashes[i]);
 					}
 				    for(int i =0;i<replicasHashes_set.length;i++)
 					{
 					    writer.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
+					    System.out.println("replicasHashes_set i = "+i+" is "+replicasHashes_set[i]);
 					}
+				    System.out.println("---------------------------------------------------------------------------");
 				    writer.println("---------------------------------------------------------------------------");
 				    writer.flush();
 				                    
@@ -219,17 +227,18 @@ public static PrintWriter writer;
 					{
 					    for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
 						{
-						    writer.println("local_NUM_REPLICAS = "+local_NUM_REPLICAS);
-						    writer.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
-						    writer.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
+						    //writer.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
+						    //writer.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]);
 						    if(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i].equals(replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1]))//==replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i+1])
 							{
 							    writer.println("ENTERED allofthem=true;");
+							    System.out.println("ENTERED allofthem=true;");
 							    allofthem=true;
 							}else {
-							writer.println("ENTERED allofthem=false;");
-							allofthem=false;//CAREFUL ... if you didn't add break here, allofthem can become true in the next round and gives a wrong allofthem=true (I.L)
-							break;//TODO ... need to add what to do when the replicas don't match  
+								writer.println("ENTERED allofthem=false;");
+								System.out.println("ENTERED allofthem=false;");
+								allofthem=false;//CAREFUL ... if you didn't add break here, allofthem can become true in the next round and gives a wrong allofthem=true (I.L)
+								break;//TODO ... need to add what to do when the replicas don't match  
 						    }
 						}
 					    writer.flush();
@@ -239,9 +248,11 @@ public static PrintWriter writer;
 					    if (allofthem==true)
 						{
 						    writer.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
+						    System.out.println("ALL CORRECT FOR REDUCER "+unreplicatedReducerNumber);
 						    for(clientThread x:client_Threads_List)
 							{
 							    writer.println("client_Threads_List.size() = "+client_Threads_List.size());
+							    System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
 							    x.os.println(unreplicatedReducerNumber);//unreplicatedReducerNumber);//x.os.println("XXXX");   
 							}
 						    
@@ -260,6 +271,7 @@ public static PrintWriter writer;
 						      ii++;
 						      }
 						    */
+						    System.out.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============");
 						    writer.println("=========AFTER x.os.println(unreplicatedReducerNumber)=============");
 						    writer.flush();
 						    
@@ -278,21 +290,27 @@ public static PrintWriter writer;
 			    if(local_BFT_flag==2)
 				{
 				    writer.println("ENTERED local_BFT_flag==2");
+				    System.out.println("ENTERED local_BFT_flag==2");
 				    
 				    if(AMsMap.containsKey(ApplicationName))//we have the application
 					{
 					    writer.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
+					    System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
 					    //if(AMsMap.get(ApplicationName) != null)//this application has received reducers before
 					    {
 						temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName);
 						writer.println("---22");
+						System.out.println("---22");
 						temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
 						//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 						writer.println("---33");
+						System.out.println("---33");
 						AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_MAP);
 						writer.println("---44");
+						System.out.println("---44");
 						temp_replicasHashes_forbft2_MAP.clear();
 						writer.println("---55");
+						System.out.println("---55");
 					    }
 					    writer.flush();
 					    
@@ -300,13 +318,17 @@ public static PrintWriter writer;
 				    else//first time to see the application, add it to the hashmap
 					{
 					    writer.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
+					    System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
 					    temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
 					    //temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 					    writer.println("---2");
+					    System.out.println("---2");
 					    AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_MAP);
 					    writer.println("---3");
+					    System.out.println("---3");
 					    temp_replicasHashes_forbft2_MAP.clear();
 					    writer.println("---4");
+					    System.out.println("---4");
 					    writer.flush();
 					}
 				    
@@ -317,18 +339,28 @@ public static PrintWriter writer;
 						   " ApplicationName = "+ApplicationName+
 						   " AMsMap.size()"+AMsMap.size()
 						   );
+				    System.out.println("------------------------------------PRINTING---------------------------------------");
+				    System.out.println("receivedReducerNumber = "+receivedReducerNumber+
+						   " receivedTaskAttemptID = " + receivedTaskAttemptID +
+						   " receivedHash = " + receivedHash +
+						   " ApplicationName = "+ApplicationName+
+						   " AMsMap.size()"+AMsMap.size()
+						   );
 				    for (Map.Entry<String, Map<Integer, Long>> AppEntry: AMsMap.entrySet())
 					{
 					    writer.println("AppEntry.getKey() = "+AppEntry.getKey());
+					    System.out.println("AppEntry.getKey() = "+AppEntry.getKey());
 					    temp_replicasHashes_forbft2_MAP=AppEntry.getValue();
 					    for(int i =0;i<temp_replicasHashes_forbft2_MAP.size();i++)
 						{
 						    writer.println("temp_replicasHashes_forbft2_MAP.get(i) i = "+i+" is "+temp_replicasHashes_forbft2_MAP.get(i));
+						    System.out.println("temp_replicasHashes_forbft2_MAP.get(i) i = "+i+" is "+temp_replicasHashes_forbft2_MAP.get(i));
 						}
 					    temp_replicasHashes_forbft2_MAP.clear();                
 
 					    
 					}
+				    System.out.println("---------------------------------------------------------------------------");
 				    writer.println("---------------------------------------------------------------------------");
 				    writer.flush();
 
