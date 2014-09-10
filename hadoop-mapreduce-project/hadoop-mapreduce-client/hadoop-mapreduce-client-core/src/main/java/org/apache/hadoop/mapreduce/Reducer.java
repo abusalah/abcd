@@ -49,6 +49,7 @@ import org.apache.hadoop.ipc.Server;
 
 
 
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -208,8 +209,14 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    */
   public void run(Context context) throws IOException, InterruptedException {
 	  
+	 int local_BFT_flag = context.getConfiguration().getInt("mapred.job.bft", 1);//Integer.parseInt(conf.getInt("mapred.job.bft", 1);
+	 int local_NUM_REPLICAS = context.getConfiguration().getInt("mapred.job.numreplicas",4);//Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
+	 int local_NUM_REDUCES = context.getConfiguration().getInt("mapreduce.job.reduces",4);//conf.getInt("mapreduce.job.reduces",1); 
+	 String flags_to_send=Integer.toString(local_BFT_flag)+"-"+Integer.toString(local_NUM_REPLICAS)
+			 +"-"+Integer.toString(local_NUM_REDUCES);
 	  
-if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)	 
+	  
+if(local_BFT_flag==1)	 
 {
 	    setup(context);
 	    try {
@@ -228,7 +235,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==1)
 	  
 	  
 	  
-if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2) //|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
+if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
 {
 	
 	int unreplicatedReducerNumber =0;
@@ -237,9 +244,9 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getC
 	  int reducerNumber = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[4]);
 	  long applicationNumber_1 = Long.parseLong(context.getTaskAttemptID().toString().split("_")[1]);
 	  int applicationNumber_2 = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[2]);
-	  if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)
+	  if(local_BFT_flag==3)
 	  {
-		  int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4);
+		  //int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4);
 		  unreplicatedReducerNumber = (int) Math.floor(reducerNumber/local_NUM_REPLICAS);
 	  }
 	  
@@ -268,24 +275,24 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getC
     		
         reduce(context.getCurrentKey(), context.getValues(), context);
         
-        if(reducerORmapper.equals("r"))
-        {
-	        //KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();// first hashing method
-	        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
-	        totalHash+=KV.hashCode();
-	        
-//	        System.out.println("++++++ inside run in Reducer.java context.getCurrentKey().toString() = "
-//	                +context.getCurrentKey().toString()+" context.getCurrentValue().toString() = "+
-//	        		context.getCurrentValue().toString()+" KV.hashCode() = "+KV.hashCode()
-//	                + "totalHash = "+totalHash + " external_total_hash = "+external_total_hash);
-//	        //Note that here context.getCurrentValue().toString() is not as 
-	        // value.toString() in TaskInputOutputContextImpl.java or in WordCount.java, 
-	        // because the values are not reduced yet.
-	        
-	        //System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
-	        //		" KV.hashCode() = "+KV.hashCode()+" totalHash = "+totalHash);
-	        //KV="p";
-        }
+//        if(reducerORmapper.equals("r"))
+//        {
+//	        //KV+=context.getCurrentKey().toString()+context.getCurrentValue().toString();// first hashing method
+//	        KV=context.getCurrentKey().toString()+context.getCurrentValue().toString();
+//	        totalHash+=KV.hashCode();
+//	        
+////	        System.out.println("++++++ inside run in Reducer.java context.getCurrentKey().toString() = "
+////	                +context.getCurrentKey().toString()+" context.getCurrentValue().toString() = "+
+////	        		context.getCurrentValue().toString()+" KV.hashCode() = "+KV.hashCode()
+////	                + "totalHash = "+totalHash + " external_total_hash = "+external_total_hash);
+////	        //Note that here context.getCurrentValue().toString() is not as 
+//	        // value.toString() in TaskInputOutputContextImpl.java or in WordCount.java, 
+//	        // because the values are not reduced yet.
+//	        
+//	        //System.out.println("key = "+context.getCurrentKey()+" value = "+context.getCurrentValue()+
+//	        //		" KV.hashCode() = "+KV.hashCode()+" totalHash = "+totalHash);
+//	        //KV="p";
+//        }
         
         // If a back up store is used, reset it
         Iterator<VALUEIN> iter = context.getValues().iterator();
@@ -293,7 +300,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getC
         
         
           
-        i++;
+        //i++;
       }
       
       
@@ -307,7 +314,7 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getC
     	  +context.getTaskAttemptID().toString()+" external_total_hash = "+external_total_hash);
     	  
     	  totalHash=0;//just for now for testing    	  
-    	  stringToSend=context.getTaskAttemptID().toString()+" "+external_total_hash;
+    	  stringToSend=flags_to_send+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
     	  
     	  
     	  try {
@@ -345,18 +352,18 @@ if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3 || context.getC
 						System.out.println("ENTERED if(responseLine!=null && !responseLine.isEmpty())");
 						//add if stmt for checking the server address, but first open a socket here for each Reducer for accepting server address
 						//clientSocket = serverSocket.accept();(put it above)
-						if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)
+						if(local_BFT_flag==3)
 						{
-							System.out.println("ENTERED if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==3)");
+							System.out.println("ENTERED local_BFT_flag==3)");
 							if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)//here add if bft =...AM & unre
 							{	
 								System.out.println("Entered XXX------");
 								break;
 							}
 						}
-						if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
+						if(local_BFT_flag==2)
 						{
-							System.out.println("ENTERED if(context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)");
+							System.out.println("ENTERED local_BFT_flag==2)");
 							//if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)//here add if bft =...AM & unre
 							//{	
 							//	System.out.println("Entered XXX------");
