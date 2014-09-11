@@ -351,6 +351,7 @@ public static PrintWriter writer;
 					    writer.println("AppEntry.getKey() = "+AppEntry.getKey());
 					    System.out.println("AppEntry.getKey() = "+AppEntry.getKey());
 					    temp_replicasHashes_forbft2_MAP=AppEntry.getValue();
+					    System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
 					    for(int i =0;i<temp_replicasHashes_forbft2_MAP.size();i++)
 						{
 						    writer.println("temp_replicasHashes_forbft2_MAP.get(i) i = "+i+" is "+temp_replicasHashes_forbft2_MAP.get(i));
