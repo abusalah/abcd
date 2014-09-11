@@ -140,6 +140,8 @@ public static PrintWriter writer;
 	    String lineReceived;
 	    String receivedOK;
 	    int ii =0;
+	    int resetArraysFlagCount=0;//a count to know when to reset replicasHashes and replicasHashes_set arrays
+	    int resetArraysFlag=0;
 	    System.out.println("Inside run() inside clientThread class");
 	    try {
 		System.out.println(" "+clientSocket.getInetAddress()+" "+clientSocket.getRemoteSocketAddress()+" "+
@@ -158,8 +160,12 @@ public static PrintWriter writer;
 			    local_BFT_flag = Integer.parseInt(lineReceived.split(" ")[0].split("-")[0]);//conf.getInt("mapred.job.bft", 1);
 			    local_NUM_REPLICAS = Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
 			    local_NUM_REDUCES = Integer.parseInt(lineReceived.split(" ")[0].split("-")[2]);//conf.getInt("mapreduce.job.reduces",1); 
-			    replicasHashes = new Long[local_NUM_REDUCES];
-			    replicasHashes_set = new int[local_NUM_REDUCES/local_NUM_REPLICAS]; 
+			    if(resetArraysFlag==0)//new application for bft=3, need new arrays
+			    {
+				    replicasHashes = new Long[local_NUM_REDUCES];
+				    replicasHashes_set = new int[local_NUM_REDUCES/local_NUM_REPLICAS]; 
+				    resetArraysFlag=1;
+			    }
 			    
 			    System.out.println("INSIDE local_BFT_flag = "+local_BFT_flag);
 			    System.out.println("INSIDE local_NUM_REPLICAS = "+local_NUM_REPLICAS);
@@ -202,6 +208,13 @@ public static PrintWriter writer;
 				                    
 				    if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
 					{
+				    	resetArraysFlagCount++;
+				    	System.out.println("resetArraysFlagCount++");
+				    	if(resetArraysFlagCount==local_NUM_REDUCES/local_NUM_REPLICAS)//which is basically the original number of reducers
+				    	{
+				    		System.out.println("ENTERED if(resetArraysFlagCount==local_NUM_REDUCES/local_NUM_REPLICAS)");
+				    		resetArraysFlag=0;
+				    	}
 					    for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
 						{
 						    //writer.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
