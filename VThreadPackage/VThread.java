@@ -66,8 +66,8 @@ public static PrintWriter writer;
 		System.out.println(e);
 	    }
 	      
-	    System.out.println("after serverSocket = new ServerSocket(2222);");
-	    writer.println("after serverSocket = new ServerSocket(2222);");
+	    System.out.println("after serverSocket = new ServerSocket(2226);");
+	    writer.println("after serverSocket = new ServerSocket(2226);");
 	    writer.flush();
 
 	    while (true) {//!Thread.currentThread().isInterrupted()
@@ -298,20 +298,22 @@ public static PrintWriter writer;
 					    System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
 					    //if(AMsMap.get(ApplicationName) != null)//this application has received reducers before
 					    {
-						temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName);
+						//temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
+						AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 						writer.println("---22");
 						System.out.println("---22");
-						temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
-						System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
+						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationName).size());
+						//temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
+						//System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
 						//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 						writer.println("---33");
 						System.out.println("---33");
-						AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_MAP);
-					    temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
-					    System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
+						//AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_MAP);
+					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
+					    //System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
 						writer.println("---44");
 						System.out.println("---44");
-						temp_replicasHashes_forbft2_MAP.clear();
+						//temp_replicasHashes_forbft2_MAP.clear();
 						writer.println("---55");
 						System.out.println("---55");
 					    }
@@ -320,19 +322,22 @@ public static PrintWriter writer;
 					}
 				    else//first time to see the application, add it to the hashmap
 					{
+				    	Map<Integer, Long> new_replicasHashes_forbft2_MAP = new HashMap<Integer, Long>();
+				    	
 					    writer.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
 					    System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
-					    temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
-					    System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
+					    new_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
+					    //System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
 					    //temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 					    writer.println("---2");
 					    System.out.println("---2");
-					    AMsMap.put(ApplicationName, temp_replicasHashes_forbft2_MAP);
-					    temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
-					    System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
+					    AMsMap.put(ApplicationName, new_replicasHashes_forbft2_MAP);
+					    //AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
+					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
+					    System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationName).size());
 					    writer.println("---3");
 					    System.out.println("---3");
-					    temp_replicasHashes_forbft2_MAP.clear();
+					    //temp_replicasHashes_forbft2_MAP.clear();
 					    writer.println("---4");
 					    System.out.println("---4");
 					    writer.flush();
