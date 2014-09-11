@@ -229,11 +229,11 @@ public class WordCount {
 	    
 
 	    
-	    try {
-	        Thread.sleep(10000);
-	    } catch(InterruptedException ex) {
-	        Thread.currentThread().interrupt();
-	    }
+//	    try {
+//	        Thread.sleep(10000);
+//	    } catch(InterruptedException ex) {
+//	        Thread.currentThread().interrupt();
+//	    }
 	    
 	    
 	  }

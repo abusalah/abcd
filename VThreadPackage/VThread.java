@@ -331,6 +331,11 @@ public static PrintWriter writer;
 				    
 				    System.out.println("---------------------------------------------------------------------------");
 				    
+				    if(hash_sum_per_App.size()==(local_NUM_REDUCES*4))//should be (local_NUM_REDUCES*local_NUM_REPLICAS)
+				    {
+				    	System.out.println("ALL hashes received, start comparing and sending ... ");
+				    }
+				    
 				                    
 				}
 			}
