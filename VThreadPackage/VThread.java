@@ -15,6 +15,8 @@ public static PrintWriter writer;
   
     private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
     private static int[] replicasHashes_set;
+    public static int resetArraysFlagCount=0;//a count to know when to reset replicasHashes and replicasHashes_set arrays
+    public static int resetArraysFlag=0;
     private static Long[] temp_replicasHashes_forbft2 = new Long[2];
     private static List<Long> temp_replicasHashes_forbft2_LIST = new ArrayList<Long>();
     private static Map<Integer, Long> temp_replicasHashes_forbft2_MAP = new HashMap<Integer, Long>();
@@ -140,8 +142,6 @@ public static PrintWriter writer;
 	    String lineReceived;
 	    String receivedOK;
 	    int ii =0;
-	    int resetArraysFlagCount=0;//a count to know when to reset replicasHashes and replicasHashes_set arrays
-	    int resetArraysFlag=0;
 	    System.out.println("Inside run() inside clientThread class");
 	    try {
 		System.out.println(" "+clientSocket.getInetAddress()+" "+clientSocket.getRemoteSocketAddress()+" "+
