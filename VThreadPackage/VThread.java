@@ -23,6 +23,7 @@ public static PrintWriter writer;
     //private static String[] applicationsNames;
     //private static Map<String, List<Long>> AMsMap = new HashMap<String, List<Long>>();
     private static Map<String, Map<Integer, Long>> AMsMap = new HashMap<String, Map<Integer, Long>>();
+    private static Map<String, Long> hash_sum_per_App = new HashMap<String, Long>();
 
     private static int local_BFT_flag=0;
     private static int local_NUM_REPLICAS = 0;
@@ -268,6 +269,7 @@ public static PrintWriter writer;
 					    {
 						//temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 						AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
+						hash_sum_per_App.put(ApplicationName, hash_sum_per_App.get(ApplicationName)+receivedHash);
 						System.out.println("---22");
 						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationName).size());
 						//temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
@@ -293,6 +295,7 @@ public static PrintWriter writer;
 					    //temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 					    System.out.println("---2");
 					    AMsMap.put(ApplicationName, new_replicasHashes_forbft2_MAP);
+					    hash_sum_per_App.put(ApplicationName, receivedHash);
 					    //AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
 					    System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationName).size());
@@ -319,10 +322,13 @@ public static PrintWriter writer;
 						    //writer.println("temp_replicasHashes_forbft2_MAP.get(i) i = "+i+" is "+temp_replicasHashes_forbft2_MAP.get(i));
 						    System.out.println("AppEntry2.getKey() = "+AppEntry2.getKey()+" AppEntry2.getValue() = "+AppEntry2.getValue());
 						}
-					    //temp_replicasHashes_forbft2_MAP.clear();                
-
-					    
+					    //temp_replicasHashes_forbft2_MAP.clear();          					    
 					}
+				    for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App.entrySet())
+				    {
+				    	System.out.println("hash_sum_per_App_Entery.getKey() = "+hash_sum_per_App_Entery.getKey()+" hash_sum_per_App_Entery.getValue() = "+hash_sum_per_App_Entery.getValue());
+				    }
+				    
 				    System.out.println("---------------------------------------------------------------------------");
 				    
 				                    
