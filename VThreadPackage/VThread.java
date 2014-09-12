@@ -25,7 +25,7 @@ public static PrintWriter writer;
     //private static String[] applicationsNames;
     //private static Map<String, List<Long>> AMsMap = new HashMap<String, List<Long>>();
     private static Map<String, Map<Integer, Long>> AMsMap = new HashMap<String, Map<Integer, Long>>();
-    private static Map<String, Long> hash_sum_per_App = new HashMap<String, Long>();
+    private static Map<String, Long> hash_sum_per_App_replica = new HashMap<String, Long>();
 
     private static int local_BFT_flag=0;
     private static int local_NUM_REPLICAS = 0;
@@ -285,7 +285,7 @@ public static PrintWriter writer;
 					    {
 						//temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 						AMsMap.get(ApplicationNumberwithReplicaNumber).put(receivedReducerNumber, receivedHash);
-						hash_sum_per_App.put(ApplicationNumberBase, hash_sum_per_App.get(ApplicationNumberBase)+receivedHash);
+						hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber, hash_sum_per_App_replica.get(ApplicationNumberwithReplicaNumber)+receivedHash);
 						System.out.println("---22");
 						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber).size());
 						//temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
@@ -311,10 +311,11 @@ public static PrintWriter writer;
 					    //temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 					    System.out.println("---2");
 					    AMsMap.put(ApplicationNumberwithReplicaNumber, new_replicasHashes_forbft2_MAP);
-					    hash_sum_per_App.put(ApplicationNumberBase, receivedHash);
+					    hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber, receivedHash);
 					    //AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
-					    System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber).size());
+					    System.out.println("AMsMap.get(ApplicationNumberwithReplicaNumber).size() = "
+					    +AMsMap.get(ApplicationNumberwithReplicaNumber).size());
 					    System.out.println("---3");
 					    //temp_replicasHashes_forbft2_MAP.clear();
 					    System.out.println("---4");
@@ -325,7 +326,7 @@ public static PrintWriter writer;
 				    System.out.println("receivedReducerNumber = "+receivedReducerNumber+
 						   " receivedTaskAttemptID = " + receivedTaskAttemptID +
 						   " receivedHash = " + receivedHash +
-						   " ApplicationName = "+ApplicationNumberwithReplicaNumber+
+						   " ApplicationNumberwithReplicaNumber = "+ApplicationNumberwithReplicaNumber+
 						   " AMsMap.size()"+AMsMap.size()
 						   );
 				    for (Map.Entry<String, Map<Integer, Long>> AppEntry: AMsMap.entrySet())
@@ -340,38 +341,48 @@ public static PrintWriter writer;
 						}
 					    //temp_replicasHashes_forbft2_MAP.clear();          					    
 					}
-				    for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App.entrySet())
+				    for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    {
 				    	System.out.println("hash_sum_per_App_Entery.getKey() = "+hash_sum_per_App_Entery.getKey()+" hash_sum_per_App_Entery.getValue() = "+hash_sum_per_App_Entery.getValue());
 				    }
 				    
 				    System.out.println("---------------------------------------------------------------------------");
 				    
-				    if(Collections.frequency(new ArrayList<String>(hash_sum_per_App.keySet()), ApplicationNumberwithReplicaNumber)==4)//should be ==local_NUM_REPLICAS in case you have different replication factors 
+				    
+				    System.out.println("Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberwithReplicaNumber) = "
+				    +Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberwithReplicaNumber));
+				    
+				    //TODO : should be ==local_NUM_REPLICAS in case you have different replication factors
+				    if(Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberwithReplicaNumber)==4) 
 				    {
-				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberwithReplicaNumber);
+				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase);
 				    	int q=0;//hash_sum_per_App loop variable
 				    	//Map.Entry<String,int> entry = new AbstractMap.SimpleEntry<String, int>("exmpleString", 42);
 				    	Map.Entry<String,Long> tempEntry = new AbstractMap.SimpleEntry<String, Long>(" ",(long) 0);//("exmpleString", (long)42);
 				    	allofthem=false;
-				    	for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App.entrySet())
+				    	for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    	{//in case we have many applications running in parallel; check for the ApplicationNumberBase first
-				    		if(hash_sum_per_App_Entery.getKey().equals(ApplicationNumberBase))
+				    		if(hash_sum_per_App_Entery.getKey().split("_")[0].equals(ApplicationNumberBase))
 				    		{
+				    			System.out.println("ENTERED if(hash_sum_per_App_Entery.getKey().split(\"_\")[0].equals(ApplicationNumberBase))");
 				    			if(q==0)
 				    			{
+				    				System.out.println("ENTERED if(q==0)");
 				    				tempEntry=hash_sum_per_App_Entery;
 				    				q++;
 				    			}
 				    			else//tempEntry has the prev value
 				    			{ 
-				    				if(tempEntry.getValue().equals(hash_sum_per_App_Entery))
+				    				System.out.println("ENTERED if(q==0) ... else");
+				    				if(tempEntry.getValue().equals(hash_sum_per_App_Entery.getValue()))
 				    				{
+				    					System.out.println("ENTERED if(tempEntry.getValue().equals(hash_sum_per_App_Entery.getValue()))");
 				    					tempEntry=hash_sum_per_App_Entery;//for next iteration
 				    					allofthem=true;
 				    				}
 				    				else
 				    				{
+				    					System.out.println("ENTERED if(tempEntry.getValue().equals(hash_sum_per_App_Entery.getValue())) ... else");
 				    					allofthem=false;
 				    					break;
 				    				}
