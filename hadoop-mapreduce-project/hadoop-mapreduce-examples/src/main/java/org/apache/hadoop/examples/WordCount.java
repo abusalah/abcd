@@ -207,7 +207,9 @@ public class WordCount {
 		  System.out.println("------INSIDE the for loop , r3 = --------- "+r3+" -------------- ");
 		  
 		  Job job = new Job(conf[i], "word count");
-	    
+		  
+		  System.out.println("job.getJobID() = "+job.getJobID()+" job.getJobName() = "+job.getJobName());
+		  
 	    job.setJarByClass(WordCount.class);
 	    job.setMapperClass(TokenizerMapper.class);
 	    job.setCombinerClass(IntSumReducer.class);
