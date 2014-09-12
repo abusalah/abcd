@@ -354,21 +354,21 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
 						//clientSocket = serverSocket.accept();(put it above)
 						if(local_BFT_flag==3)
 						{
-							System.out.println("ENTERED local_BFT_flag==3)");
+							System.out.println("ENTERED local_BFT_flag==3");
 							if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)//here add if bft =...AM & unre
 							{	
-								System.out.println("Entered XXX------");
+								System.out.println("Entered XXX for local_BFT_flag==3------");
 								break;
 							}
 						}
 						if(local_BFT_flag==2)
 						{
 							System.out.println("ENTERED local_BFT_flag==2)");
-							//if (Integer.parseInt(responseLine)==unreplicatedReducerNumber)//here add if bft =...AM & unre
-							//{	
-							//	System.out.println("Entered XXX------");
-							//	break;
-							//}							
+							if (Long.parseLong(responseLine)==applicationNumber_1)//here add if bft =...AM & unre
+							{	
+								System.out.println("Entered XXX for local_BFT_flag==2------");
+								break;
+							}							
 						}
 					}
   				}  				

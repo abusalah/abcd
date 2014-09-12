@@ -121,7 +121,8 @@ public static PrintWriter writer;
 	String receivedTaskAttemptID ="";
 	long receivedApplicationNumber_1 =0;
 	int receivedApplicationNumber_2 =0;
-	String ApplicationName=null;
+	String ApplicationNumberwithReplicaNumber=null;
+	String ApplicationNumberBase=null;
 	long receivedHash= 0;
 	Integer unreplicatedReducerNumber=null;
 	boolean firstandsecond,thirdandforth,allofthem;
@@ -179,7 +180,8 @@ public static PrintWriter writer;
 			    receivedReducerNumber = Integer.parseInt(receivedTaskAttemptID.toString().split("_")[4]);
 			    receivedApplicationNumber_1=Long.parseLong(receivedTaskAttemptID.toString().split("_")[1]);
 			    receivedApplicationNumber_2=Integer.parseInt(receivedTaskAttemptID.toString().split("_")[2]);
-			    ApplicationName = Long.toString(receivedApplicationNumber_1)+"_"+Integer.toString(receivedApplicationNumber_2);
+			    ApplicationNumberwithReplicaNumber = Long.toString(receivedApplicationNumber_1)+"_"+Integer.toString(receivedApplicationNumber_2);
+			    ApplicationNumberBase=Long.toString(receivedApplicationNumber_1);
 			    receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
 			    if(local_BFT_flag==3)
 				{
@@ -194,7 +196,7 @@ public static PrintWriter writer;
 						   "receivedTaskAttemptID = " + receivedTaskAttemptID +
 						   "receivedHash = " + receivedHash +
 						   "unreplicatedReducerNumber = "+unreplicatedReducerNumber+
-						   "ApplicationName = "+ApplicationName
+						   "ApplicationName = "+ApplicationNumberwithReplicaNumber
 						   );
 				    for(int i =0;i<replicasHashes.length;i++)
 					{
@@ -215,6 +217,7 @@ public static PrintWriter writer;
 				    		System.out.println("ENTERED if(resetArraysFlagCount==local_NUM_REDUCES/local_NUM_REPLICAS)");
 				    		resetArraysFlag=0;
 				    	}
+				    	allofthem=false;
 					    for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
 						{
 						    //writer.println("replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i] = "+replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+i]);
@@ -229,7 +232,7 @@ public static PrintWriter writer;
 								break;//TODO ... need to add what to do when the replicas don't match  
 						    }
 						}
-					    writer.flush();
+					    //writer.flush();
 					    //firstandsecond = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+0] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+1]);
 					    //thirdandforth = (replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+2] == replicasHashes[(unreplicatedReducerNumber*local_NUM_REPLICAS)+3]);
 					    //allofthem = (firstandsecond == thirdandforth);
@@ -275,16 +278,16 @@ public static PrintWriter writer;
 				{
 				    System.out.println("ENTERED local_BFT_flag==2");
 				    
-				    if(AMsMap.containsKey(ApplicationName))//we have the application
+				    if(AMsMap.containsKey(ApplicationNumberwithReplicaNumber))//we have the application
 					{
 					    System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
 					    //if(AMsMap.get(ApplicationName) != null)//this application has received reducers before
 					    {
 						//temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
-						AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
-						hash_sum_per_App.put(ApplicationName, hash_sum_per_App.get(ApplicationName)+receivedHash);
+						AMsMap.get(ApplicationNumberwithReplicaNumber).put(receivedReducerNumber, receivedHash);
+						hash_sum_per_App.put(ApplicationNumberBase, hash_sum_per_App.get(ApplicationNumberBase)+receivedHash);
 						System.out.println("---22");
-						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationName).size());
+						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber).size());
 						//temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
 						//System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
 						//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
@@ -307,11 +310,11 @@ public static PrintWriter writer;
 					    //System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
 					    //temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 					    System.out.println("---2");
-					    AMsMap.put(ApplicationName, new_replicasHashes_forbft2_MAP);
-					    hash_sum_per_App.put(ApplicationName, receivedHash);
+					    AMsMap.put(ApplicationNumberwithReplicaNumber, new_replicasHashes_forbft2_MAP);
+					    hash_sum_per_App.put(ApplicationNumberBase, receivedHash);
 					    //AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
-					    System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationName).size());
+					    System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber).size());
 					    System.out.println("---3");
 					    //temp_replicasHashes_forbft2_MAP.clear();
 					    System.out.println("---4");
@@ -322,7 +325,7 @@ public static PrintWriter writer;
 				    System.out.println("receivedReducerNumber = "+receivedReducerNumber+
 						   " receivedTaskAttemptID = " + receivedTaskAttemptID +
 						   " receivedHash = " + receivedHash +
-						   " ApplicationName = "+ApplicationName+
+						   " ApplicationName = "+ApplicationNumberwithReplicaNumber+
 						   " AMsMap.size()"+AMsMap.size()
 						   );
 				    for (Map.Entry<String, Map<Integer, Long>> AppEntry: AMsMap.entrySet())
@@ -344,9 +347,51 @@ public static PrintWriter writer;
 				    
 				    System.out.println("---------------------------------------------------------------------------");
 				    
-				    if(hash_sum_per_App.size()==4)//should be ==local_NUM_REPLICAS in case you have different replication factors 
+				    if(Collections.frequency(new ArrayList<String>(hash_sum_per_App.keySet()), ApplicationNumberwithReplicaNumber)==4)//should be ==local_NUM_REPLICAS in case you have different replication factors 
 				    {
-				    	System.out.println("ALL hashes received, start comparing and sending ... ");
+				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberwithReplicaNumber);
+				    	int q=0;//hash_sum_per_App loop variable
+				    	//Map.Entry<String,int> entry = new AbstractMap.SimpleEntry<String, int>("exmpleString", 42);
+				    	Map.Entry<String,Long> tempEntry = new AbstractMap.SimpleEntry<String, Long>(" ",(long) 0);//("exmpleString", (long)42);
+				    	allofthem=false;
+				    	for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App.entrySet())
+				    	{//in case we have many applications running in parallel; check for the ApplicationNumberBase first
+				    		if(hash_sum_per_App_Entery.getKey().equals(ApplicationNumberBase))
+				    		{
+				    			if(q==0)
+				    			{
+				    				tempEntry=hash_sum_per_App_Entery;
+				    				q++;
+				    			}
+				    			else//tempEntry has the prev value
+				    			{ 
+				    				if(tempEntry.getValue().equals(hash_sum_per_App_Entery))
+				    				{
+				    					tempEntry=hash_sum_per_App_Entery;//for next iteration
+				    					allofthem=true;
+				    				}
+				    				else
+				    				{
+				    					allofthem=false;
+				    					break;
+				    				}
+				    			}
+				    		}
+				    	}
+				    	
+				    	if (allofthem==true)
+						{
+						    System.out.println("ALL CORRECT FOR APPLICATION "+ApplicationNumberBase);
+						    for(clientThread x:client_Threads_List)
+							{
+							    System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
+							    x.os.println(ApplicationNumberBase);//unreplicatedReducerNumber);//x.os.println("XXXX");   
+							}
+						}
+				    	
+				    	
+				    	
+				    	//clear hash_sum_per_App
 				    }
 				    
 				                    
