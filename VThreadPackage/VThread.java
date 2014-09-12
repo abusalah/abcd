@@ -26,6 +26,7 @@ public static PrintWriter writer;
     //private static Map<String, List<Long>> AMsMap = new HashMap<String, List<Long>>();
     private static Map<String, Map<Integer, Long>> AMsMap = new HashMap<String, Map<Integer, Long>>();
     private static Map<String, Long> hash_sum_per_App_replica = new HashMap<String, Long>();
+    private static Map<String, Integer> ApplicationNumberBase_Touch = new HashMap<String, Integer>();
 
     private static int local_BFT_flag=0;
     private static int local_NUM_REPLICAS = 0;
@@ -286,6 +287,7 @@ public static PrintWriter writer;
 						//temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 						AMsMap.get(ApplicationNumberwithReplicaNumber).put(receivedReducerNumber, receivedHash);
 						hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber, hash_sum_per_App_replica.get(ApplicationNumberwithReplicaNumber)+receivedHash);
+						ApplicationNumberBase_Touch.put(ApplicationNumberBase, ApplicationNumberBase_Touch.get(ApplicationNumberBase)+1);
 						System.out.println("---22");
 						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber).size());
 						//temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
@@ -312,6 +314,7 @@ public static PrintWriter writer;
 					    System.out.println("---2");
 					    AMsMap.put(ApplicationNumberwithReplicaNumber, new_replicasHashes_forbft2_MAP);
 					    hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber, receivedHash);
+					    ApplicationNumberBase_Touch.put(ApplicationNumberBase, 1);//first time to see the app, put 1 touch
 					    //AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
 					    System.out.println("AMsMap.get(ApplicationNumberwithReplicaNumber).size() = "
@@ -349,11 +352,12 @@ public static PrintWriter writer;
 				    System.out.println("---------------------------------------------------------------------------");
 				    
 				    
-				    System.out.println("Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberwithReplicaNumber) = "
-				    +Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberwithReplicaNumber));
+				    System.out.println("ApplicationNumberBase_Touch.get(ApplicationNumberBase) = "
+				    +ApplicationNumberBase_Touch.get(ApplicationNumberBase));
 				    
-				    //TODO : should be ==local_NUM_REPLICAS in case you have different replication factors
-				    if(Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberwithReplicaNumber)==4) 
+				    //TODO : should be ==local_NUM_REDUCES*local_NUM_REPLICAS in case you have different replication factors
+				    //if(Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberBase)==4) 
+				    if(ApplicationNumberBase_Touch.get(ApplicationNumberBase)==local_NUM_REDUCES*4)
 				    {
 				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase);
 				    	int q=0;//hash_sum_per_App loop variable
