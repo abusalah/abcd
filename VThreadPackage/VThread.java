@@ -279,6 +279,15 @@ public static PrintWriter writer;
 				{
 				    System.out.println("ENTERED local_BFT_flag==2");
 				    
+				    if(ApplicationNumberBase_Touch.containsKey(ApplicationNumberBase))
+				    {
+						ApplicationNumberBase_Touch.put(ApplicationNumberBase, ApplicationNumberBase_Touch.get(ApplicationNumberBase)+1);
+				    }
+				    else
+				    {
+					    ApplicationNumberBase_Touch.put(ApplicationNumberBase, 1);//first time to see the app, put 1 touch
+				    }
+				    
 				    if(AMsMap.containsKey(ApplicationNumberwithReplicaNumber))//we have the application
 					{
 					    System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
@@ -287,7 +296,6 @@ public static PrintWriter writer;
 						//temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 						AMsMap.get(ApplicationNumberwithReplicaNumber).put(receivedReducerNumber, receivedHash);
 						hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber, hash_sum_per_App_replica.get(ApplicationNumberwithReplicaNumber)+receivedHash);
-						ApplicationNumberBase_Touch.put(ApplicationNumberBase, ApplicationNumberBase_Touch.get(ApplicationNumberBase)+1);
 						System.out.println("---22");
 						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber).size());
 						//temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
@@ -314,7 +322,6 @@ public static PrintWriter writer;
 					    System.out.println("---2");
 					    AMsMap.put(ApplicationNumberwithReplicaNumber, new_replicasHashes_forbft2_MAP);
 					    hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber, receivedHash);
-					    ApplicationNumberBase_Touch.put(ApplicationNumberBase, 1);//first time to see the app, put 1 touch
 					    //AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
 					    System.out.println("AMsMap.get(ApplicationNumberwithReplicaNumber).size() = "
