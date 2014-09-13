@@ -356,8 +356,17 @@ class JobSubmitter {
       conf.set(MRJobConfig.JOB_SUBMITHOST,submitHostName);
       conf.set(MRJobConfig.JOB_SUBMITHOSTADDR,submitHostAddress);
     }
+    System.out.println("00000 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
+    		+" job.getJobID().getId() = "+job.getJobID().getId()
+    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
     JobID jobId = submitClient.getNewJobID();
+    System.out.println("11111 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
+    		+" job.getJobID().getId() = "+job.getJobID().getId()
+    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
     job.setJobID(jobId);
+    System.out.println("22222 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
+    		+" job.getJobID().getId() = "+job.getJobID().getId()
+    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
     Path submitJobDir = new Path(jobStagingArea, jobId.toString());
     JobStatus status = null;
     try {

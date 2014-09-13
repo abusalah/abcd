@@ -366,7 +366,6 @@ public static PrintWriter writer;
 				    //if(Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberBase)==4) 
 				    if(ApplicationNumberBase_Touch.get(ApplicationNumberBase)==local_NUM_REDUCES*4)
 				    {
-				    	ApplicationNumberBase_Touch.clear();
 				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase);
 				    	int q=0;//hash_sum_per_App loop variable
 				    	//Map.Entry<String,int> entry = new AbstractMap.SimpleEntry<String, int>("exmpleString", 42);
@@ -412,6 +411,8 @@ public static PrintWriter writer;
 							}
 						}
 				    }
+				    
+				    
 				    
 				                    
 				}
