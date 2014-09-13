@@ -47,7 +47,7 @@ public class JobID extends org.apache.hadoop.mapreduce.JobID {
 	
 	
 	
-	public static int newCounter=2;
+	public static int newCounter=0;
 	
 	
   /**
