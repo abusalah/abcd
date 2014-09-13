@@ -210,6 +210,12 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
 
   private boolean quietmode = true;
  
+  //public static class setMyIntTemp(int localTemp)
+  
+  
+  
+  
+  
   private static class Resource {
     private final Object resource;
     private final String name;

@@ -251,7 +251,7 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
 	  }
 	  
 	 
-	  System.out.println("ENTERED run in Reducer.java");
+	  System.out.println("ENTERED run in Reducer.java ");
 	  
     setup(context);
     

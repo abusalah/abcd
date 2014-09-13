@@ -210,6 +210,9 @@ public class WordCount {
 		  
 		  System.out.println("job.getJobID() = "+job.getJobID()+" job.getJobName() = "+job.getJobName());
 		  
+		  
+		  
+		  
 	    job.setJarByClass(WordCount.class);
 	    job.setMapperClass(TokenizerMapper.class);
 	    job.setCombinerClass(IntSumReducer.class);

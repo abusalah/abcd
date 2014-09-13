@@ -1498,6 +1498,8 @@ abstract public class Task implements Writable, Configurable {
                                                               comparator, 
                                                               keyClass, 
                                                               valueClass);
+    
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobID.newCounter = "+JobID.newCounter);
 
     org.apache.hadoop.mapreduce.Reducer<INKEY,INVALUE,OUTKEY,OUTVALUE>.Context 
         reducerContext = 

@@ -44,12 +44,19 @@ import org.apache.hadoop.classification.InterfaceStability;
 @InterfaceAudience.Public
 @InterfaceStability.Stable
 public class JobID extends org.apache.hadoop.mapreduce.JobID {
+	
+	
+	
+	public static int newCounter=2;
+	
+	
   /**
    * Constructs a JobID object 
    * @param jtIdentifier jobTracker identifier
    * @param id job number
    */
   public JobID(String jtIdentifier, int id) {
+	  newCounter++;
     super(jtIdentifier, id);
   }
   
