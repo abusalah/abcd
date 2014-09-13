@@ -359,14 +359,19 @@ class JobSubmitter {
 //    THIS will give null exception: System.out.println("00000 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
 //    		+" job.getJobID().getId() = "+job.getJobID().getId()
 //    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
+    System.out.println("______2____1__");
     JobID jobId = submitClient.getNewJobID();
+    System.out.println("______2____2__");
     System.out.println("11111 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
     		+" job.getJobID().getId() = "+job.getJobID().getId()
     		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
+    System.out.println("______2____3__");
     job.setJobID(jobId);
+    System.out.println("______2____4__");
     System.out.println("22222 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
     		+" job.getJobID().getId() = "+job.getJobID().getId()
     		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
+    System.out.println("______2____5__");
     Path submitJobDir = new Path(jobStagingArea, jobId.toString());
     JobStatus status = null;
     try {
