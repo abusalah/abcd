@@ -77,6 +77,10 @@ class JobSubmitter {
   private String submitHostName;
   private String submitHostAddress;
   
+  public static int numApps_forbft2=0;
+  public static String allAppsString_forbft2=" ";
+  
+  
   JobSubmitter(FileSystem submitFs, ClientProtocol submitClient) 
   throws IOException {
     this.submitClient = submitClient;
@@ -368,9 +372,14 @@ class JobSubmitter {
     System.out.println("______2____3__");
     job.setJobID(jobId);
     System.out.println("______2____4__");
+    //if(allAppsString_forbft2.isEmpty() ||allAppsString_forbft2.equals(null)){allAppsString_forbft2=job.getJobID().toString();}
+    //else
+    allAppsString_forbft2+=job.getJobID().toString();
+    numApps_forbft2++;
     System.out.println("222222 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
     		+" job.getJobID().getId() = "+job.getJobID().getId()
-    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
+    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier()+" allAppsString_forbft2 = "+allAppsString_forbft2
+    		+" numApps_forbft2 = "+numApps_forbft2);
     System.out.println("______2____5__");
     Path submitJobDir = new Path(jobStagingArea, jobId.toString());
     JobStatus status = null;
