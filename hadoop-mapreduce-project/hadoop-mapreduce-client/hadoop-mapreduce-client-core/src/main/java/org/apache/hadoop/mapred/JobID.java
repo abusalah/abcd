@@ -55,9 +55,9 @@ public class JobID extends org.apache.hadoop.mapreduce.JobID {
    * @param jtIdentifier jobTracker identifier
    * @param id job number
    */
-  public JobID(String jtIdentifier, int id) {
-	  newCounter++;
+  public JobID(String jtIdentifier, int id) {	  
     super(jtIdentifier, id);
+    newCounter++;
   }
   
   public JobID() { }
