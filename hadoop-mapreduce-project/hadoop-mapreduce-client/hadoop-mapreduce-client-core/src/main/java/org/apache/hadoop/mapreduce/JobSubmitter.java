@@ -356,9 +356,9 @@ class JobSubmitter {
       conf.set(MRJobConfig.JOB_SUBMITHOST,submitHostName);
       conf.set(MRJobConfig.JOB_SUBMITHOSTADDR,submitHostAddress);
     }
-    System.out.println("00000 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
-    		+" job.getJobID().getId() = "+job.getJobID().getId()
-    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
+//    THIS will give null exception: System.out.println("00000 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
+//    		+" job.getJobID().getId() = "+job.getJobID().getId()
+//    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
     JobID jobId = submitClient.getNewJobID();
     System.out.println("11111 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
     		+" job.getJobID().getId() = "+job.getJobID().getId()
