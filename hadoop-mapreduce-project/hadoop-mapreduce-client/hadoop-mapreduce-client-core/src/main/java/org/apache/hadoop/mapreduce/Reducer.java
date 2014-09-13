@@ -310,6 +310,12 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
     	  
+    	  System.out.println("context.getConfiguration().get(\"allAppsString_forbft2\") = "
+					+context.getConfiguration().get("allAppsString_forbft2"));
+					System.out.println("context.getConfiguration().get(\"numApps_forbft2\") = "
+					+context.getConfiguration().get("numApps_forbft2"));
+					
+    	  
     	  System.out.println("++++++ inside run in Reducer.java context.getTaskAttemptID().toString() = "
     	  +context.getTaskAttemptID().toString()+" external_total_hash = "+external_total_hash);
     	  
