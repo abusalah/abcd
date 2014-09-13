@@ -107,6 +107,8 @@ public class ReduceContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
     this.valueClass = valueClass;
     this.conf = conf;
     this.taskid = taskid;
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~this.getiCounter() = "+this.getiCounter());
+    
   }
 
   /** Start processing next unique key. */

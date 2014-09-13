@@ -101,6 +101,12 @@ public class JobContextImpl implements JobContext {
     this.jobId = jobId;
   }
   
+  
+  //temp delete for bft
+  public int getiCounter() {
+	  return iCounter;
+  }
+  
   /**
    * Get configured the number of reduce tasks for this job. Defaults to 
    * <code>1</code>.
