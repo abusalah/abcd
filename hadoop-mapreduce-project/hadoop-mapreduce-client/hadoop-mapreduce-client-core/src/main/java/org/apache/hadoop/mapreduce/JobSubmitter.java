@@ -362,9 +362,9 @@ class JobSubmitter {
     System.out.println("______2____1__");
     JobID jobId = submitClient.getNewJobID();
     System.out.println("______2____2__");
-    System.out.println("11111 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
-    		+" job.getJobID().getId() = "+job.getJobID().getId()
-    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
+//    THIS will give null exception:  System.out.println("11111 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
+//    		+" job.getJobID().getId() = "+job.getJobID().getId()
+//    		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
     System.out.println("______2____3__");
     job.setJobID(jobId);
     System.out.println("______2____4__");
