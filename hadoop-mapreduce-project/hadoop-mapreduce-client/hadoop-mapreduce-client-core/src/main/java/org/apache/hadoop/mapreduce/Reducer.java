@@ -364,6 +364,10 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
 						if(local_BFT_flag==2)
 						{
 							System.out.println("ENTERED local_BFT_flag==2)");
+							System.out.println("context.getConfiguration().get(\"allAppsString_forbft2\") = "
+							+context.getConfiguration().get("allAppsString_forbft2"));
+							System.out.println("context.getConfiguration().get(\"numApps_forbft2\") = "
+							+context.getConfiguration().get("numApps_forbft2"));
 							if (Long.parseLong(responseLine)==applicationNumber_1)//here add if bft =...AM & unre
 							{	
 								System.out.println("Entered XXX for local_BFT_flag==2------");
