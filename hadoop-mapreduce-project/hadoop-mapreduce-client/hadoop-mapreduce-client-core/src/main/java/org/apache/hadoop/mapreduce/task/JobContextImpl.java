@@ -54,6 +54,7 @@ public class JobContextImpl implements JobContext {
 	
   protected final org.apache.hadoop.mapred.JobConf conf;
   private JobID jobId;
+  private static int iCounter=0;
   /**
    * The UserGroupInformation object that has a reference to the current user
    */
@@ -95,6 +96,8 @@ public class JobContextImpl implements JobContext {
    * Set the JobID.
    */
   public void setJobID(JobID jobId) {
+	  iCounter++;
+	  System.out.println("ENTERED setJobID(JobID jobId) in JobContextImpl.java iCounter = "+iCounter);
     this.jobId = jobId;
   }
   
