@@ -150,6 +150,11 @@ extends ApplicationSubmissionContext {
   
   @Override
   public ApplicationId getApplicationId() {
+	  
+	  System.out.println("ENTERED getApplicationId() in ApplicationSubmissionContextPBImpl.java");
+	  System.out.println("___________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  
     ApplicationSubmissionContextProtoOrBuilder p = viaProto ? proto : builder;
     if (this.applicationId != null) {
       return applicationId;
@@ -163,6 +168,11 @@ extends ApplicationSubmissionContext {
 
   @Override
   public void setApplicationId(ApplicationId applicationId) {
+	  
+	  System.out.println("ENTERED setApplicationId(ApplicationId applicationId) in ApplicationSubmissionContextPBImpl.java");
+	  System.out.println("___________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  
     maybeInitBuilder();
     if (applicationId == null)
       builder.clearApplicationId();
