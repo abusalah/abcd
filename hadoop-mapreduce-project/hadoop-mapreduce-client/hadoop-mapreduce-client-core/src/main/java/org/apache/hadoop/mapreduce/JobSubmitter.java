@@ -368,7 +368,7 @@ class JobSubmitter {
     System.out.println("______2____3__");
     job.setJobID(jobId);
     System.out.println("______2____4__");
-    System.out.println("22222 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
+    System.out.println("222222 job.getJobID() = "+job.getJobID()+" job.getJobID().id "+job.getJobID().id
     		+" job.getJobID().getId() = "+job.getJobID().getId()
     		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier());
     System.out.println("______2____5__");
