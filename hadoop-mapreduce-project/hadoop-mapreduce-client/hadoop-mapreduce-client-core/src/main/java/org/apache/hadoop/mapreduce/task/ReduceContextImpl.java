@@ -111,6 +111,9 @@ public class ReduceContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
     this.taskid = taskid;
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~this.getiCounter() = "+this.getiCounter());
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~localCounterJobID = "+localCounterJobID);
+    
+    
+    
     test_localCounterJobID=localCounterJobID;
     
   }

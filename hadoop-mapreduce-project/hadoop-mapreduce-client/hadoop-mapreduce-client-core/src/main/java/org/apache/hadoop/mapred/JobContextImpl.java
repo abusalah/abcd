@@ -30,6 +30,8 @@ public class JobContextImpl
   private Progressable progress;
   
   public static int newCounter2=0;
+  
+  public static String tempApps=" ";
 
   public JobContextImpl(JobConf conf, org.apache.hadoop.mapreduce.JobID jobId, 
                  Progressable progress) {
@@ -37,6 +39,7 @@ public class JobContextImpl
     this.job = conf;
     this.progress = progress;
     newCounter2++;
+    tempApps+=this.getJobID().toString();
   }
 
   public JobContextImpl(JobConf conf, org.apache.hadoop.mapreduce.JobID jobId) {

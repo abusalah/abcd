@@ -1500,6 +1500,12 @@ abstract public class Task implements Writable, Configurable {
                                                               valueClass,JobID.newCounter);
     
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobID.newCounter = "+JobID.newCounter);
+    
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobContextImpl.newCounter2 = "+JobContextImpl.newCounter2);
+    
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobContextImpl.tempApps = "+JobContextImpl.tempApps);
+    
+    
 
     org.apache.hadoop.mapreduce.Reducer<INKEY,INVALUE,OUTKEY,OUTVALUE>.Context 
         reducerContext = 
