@@ -120,14 +120,14 @@ public class TaskHeartbeatHandler extends AbstractService {
 
   public TaskHeartbeatHandler(EventHandler eventHandler, Clock clock, int numThreads) {
     super("TaskHeartbeatHandler");
-    try {    	
-		appMasterHost_in_TaskHeartbeatHandler=InetAddress.getLocalHost().getHostName();
-		System.out.println("appMasterHost_in_TaskHeartbeatHandler inside TaskHeartbeatHandler constructor = "+appMasterHost_in_TaskHeartbeatHandler);
-	    System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
-	} catch (UnknownHostException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
+//    try {    	
+//		appMasterHost_in_TaskHeartbeatHandler=InetAddress.getLocalHost().getHostName();
+//		System.out.println("appMasterHost_in_TaskHeartbeatHandler inside TaskHeartbeatHandler constructor = "+appMasterHost_in_TaskHeartbeatHandler);
+//	    System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
+//	} catch (UnknownHostException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
     this.eventHandler = eventHandler;
     this.clock = clock;
     runningAttempts = new ConcurrentHashMap<TaskAttemptId, ReportTime>(16, 0.75f, numThreads);
@@ -143,8 +143,8 @@ public class TaskHeartbeatHandler extends AbstractService {
     System.out.println("System.currentTimeMillis() = "+System.currentTimeMillis());
     taskTimeOut = conf.getInt(MRJobConfig.TASK_TIMEOUT, 1 * 60 * 1000);///---bft //original was: 5 * 60 * 1000;
     taskTimeOutCheckInterval = conf.getInt(MRJobConfig.TASK_TIMEOUT_CHECK_INTERVAL_MS, 30 * 1000);
-    local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
-    local_NUM_REPLICAS =conf.getInt(MRJobConfig.NUM_REPLICAS,4);
+//    local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
+//    local_NUM_REPLICAS =conf.getInt(MRJobConfig.NUM_REPLICAS,4);
     replicasHashes = new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
     replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS];    
   }

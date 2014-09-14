@@ -1521,14 +1521,14 @@ public class JobImpl implements org.apache.hadoop.mapreduce.v2.app.job.Job,
 
     private void createReduceTasks(JobImpl job) {
       for (int i = 0; i < job.numReduceTasks; i++) {
-    	  try {
-			job.conf.appMasterHost=InetAddress.getLocalHost().getHostName();
-			Configuration.appMasterHost=InetAddress.getLocalHost().getHostName();
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-    	  System.out.println("_________________________________+____________________________job.conf.appMasterHost = "+job.conf.appMasterHost);
+//    	  try {
+//			job.conf.appMasterHost=InetAddress.getLocalHost().getHostName();
+//			Configuration.appMasterHost=InetAddress.getLocalHost().getHostName();
+//		} catch (UnknownHostException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+    	  //System.out.println("_________________________________+____________________________job.conf.appMasterHost = "+job.conf.appMasterHost);
     	  
     	  //_______________________________________________________________________________________________
         TaskImpl task =

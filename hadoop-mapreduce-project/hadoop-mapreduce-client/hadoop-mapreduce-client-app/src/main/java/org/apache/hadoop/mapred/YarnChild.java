@@ -63,8 +63,8 @@ import org.apache.hadoop.yarn.api.ApplicationConstants;
 import org.apache.hadoop.yarn.api.ApplicationConstants.Environment;
 import org.apache.hadoop.yarn.api.records.ApplicationAttemptId;
 import org.apache.hadoop.yarn.util.ConverterUtils;
-import org.apache.hadoop.mapreduce.v2.app.MRAppMaster;
-import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler;
+//import org.apache.hadoop.mapreduce.v2.app.MRAppMaster;
+//import org.apache.hadoop.mapreduce.v2.app.TaskHeartbeatHandler;
 
 /**
  * The main() for MapReduce task processes.
