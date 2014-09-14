@@ -1505,6 +1505,8 @@ abstract public class Task implements Writable, Configurable {
     
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobContextImpl.tempApps = "+JobContextImpl.tempApps);
     
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobID.Apps_in_JobID = "+JobID.Apps_in_JobID);
+    
     
 
     org.apache.hadoop.mapreduce.Reducer<INKEY,INVALUE,OUTKEY,OUTVALUE>.Context 

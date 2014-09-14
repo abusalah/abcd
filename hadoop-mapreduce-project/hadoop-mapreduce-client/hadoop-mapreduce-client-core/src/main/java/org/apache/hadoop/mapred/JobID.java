@@ -48,6 +48,7 @@ public class JobID extends org.apache.hadoop.mapreduce.JobID {
 	
 	
 	public static int newCounter=0;
+	public static String Apps_in_JobID=" ";
 	
 	
   /**
@@ -58,6 +59,7 @@ public class JobID extends org.apache.hadoop.mapreduce.JobID {
   public JobID(String jtIdentifier, int id) {	  
     super(jtIdentifier, id);
     newCounter++;
+    Apps_in_JobID+=jtIdentifier;
   }
   
   public JobID() { }
