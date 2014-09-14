@@ -1499,6 +1499,10 @@ abstract public class Task implements Writable, Configurable {
                                                               keyClass, 
                                                               valueClass,JobID.newCounter);
     
+    System.out.println("___________inside createReduceContext in Task.java_______________Thread.currentThread().getStackTrace() = ");
+    for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+    
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobID.newCounter = "+JobID.newCounter);
     
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobContextImpl.newCounter2 = "+JobContextImpl.newCounter2);
