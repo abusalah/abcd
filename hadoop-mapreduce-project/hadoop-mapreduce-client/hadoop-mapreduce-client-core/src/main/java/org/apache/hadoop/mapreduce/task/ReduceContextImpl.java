@@ -81,6 +81,8 @@ public class ReduceContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
   private int currentKeyLength = -1;
   private int currentValueLength = -1;
   
+  public static int test_localCounterJobID = 0;
+  
   public ReduceContextImpl(Configuration conf, TaskAttemptID taskid,
                            RawKeyValueIterator input, 
                            Counter inputKeyCounter,
@@ -109,6 +111,7 @@ public class ReduceContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
     this.taskid = taskid;
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~this.getiCounter() = "+this.getiCounter());
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~localCounterJobID = "+localCounterJobID);
+    test_localCounterJobID=localCounterJobID;
     
   }
 

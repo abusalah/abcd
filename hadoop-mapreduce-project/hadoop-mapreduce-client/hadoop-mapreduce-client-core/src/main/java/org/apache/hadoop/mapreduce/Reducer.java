@@ -24,6 +24,7 @@ import java.net.*;
 import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.conf.Configuration;
+import org.apache.hadoop.mapreduce.task.ReduceContextImpl;
 import org.apache.hadoop.mapreduce.task.annotation.Checkpointable;
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEventType;
@@ -36,6 +37,7 @@ import org.apache.hadoop.yarn.event.EventHandler;
 
 
 import org.apache.hadoop.ipc.Server;
+
 
 
 
@@ -214,7 +216,12 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	 int local_NUM_REDUCES = context.getConfiguration().getInt("mapreduce.job.reduces",4);//conf.getInt("mapreduce.job.reduces",1); 
 	 String flags_to_send=Integer.toString(local_BFT_flag)+"-"+Integer.toString(local_NUM_REPLICAS)
 			 +"-"+Integer.toString(local_NUM_REDUCES);
+	 
+	 System.out.println("~~~~~~~~~~~~~~~~~~~~~~ReduceContextImpl.test_localCounterJobID = "+ReduceContextImpl.test_localCounterJobID);
+	 
+	 
 	  
+	 
 	  
 if(local_BFT_flag==1)	 
 {
