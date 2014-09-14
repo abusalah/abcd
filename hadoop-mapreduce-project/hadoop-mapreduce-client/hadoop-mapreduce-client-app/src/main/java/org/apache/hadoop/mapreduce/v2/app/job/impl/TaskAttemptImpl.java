@@ -517,6 +517,11 @@ public abstract class TaskAttemptImpl implements
     attemptId.setId(i);
     this.taskAttemptListener = taskAttemptListener;
     this.appContext = appContext;
+    
+    System.out.println("-------------------------Entered TaskAttemptImpl.java constructor");
+    System.out.println("___________Entered TaskAttemptImpl.java constructor_______________Thread.currentThread().getStackTrace() = ");
+    for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
 
     // Initialize reportedStatus
     reportedStatus = new TaskAttemptStatus();
