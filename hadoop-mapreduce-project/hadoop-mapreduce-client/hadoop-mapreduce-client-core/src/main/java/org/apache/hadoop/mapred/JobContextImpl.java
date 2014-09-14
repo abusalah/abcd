@@ -28,12 +28,15 @@ public class JobContextImpl
     implements JobContext {
   private JobConf job;
   private Progressable progress;
+  
+  public static int newCounter2=0;
 
   public JobContextImpl(JobConf conf, org.apache.hadoop.mapreduce.JobID jobId, 
                  Progressable progress) {
     super(conf, jobId);
     this.job = conf;
     this.progress = progress;
+    newCounter2++;
   }
 
   public JobContextImpl(JobConf conf, org.apache.hadoop.mapreduce.JobID jobId) {

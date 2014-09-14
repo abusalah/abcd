@@ -1497,7 +1497,7 @@ abstract public class Task implements Writable, Configurable {
                                                               reporter, 
                                                               comparator, 
                                                               keyClass, 
-                                                              valueClass);
+                                                              valueClass,JobID.newCounter);
     
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ JobID.newCounter = "+JobID.newCounter);
 
