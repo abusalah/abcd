@@ -484,7 +484,7 @@ public class ReduceTask extends Task {
       this.fileOutputByteCounter = reduce.fileOutputByteCounter;
       List<Statistics> matchedStats = null;
       if (job.getOutputFormat() instanceof FileOutputFormat) {
-        matchedStats = getFsStatistics(FileOutputFormat.getOutputPath(job), job);
+        //matchedStats = getFsStatistics(FileOutputFormat.getOutputPath(), job);//IMP was uncommented in the original code
       }
       fsStats = matchedStats;
 
