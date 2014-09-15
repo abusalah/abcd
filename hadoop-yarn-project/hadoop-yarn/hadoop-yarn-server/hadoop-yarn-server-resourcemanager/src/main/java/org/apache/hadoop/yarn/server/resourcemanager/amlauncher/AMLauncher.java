@@ -214,6 +214,20 @@ public class AMLauncher implements Runnable {
         + StringUtils.arrayToString(container.getCommands().toArray(
             new String[0])));
     
+    
+    for(String my_command:container.getCommands())
+    {
+         System.out.println("--my_command----in AMLauncher.java-----my_command = "+my_command);
+    }
+    
+    for (String my_key: container.getEnvironment().keySet()){
+
+        //String key =my_key.toString();
+        String my_value = container.getEnvironment().get(my_key).toString();  
+        System.out.println(my_key + " " + my_value);  
+    } 
+    
+    
     // Finalize the container
     setupTokens(container, containerID);
     
