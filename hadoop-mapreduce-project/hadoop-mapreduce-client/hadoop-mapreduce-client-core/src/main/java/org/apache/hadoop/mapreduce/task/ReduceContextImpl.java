@@ -92,7 +92,7 @@ public class ReduceContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
                            StatusReporter reporter,
                            RawComparator<KEYIN> comparator,
                            Class<KEYIN> keyClass,
-                           Class<VALUEIN> valueClass , int localCounterJobID
+                           Class<VALUEIN> valueClass //, int localCounterJobID
                           ) throws InterruptedException, IOException{
     super(conf, taskid, output, committer, reporter);
     this.input = input;
@@ -110,11 +110,11 @@ public class ReduceContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
     this.conf = conf;
     this.taskid = taskid;
     System.out.println("~~~~~~~~~~~~~~~~~~~~~~~this.getiCounter() = "+this.getiCounter());
-    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~localCounterJobID = "+localCounterJobID);
+    //System.out.println("~~~~~~~~~~~~~~~~~~~~~~~localCounterJobID = "+localCounterJobID);
     
     
     
-    test_localCounterJobID=localCounterJobID;
+    //test_localCounterJobID=localCounterJobID;
     
   }
 

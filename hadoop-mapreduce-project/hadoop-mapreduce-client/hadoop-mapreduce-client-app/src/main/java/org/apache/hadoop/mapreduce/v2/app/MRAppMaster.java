@@ -866,8 +866,7 @@ public static final Object lock = new Object();
     	    
     	    
         this.containerAllocator = new LocalContainerAllocator(
-            this.clientService, this.context, nmHost, nmPort, nmHttpPort
-            , containerID);
+            this.clientService, this.context, nmHost, nmPort, nmHttpPort, containerID);
       } else {
 //    	  System.out.println("\n if (job.isUber()) else\n");
 //  	    System.out.println("__inside serviceStart in MRAppMaster.java__Thread.currentThread().getStackTrace() = ");

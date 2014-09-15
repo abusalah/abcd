@@ -1497,7 +1497,8 @@ abstract public class Task implements Writable, Configurable {
                                                               reporter, 
                                                               comparator, 
                                                               keyClass, 
-                                                              valueClass,JobID.newCounter);
+                                                              valueClass//,JobID.newCounter
+                                                              );
     
     System.out.println("___________inside createReduceContext in Task.java_______________Thread.currentThread().getStackTrace() = ");
     for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
