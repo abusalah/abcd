@@ -51,6 +51,7 @@ import org.apache.hadoop.mapred.SortedRanges.SkipRangeIterator;
 import org.apache.hadoop.mapreduce.MRConfig;
 import org.apache.hadoop.mapreduce.TaskAttemptContext;
 import org.apache.hadoop.mapreduce.TaskCounter;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormatCounter;
 import org.apache.hadoop.mapreduce.task.reduce.Shuffle;
 import org.apache.hadoop.util.Progress;
@@ -588,7 +589,7 @@ public class ReduceTask extends Task {
                      RawComparator<INKEY> comparator,
                      Class<INKEY> keyClass,
                      Class<INVALUE> valueClass
-                     ) throws IOException,InterruptedException, ClassNotFoundException {
+                     ) throws IOException,InterruptedException, ClassNotFoundException {	  
     // wrap value iterator to report progress.
     final RawKeyValueIterator rawIter = rIter;
     rIter = new RawKeyValueIterator() {
@@ -631,6 +632,7 @@ public class ReduceTask extends Task {
                                                reporter, comparator, keyClass,
                                                valueClass);
     try {
+    	System.out.println("FileOutputFormat.getOutputPath(this.jobContext); = "+FileOutputFormat.getOutputPath(this.jobContext));
       reducer.run(reducerContext);
     } finally {
       trackedRW.close(reducerContext);

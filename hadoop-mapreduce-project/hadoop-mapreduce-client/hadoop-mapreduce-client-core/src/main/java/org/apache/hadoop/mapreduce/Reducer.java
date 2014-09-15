@@ -26,6 +26,8 @@ import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.task.ReduceContextImpl;
 import org.apache.hadoop.mapreduce.task.annotation.Checkpointable;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEventType;
 //import org.apache.hadoop.yarn.event.EventHandler;
@@ -222,7 +224,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	 
 	 System.out.println("~~~~~~~~~~~~~~~~~~~~~~context.getWorkingDirectory() = "+context.getWorkingDirectory());
 	  
-	 
+	 System.out.println("~~in Reducer.java~~~FileOutputFormat.getOutputPath(context) = "+FileOutputFormat.getOutputPath(context));
 	  
 if(local_BFT_flag==1)	 
 {

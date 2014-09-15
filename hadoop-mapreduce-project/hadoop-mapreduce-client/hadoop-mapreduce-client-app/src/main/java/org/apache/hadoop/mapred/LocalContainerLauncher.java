@@ -86,11 +86,11 @@ public class LocalContainerLauncher extends AbstractService implements
         // but skip RPC stuff)
 
     
-//    
-//    System.out.println("\nEntered LocalContainerLauncher\n");
-//    System.out.println("__inside LocalContainerLauncher constructor of LocalContainerLauncher.java__Thread.currentThread().getStackTrace() = ");
-//    for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
-//    
+    
+    System.out.println("\n\n123\n\nEntered LocalContainerLauncher\n\n123\n\n");
+    System.out.println("__inside LocalContainerLauncher constructor of LocalContainerLauncher.java__Thread.currentThread().getStackTrace() = ");
+    for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+    
     
     
     try {
