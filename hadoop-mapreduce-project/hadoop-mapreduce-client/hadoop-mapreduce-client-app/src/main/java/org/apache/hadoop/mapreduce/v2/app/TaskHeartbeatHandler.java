@@ -145,8 +145,8 @@ public class TaskHeartbeatHandler extends AbstractService {
     taskTimeOutCheckInterval = conf.getInt(MRJobConfig.TASK_TIMEOUT_CHECK_INTERVAL_MS, 30 * 1000);
 //    local_BFT_flag =conf.getInt(MRJobConfig.BFT_FLAG, 1);
 //    local_NUM_REPLICAS =conf.getInt(MRJobConfig.NUM_REPLICAS,4);
-    replicasHashes = new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
-    replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS];    
+    //replicasHashes = new Long[conf.getInt(MRJobConfig.NUM_REDUCES, 1)];
+    //replicasHashes_set = new int[conf.getInt(MRJobConfig.NUM_REDUCES, 1)/local_NUM_REPLICAS];    
   }
 
   @Override
