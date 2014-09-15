@@ -220,6 +220,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	 System.out.println("~~~~~~~~~~~~~~~~~~~~~~ReduceContextImpl.test_localCounterJobID = "+ReduceContextImpl.test_localCounterJobID);
 	 
 	 
+	 System.out.println("~~~~~~~~~~~~~~~~~~~~~~context.getWorkingDirectory() = "+context.getWorkingDirectory());
 	  
 	 
 	  
