@@ -28,7 +28,7 @@ import org.apache.hadoop.mapreduce.task.ReduceContextImpl;
 import org.apache.hadoop.mapreduce.task.annotation.Checkpointable;
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEventType;
-import org.apache.hadoop.yarn.event.EventHandler;
+//import org.apache.hadoop.yarn.event.EventHandler;
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptDiagnosticsUpdateEvent;
 //import org.apache.hadoop.mapreduce.ta.TaskAttemptContext;.
 
@@ -36,7 +36,7 @@ import org.apache.hadoop.yarn.event.EventHandler;
 //import org.apache.hadoop.mapreduce.v2.app.*;
 
 
-import org.apache.hadoop.ipc.Server;
+//import org.apache.hadoop.ipc.Server;
 
 
 

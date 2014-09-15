@@ -97,16 +97,37 @@ public class IFile {
       this(conf, fs.create(file), keyClass, valueClass, codec,
            writesCounter);
       ownOutputStream = true;
+      
+      
+      System.out.println("___________inside Writer 1 in IFile.java_______________Thread.currentThread().getStackTrace() = ");
+      for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+      
+      
+      
+      
     }
     
     protected Writer(Counters.Counter writesCounter) {
       writtenRecordsCounter = writesCounter;
+   
+      
+      System.out.println("___________inside Writer 2 in IFile.java_______________Thread.currentThread().getStackTrace() = ");
+      for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+      
     }
 
     public Writer(Configuration conf, FSDataOutputStream out, 
         Class<K> keyClass, Class<V> valueClass,
         CompressionCodec codec, Counters.Counter writesCounter)
         throws IOException {
+    	   
+        
+        System.out.println("___________inside Writer 3 in IFile.java_______________Thread.currentThread().getStackTrace() = ");
+        for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+        
       this.writtenRecordsCounter = writesCounter;
       this.checksumOut = new IFileOutputStream(out);
       this.rawOut = out;
@@ -142,6 +163,13 @@ public class IFile {
     public Writer(Configuration conf, FileSystem fs, Path file) 
     throws IOException {
       this(conf, fs, file, null, null, null, null);
+      
+   
+      
+      System.out.println("___________inside Writer 4 in IFile.java_______________Thread.currentThread().getStackTrace() = ");
+      for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+      
     }
 
     public void close() throws IOException {
