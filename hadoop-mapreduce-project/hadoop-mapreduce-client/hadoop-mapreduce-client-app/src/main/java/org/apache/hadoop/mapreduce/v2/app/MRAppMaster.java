@@ -860,18 +860,18 @@ public static final Object lock = new Object();
     protected void serviceStart() throws Exception {
       if (job.isUber()) {
 
-    	    System.out.println("\nEntered  if (job.isUber()) this.containerAllocator = new LocalContainerAllocator\n");
-    	    System.out.println("__inside serviceStart in MRAppMaster.java__Thread.currentThread().getStackTrace() = ");
-    	    for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+//    	    System.out.println("\nEntered  if (job.isUber()) this.containerAllocator = new LocalContainerAllocator\n");
+//    	    System.out.println("__inside serviceStart in MRAppMaster.java__Thread.currentThread().getStackTrace() = ");
+//    	    for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
     	    
     	    
         this.containerAllocator = new LocalContainerAllocator(
             this.clientService, this.context, nmHost, nmPort, nmHttpPort
             , containerID);
       } else {
-    	  System.out.println("\n if (job.isUber()) else\n");
-  	    System.out.println("__inside serviceStart in MRAppMaster.java__Thread.currentThread().getStackTrace() = ");
-  	    for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+//    	  System.out.println("\n if (job.isUber()) else\n");
+//  	    System.out.println("__inside serviceStart in MRAppMaster.java__Thread.currentThread().getStackTrace() = ");
+//  	    for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
   	    
         this.containerAllocator = new RMContainerAllocator(
             this.clientService, this.context, preemptionPolicy);
