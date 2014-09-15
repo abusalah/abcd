@@ -80,6 +80,13 @@ class YarnChild {
 	  
   System.out.println("__________inside main of YarnChild.java________________Thread.currentThread().getStackTrace() = ");
   for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+  
+  for(String my_arg:args)
+  {
+	  System.out.println("----args--in YarnChild-----my_arg = "+my_arg);
+  }
+  
+  
 	  
     Thread.setDefaultUncaughtExceptionHandler(new YarnUncaughtExceptionHandler());
     LOG.debug("Child starting");

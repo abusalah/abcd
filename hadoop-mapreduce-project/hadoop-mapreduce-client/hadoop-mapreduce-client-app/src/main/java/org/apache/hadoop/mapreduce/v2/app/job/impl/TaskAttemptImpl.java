@@ -824,6 +824,11 @@ public abstract class TaskAttemptImpl implements
     // Set up the launch command
     List<String> commands = MapReduceChildJVM.getVMCommand(
         taskAttemptListener.getAddress(), remoteTask, jvmID);
+    
+    for(String my_command:commands)
+    {
+  	  System.out.println("----commands---in TaskAttemptImlp----my_command = "+my_command);
+    }
 
     // Duplicate the ByteBuffers for access by multiple containers.
     Map<String, ByteBuffer> myServiceData = new HashMap<String, ByteBuffer>();

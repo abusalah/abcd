@@ -232,6 +232,12 @@ public class MapReduceChildJVM {
     vargs.add(String.valueOf(jvmID.getId()));
     vargs.add("1>" + getTaskLogFile(TaskLog.LogName.STDOUT));
     vargs.add("2>" + getTaskLogFile(TaskLog.LogName.STDERR));
+    
+    for(String my_varg:vargs)
+    {
+  	  System.out.println("----vargs---in MapReduceChildJVM----my_varg = "+my_varg);
+    }
+    
 
     // Final commmand
     StringBuilder mergedCommand = new StringBuilder();
