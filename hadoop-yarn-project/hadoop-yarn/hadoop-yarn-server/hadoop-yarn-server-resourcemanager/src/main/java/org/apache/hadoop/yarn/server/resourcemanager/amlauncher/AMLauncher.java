@@ -214,11 +214,20 @@ public class AMLauncher implements Runnable {
         + StringUtils.arrayToString(container.getCommands().toArray(
             new String[0])));
     
+    System.out.println("Command to launch container "
+            + containerID
+            + " : "
+            + StringUtils.arrayToString(container.getCommands().toArray(
+                new String[0])));
+        
+    
     
     for(String my_command:container.getCommands())
     {
          System.out.println("--my_command----in AMLauncher.java-----my_command = "+my_command);
     }
+    
+    
     
     for (String my_key: container.getEnvironment().keySet()){
 
@@ -227,6 +236,23 @@ public class AMLauncher implements Runnable {
         System.out.println(my_key + " " + my_value);  
     } 
     
+    List<String> tempList=container.getCommands();
+    
+    tempList.add("TestingArgMRApp");
+    
+    container.setCommands(tempList);
+    
+    for(String my_command:container.getCommands())
+    {
+         System.out.println("AFTER--my_command----in AMLauncher.java-----my_command = "+my_command);
+    }
+    
+    System.out.println("Command to launch container "
+            + containerID
+            + " : "
+            + StringUtils.arrayToString(container.getCommands().toArray(
+                new String[0])));
+        
     
     // Finalize the container
     setupTokens(container, containerID);

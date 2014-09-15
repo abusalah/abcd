@@ -1466,7 +1466,8 @@ public static final Object lock = new Object();
 			  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 			  
 			  
-
+			  	System.out.println("args.length = "+args.length);
+			  
 			  for(String my_arg:args)
 			  {
 			       System.out.println("----args--in MRAppMaster.java-----my_arg = "+my_arg);
