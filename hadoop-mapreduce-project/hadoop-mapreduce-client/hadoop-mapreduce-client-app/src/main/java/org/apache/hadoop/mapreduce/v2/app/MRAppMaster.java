@@ -1462,6 +1462,10 @@ public static final Object lock = new Object();
 	  */   
 	  
 	  System.out.println("_________________________________________Entered main of MRAppMaster.java");
+	  System.out.println("__________inside main(String[] args) MRAppMaster.java________________Thread.currentThread().getStackTrace() = ");
+			  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+			  
+			  
     try {
       Thread.setDefaultUncaughtExceptionHandler(new YarnUncaughtExceptionHandler());
       String containerIdStr = System.getenv(Environment.CONTAINER_ID.name());

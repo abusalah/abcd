@@ -632,7 +632,6 @@ public class ReduceTask extends Task {
                                                reporter, comparator, keyClass,
                                                valueClass);
     try {
-    	System.out.println("FileOutputFormat.getOutputPath(this.jobContext); = "+FileOutputFormat.getOutputPath(this.jobContext));
       reducer.run(reducerContext);
     } finally {
       trackedRW.close(reducerContext);
