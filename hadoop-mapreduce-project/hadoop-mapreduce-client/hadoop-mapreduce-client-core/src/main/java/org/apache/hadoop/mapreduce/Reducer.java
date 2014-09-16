@@ -335,7 +335,7 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
     	  +context.getTaskAttemptID().toString()+" external_total_hash = "+external_total_hash);
     	  
     	  totalHash=0;//just for now for testing    	  
-    	  stringToSend=flags_to_send+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
+    	  stringToSend=flags_to_send+" "+FileOutputFormat.getOutputPath(context)+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
     	  
     	  
     	  try {

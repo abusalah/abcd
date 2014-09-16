@@ -89,36 +89,36 @@ public class WordCount {
   
   
   
-  public static class MyRunnable implements Runnable {
-
-	    private Job local_job;
-
-	    public MyRunnable(Job sent_job) {
-	    	System.out.println("Inside 1 sent_job.getJar() = "+sent_job.getJar());
-	        this.local_job = sent_job;
-	        System.out.println("Inside 2 sent_job.getJar() = "+sent_job.getJar());
-	    }
-
-	    public void run() {
-	    	try {
-	    		System.out.println("Inside 3 this.local_job.getJar() = "+this.local_job.getJar());
-	    		this.local_job=new Job(this.local_job.getConfiguration(), "word count");
-				this.local_job.waitForCompletion(true);
-				
-			} catch (ClassNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}//.waitForCompletion(true);
-	        // code in the other thread, can reference "var" variable
-	    }
-	}
-
+//  public static class MyRunnable implements Runnable {
+//
+//	    private Job local_job;
+//
+//	    public MyRunnable(Job sent_job) {
+//	    	System.out.println("Inside 1 sent_job.getJar() = "+sent_job.getJar());
+//	        this.local_job = sent_job;
+//	        System.out.println("Inside 2 sent_job.getJar() = "+sent_job.getJar());
+//	    }
+//
+//	    public void run() {
+//	    	try {
+//	    		System.out.println("Inside 3 this.local_job.getJar() = "+this.local_job.getJar());
+//	    		this.local_job=new Job(this.local_job.getConfiguration(), "word count");
+//				this.local_job.waitForCompletion(true);
+//				
+//			} catch (ClassNotFoundException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			} catch (InterruptedException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}//.waitForCompletion(true);
+//	        // code in the other thread, can reference "var" variable
+//	    }
+//	}
+//
 
 
   public static void main(String[] args) throws Exception {
