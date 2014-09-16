@@ -120,10 +120,11 @@ public static PrintWriter writer;
 	
 	int receivedReducerNumber=0;
 	String receivedTaskAttemptID ="";
+	String receivedOutputPath="";
 	long receivedApplicationNumber_1 =0;
 	int receivedApplicationNumber_2 =0;
-	String ApplicationNumberwithReplicaNumber=null;
-	String ApplicationNumberBase=null;
+	String ApplicationNumberwithReplicaNumber_withOutputName=null;
+	String ApplicationNumberBase_withOutputName=null;
 	long receivedHash= 0;
 	Integer unreplicatedReducerNumber=null;
 	boolean firstandsecond,thirdandforth,allofthem;
@@ -142,7 +143,7 @@ public static PrintWriter writer;
 	
 	public void run() {
 	    String lineReceived;
-	    String receivedOK;
+	    String receivedOK;	    
 	    int ii =0;
 	    System.out.println("Inside run() inside clientThread class");
 	    try {
@@ -177,13 +178,20 @@ public static PrintWriter writer;
 			    
 			    
 			    //receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
-			    receivedTaskAttemptID = lineReceived.split(" ")[1];//was [1]
+			    receivedOutputPath = lineReceived.split(" ")[1];
+			    receivedTaskAttemptID = lineReceived.split(" ")[2];		
+			    receivedHash = Long.parseLong(lineReceived.split(" ")[3]);
 			    receivedReducerNumber = Integer.parseInt(receivedTaskAttemptID.toString().split("_")[4]);
 			    receivedApplicationNumber_1=Long.parseLong(receivedTaskAttemptID.toString().split("_")[1]);
 			    receivedApplicationNumber_2=Integer.parseInt(receivedTaskAttemptID.toString().split("_")[2]);
-			    ApplicationNumberwithReplicaNumber = Long.toString(receivedApplicationNumber_1)+"_"+Integer.toString(receivedApplicationNumber_2);
-			    ApplicationNumberBase=Long.toString(receivedApplicationNumber_1);
-			    receivedHash = Long.parseLong(lineReceived.split(" ")[2]);
+			    ApplicationNumberwithReplicaNumber_withOutputName = receivedOutputPath.substring(0, receivedOutputPath.length()-1)+
+			    		"_"+Long.toString(receivedApplicationNumber_1)+
+			    		"_"+Integer.toString(receivedApplicationNumber_2);
+			    ApplicationNumberBase_withOutputName=receivedOutputPath.substring(0, receivedOutputPath.length()-1)+"_"+Long.toString(receivedApplicationNumber_1);
+			    
+			    System.out.println("\n"+receivedOutputPath+" "+receivedTaskAttemptID+" "+receivedHash+" "+receivedReducerNumber+" "+receivedApplicationNumber_1
+			    		+" "+receivedApplicationNumber_2+" "+ApplicationNumberwithReplicaNumber_withOutputName+" "+ApplicationNumberBase_withOutputName+"\n");
+			    
 			    if(local_BFT_flag==3)
 				{
 				    System.out.println("ENTERED local_BFT_flag==3");
@@ -197,7 +205,7 @@ public static PrintWriter writer;
 						   "receivedTaskAttemptID = " + receivedTaskAttemptID +
 						   "receivedHash = " + receivedHash +
 						   "unreplicatedReducerNumber = "+unreplicatedReducerNumber+
-						   "ApplicationName = "+ApplicationNumberwithReplicaNumber
+						   "ApplicationName = "+ApplicationNumberwithReplicaNumber_withOutputName
 						   );
 				    for(int i =0;i<replicasHashes.length;i++)
 					{
@@ -279,25 +287,25 @@ public static PrintWriter writer;
 				{
 				    System.out.println("ENTERED local_BFT_flag==2");
 				    
-				    if(ApplicationNumberBase_Touch.containsKey(ApplicationNumberBase))
+				    if(ApplicationNumberBase_Touch.containsKey(ApplicationNumberBase_withOutputName))
 				    {
-						ApplicationNumberBase_Touch.put(ApplicationNumberBase, ApplicationNumberBase_Touch.get(ApplicationNumberBase)+1);
+						ApplicationNumberBase_Touch.put(ApplicationNumberBase_withOutputName, ApplicationNumberBase_Touch.get(ApplicationNumberBase_withOutputName)+1);
 				    }
 				    else
 				    {
-					    ApplicationNumberBase_Touch.put(ApplicationNumberBase, 1);//first time to see the app, put 1 touch
+					    ApplicationNumberBase_Touch.put(ApplicationNumberBase_withOutputName, 1);//first time to see the app, put 1 touch
 				    }
 				    
-				    if(AMsMap.containsKey(ApplicationNumberwithReplicaNumber))//we have the application
+				    if(AMsMap.containsKey(ApplicationNumberwithReplicaNumber_withOutputName))//we have the application
 					{
 					    System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))");
 					    //if(AMsMap.get(ApplicationName) != null)//this application has received reducers before
 					    {
 						//temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
-						AMsMap.get(ApplicationNumberwithReplicaNumber).put(receivedReducerNumber, receivedHash);
-						hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber, hash_sum_per_App_replica.get(ApplicationNumberwithReplicaNumber)+receivedHash);
+						AMsMap.get(ApplicationNumberwithReplicaNumber_withOutputName).put(receivedReducerNumber, receivedHash);
+						hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber_withOutputName, hash_sum_per_App_replica.get(ApplicationNumberwithReplicaNumber_withOutputName)+receivedHash);
 						System.out.println("---22");
-						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber).size());
+						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber_withOutputName).size());
 						//temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
 						//System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
 						//temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
@@ -320,12 +328,12 @@ public static PrintWriter writer;
 					    //System.out.println("temp_replicasHashes_forbft2_MAP.size() = "+temp_replicasHashes_forbft2_MAP.size());
 					    //temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 					    System.out.println("---2");
-					    AMsMap.put(ApplicationNumberwithReplicaNumber, new_replicasHashes_forbft2_MAP);
-					    hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber, receivedHash);
+					    AMsMap.put(ApplicationNumberwithReplicaNumber_withOutputName, new_replicasHashes_forbft2_MAP);
+					    hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber_withOutputName, receivedHash);
 					    //AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
 					    System.out.println("AMsMap.get(ApplicationNumberwithReplicaNumber).size() = "
-					    +AMsMap.get(ApplicationNumberwithReplicaNumber).size());
+					    +AMsMap.get(ApplicationNumberwithReplicaNumber_withOutputName).size());
 					    System.out.println("---3");
 					    //temp_replicasHashes_forbft2_MAP.clear();
 					    System.out.println("---4");
@@ -336,7 +344,7 @@ public static PrintWriter writer;
 				    System.out.println("receivedReducerNumber = "+receivedReducerNumber+
 						   " receivedTaskAttemptID = " + receivedTaskAttemptID +
 						   " receivedHash = " + receivedHash +
-						   " ApplicationNumberwithReplicaNumber = "+ApplicationNumberwithReplicaNumber+
+						   " ApplicationNumberwithReplicaNumber = "+ApplicationNumberwithReplicaNumber_withOutputName+
 						   " AMsMap.size()"+AMsMap.size()
 						   );
 				    for (Map.Entry<String, Map<Integer, Long>> AppEntry: AMsMap.entrySet())
@@ -359,23 +367,23 @@ public static PrintWriter writer;
 				    System.out.println("---------------------------------------------------------------------------");
 				    
 				    
-				    System.out.println("ApplicationNumberBase_Touch.get(ApplicationNumberBase) = "
-				    +ApplicationNumberBase_Touch.get(ApplicationNumberBase));
+				    System.out.println("ApplicationNumberBase_Touch.get(ApplicationNumberBase_withOutputName) = "
+				    +ApplicationNumberBase_Touch.get(ApplicationNumberBase_withOutputName));
 				    
 				    //TODO : should be ==local_NUM_REDUCES*local_NUM_REPLICAS in case you have different replication factors
 				    //if(Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberBase)==4) 
-				    if(ApplicationNumberBase_Touch.get(ApplicationNumberBase)==local_NUM_REDUCES*4)
+				    if(ApplicationNumberBase_Touch.get(ApplicationNumberBase_withOutputName)==local_NUM_REDUCES*4)
 				    {
-				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase);
+				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase_withOutputName);
 				    	int q=0;//hash_sum_per_App loop variable
 				    	//Map.Entry<String,int> entry = new AbstractMap.SimpleEntry<String, int>("exmpleString", 42);
 				    	Map.Entry<String,Long> tempEntry = new AbstractMap.SimpleEntry<String, Long>(" ",(long) 0);//("exmpleString", (long)42);
 				    	allofthem=false;
 				    	for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    	{//in case we have many applications running in parallel; check for the ApplicationNumberBase first
-				    		if(hash_sum_per_App_Entery.getKey().split("_")[0].equals(ApplicationNumberBase))
+				    		if(hash_sum_per_App_Entery.getKey().split("_")[1].equals(ApplicationNumberBase_withOutputName))
 				    		{
-				    			System.out.println("ENTERED if(hash_sum_per_App_Entery.getKey().split(\"_\")[0].equals(ApplicationNumberBase))");
+				    			System.out.println("ENTERED if(hash_sum_per_App_Entery.getKey().split(\"_\")[0].equals(ApplicationNumberBase_withOutputName))");
 				    			if(q==0)
 				    			{
 				    				System.out.println("ENTERED if(q==0)");
@@ -403,11 +411,11 @@ public static PrintWriter writer;
 				    	
 				    	if (allofthem==true)
 						{
-						    System.out.println("ALL CORRECT FOR APPLICATION "+ApplicationNumberBase);
+						    System.out.println("ALL CORRECT FOR APPLICATION "+ApplicationNumberBase_withOutputName);
 						    for(clientThread x:client_Threads_List)
 							{
 							    System.out.println("client_Threads_List.size() = "+client_Threads_List.size());
-							    x.os.println(ApplicationNumberBase);//unreplicatedReducerNumber);//x.os.println("XXXX");   
+							    x.os.println(ApplicationNumberBase_withOutputName);//unreplicatedReducerNumber);//x.os.println("XXXX");   
 							}
 						}
 				    }
