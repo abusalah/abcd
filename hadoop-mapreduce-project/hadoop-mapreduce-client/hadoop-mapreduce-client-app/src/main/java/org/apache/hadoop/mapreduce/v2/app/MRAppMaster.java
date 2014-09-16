@@ -318,7 +318,7 @@ public static final Object lock = new Object();
       newApiCommitter = true;
       LOG.info("Using mapred newApiCommitter.");
     }
-    
+
     boolean copyHistory = false;
     try {
       String user = UserGroupInformation.getCurrentUser().getShortUserName();
