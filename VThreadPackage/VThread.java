@@ -379,6 +379,8 @@ public static PrintWriter writer;
 				    	//Map.Entry<String,int> entry = new AbstractMap.SimpleEntry<String, int>("exmpleString", 42);
 				    	Map.Entry<String,Long> tempEntry = new AbstractMap.SimpleEntry<String, Long>(" ",(long) 0);//("exmpleString", (long)42);
 				    	allofthem=false;
+				    	System.out.println("-----");
+				    	System.out.println("hash_sum_per_App_replica.size() = "+hash_sum_per_App_replica.size());
 				    	for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    	{//in case we have many applications running in parallel; check for the ApplicationNumberBase first
 				    		
