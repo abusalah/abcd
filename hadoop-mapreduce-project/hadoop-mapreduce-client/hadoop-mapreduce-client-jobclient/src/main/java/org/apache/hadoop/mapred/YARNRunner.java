@@ -802,6 +802,7 @@ public class YARNRunner implements ClientProtocol {
     vargs.add(mrAppMasterUserOptions);
     
     vargs.add(MRJobConfig.APPLICATION_MASTER_CLASS);
+    vargs.add("testingARG");//new for bft just for testing
     vargs.add("1>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR +
         Path.SEPARATOR + ApplicationConstants.STDOUT);
     vargs.add("2>" + ApplicationConstants.LOG_DIR_EXPANSION_VAR +
@@ -818,6 +819,9 @@ public class YARNRunner implements ClientProtocol {
 
     LOG.debug("Command to launch container for ApplicationMaster is : "
         + mergedCommand);
+    
+    System.out.println("\n\n\n__________________________________________Command to launch container for ApplicationMaster is : "
+            + mergedCommand+"\n\n\n");
 
     // Setup the CLASSPATH in environment
     // i.e. add { Hadoop jars, job jar, CWD } to classpath.
