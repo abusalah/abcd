@@ -224,7 +224,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	 
 	 System.out.println("~~~~~~~~~~~~~~~~~~~~~~context.getWorkingDirectory() = "+context.getWorkingDirectory());
 	  
-	 System.out.println("~~in Reducer.java~~~FileOutputFormat.getOutputPath(context) = "+FileOutputFormat.getOutputPath(context));
+	 
 	  
 if(local_BFT_flag==1)	 
 {
@@ -254,6 +254,11 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
 	  int reducerNumber = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[4]);
 	  long applicationNumber_1 = Long.parseLong(context.getTaskAttemptID().toString().split("_")[1]);
 	  int applicationNumber_2 = Integer.parseInt(context.getTaskAttemptID().toString().split("_")[2]);
+	  String outputFileFullPathOnHDFS = FileOutputFormat.getOutputPath(context).toString();
+	  String lineReceivedCompare = outputFileFullPathOnHDFS.substring(0, outputFileFullPathOnHDFS.length()-1)
+			  +"_"+Long.toString(applicationNumber_1);
+	  System.out.println("~~in Reducer.java~~~outputFileFullPathOnHDFS = "+outputFileFullPathOnHDFS);
+	  System.out.println("~~in Reducer.java~~~lineReceivedCompare = "+lineReceivedCompare);
 	  if(local_BFT_flag==3)
 	  {
 		  //int local_NUM_REPLICAS = context.getConfiguration().getInt(MRJobConfig.NUM_REPLICAS,4);
@@ -335,7 +340,7 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
     	  +context.getTaskAttemptID().toString()+" external_total_hash = "+external_total_hash);
     	  
     	  totalHash=0;//just for now for testing    	  
-    	  stringToSend=flags_to_send+" "+FileOutputFormat.getOutputPath(context)+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
+    	  stringToSend=flags_to_send+" "+outputFileFullPathOnHDFS+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
     	  
     	  
     	  try {
@@ -385,11 +390,7 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
 						if(local_BFT_flag==2)
 						{
 							System.out.println("ENTERED local_BFT_flag==2)");
-							System.out.println("context.getConfiguration().get(\"allAppsString_forbft2\") = "
-							+context.getConfiguration().get("allAppsString_forbft2"));
-							System.out.println("context.getConfiguration().get(\"numApps_forbft2\") = "
-							+context.getConfiguration().get("numApps_forbft2"));
-							if (Long.parseLong(responseLine)==applicationNumber_1)//here add if bft =...AM & unre
+							if (responseLine.equals(lineReceivedCompare))//here add if bft =...AM & unre
 							{	
 								System.out.println("Entered XXX for local_BFT_flag==2------");
 								break;
