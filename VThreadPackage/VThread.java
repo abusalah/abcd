@@ -381,9 +381,10 @@ public static PrintWriter writer;
 				    	allofthem=false;
 				    	for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    	{//in case we have many applications running in parallel; check for the ApplicationNumberBase first
-				    		if(hash_sum_per_App_Entery.getKey().split("_")[1].equals(ApplicationNumberBase_withOutputName))
+				    		if(hash_sum_per_App_Entery.getKey().split("_")[0].equals(ApplicationNumberBase_withOutputName.split("_")[0])
+				    				&& hash_sum_per_App_Entery.getKey().split("_")[1].equals(ApplicationNumberBase_withOutputName.split("_")[1]))
 				    		{
-				    			System.out.println("ENTERED if(hash_sum_per_App_Entery.getKey().split(\"_\")[0].equals(ApplicationNumberBase_withOutputName))");
+				    			System.out.println("ENTERED if(hash_sum_per_App_Entery.getKey().split(.....) equals(ApplicationNumberBase_withOutputName))");
 				    			if(q==0)
 				    			{
 				    				System.out.println("ENTERED if(q==0)");
