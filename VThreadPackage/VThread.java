@@ -59,7 +59,7 @@ public static PrintWriter writer;
 		e1.printStackTrace();
 	    }
 	      
-	    System.out.println("inside run() inside VerifierThreadClass class inside YARNRunner.java");
+	    System.out.println("inside run()");
 	    //temp_replicasHashes_forbft2_LIST = new ArrayList<Long>(local_NUM_REDUCES);
 	    try {
 		serverSocket = new ServerSocket(2226);
@@ -157,14 +157,15 @@ public static PrintWriter writer;
 		    lineReceived = is.readLine();//NOTE the difference between os and System.out
 		    if(lineReceived!=null && !lineReceived.isEmpty())
 			{
-			    System.out.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
-			    writer.println("lineReceived inside YARNRunner from reducer = "+lineReceived); 
+			    System.out.println("lineReceived from reducer = "+lineReceived); 
+			    writer.println("lineReceived from reducer = "+lineReceived); 
 			    
 			    local_BFT_flag = Integer.parseInt(lineReceived.split(" ")[0].split("-")[0]);//conf.getInt("mapred.job.bft", 1);
 			    local_NUM_REPLICAS = Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
 			    local_NUM_REDUCES = Integer.parseInt(lineReceived.split(" ")[0].split("-")[2]);//conf.getInt("mapreduce.job.reduces",1); 
 			    if(resetArraysFlag==0)//new application for bft=3, need new arrays
 			    {
+			    	System.out.println("ENTERED if(resetArraysFlag==0)");
 				    replicasHashes = new Long[local_NUM_REDUCES];
 				    replicasHashes_set = new int[local_NUM_REDUCES/local_NUM_REPLICAS]; 
 				    resetArraysFlag=1;
@@ -196,6 +197,9 @@ public static PrintWriter writer;
 				{
 				    System.out.println("ENTERED local_BFT_flag==3");
 				    unreplicatedReducerNumber = (int) Math.floor(receivedReducerNumber/local_NUM_REPLICAS); 
+				    System.out.println("unreplicatedReducerNumber = "+unreplicatedReducerNumber);
+				    System.out.println("replicasHashes.length = "+replicasHashes.length);
+				    System.out.println("replicasHashes_set.length = "+replicasHashes_set.length);
 				    replicasHashes[receivedReducerNumber]=receivedHash;
 				    replicasHashes_set[unreplicatedReducerNumber]+=1;
 				                    
