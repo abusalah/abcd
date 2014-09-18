@@ -224,11 +224,13 @@ public static PrintWriter writer;
 				    if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
 					{
 				    	resetArraysFlagCount++;
-				    	System.out.println("resetArraysFlagCount++");
+				    	System.out.println("resetArraysFlagCount = "+resetArraysFlagCount);
+				    	System.out.println("local_NUM_REDUCES/local_NUM_REPLICAS = "+local_NUM_REDUCES/local_NUM_REPLICAS);
 				    	if(resetArraysFlagCount==local_NUM_REDUCES/local_NUM_REPLICAS)//which is basically the original number of reducers
 				    	{
 				    		System.out.println("ENTERED if(resetArraysFlagCount==local_NUM_REDUCES/local_NUM_REPLICAS)");
 				    		resetArraysFlag=0;
+				    		resetArraysFlagCount=0;
 				    	}
 				    	allofthem=false;
 					    for(int i=0;i<local_NUM_REPLICAS-1;i++)//NOTE ... that it is from 0 to <local_NUM_REPLICAS-1 ... which means 0 to =local_NUM_REPLICAS-2  
