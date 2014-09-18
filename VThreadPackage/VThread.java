@@ -284,6 +284,15 @@ public static PrintWriter writer;
 						      
 						       
 						}
+					    
+					    if(resetArraysFlag==0)//new application for bft=3, need new arrays
+					    {
+					    	System.out.println("ENTERED if(resetArraysFlag==0)");
+						    replicasHashes = new Long[local_NUM_REDUCES];
+						    replicasHashes_set = new int[local_NUM_REDUCES/local_NUM_REPLICAS]; 
+						    resetArraysFlag=1;
+					    }
+					    
 					}
 				                    
 				}
