@@ -217,6 +217,9 @@ public class TaskHeartbeatHandler extends AbstractService {
               (currentTime > (entry.getValue().getLastProgress() + taskTimeOut));
            
           if(taskTimedOut) {
+        	  
+        	  System.out.println("ENTERED if(taskTimedOut)");
+        	  
             // task is lost, remove from the list and raise lost event
             iterator.remove();
             eventHandler.handle(new TaskAttemptDiagnosticsUpdateEvent(entry
