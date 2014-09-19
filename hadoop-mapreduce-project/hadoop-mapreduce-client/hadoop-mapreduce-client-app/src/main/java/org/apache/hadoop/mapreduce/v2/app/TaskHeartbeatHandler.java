@@ -207,8 +207,12 @@ public class TaskHeartbeatHandler extends AbstractService {
         // avoid calculating current time everytime in loop
         long currentTime = clock.getTime();
 
+        System.out.println("\n\n_____________________________________________________START PingChecker PRINTING_____________________________________________________\n\n");
         while (iterator.hasNext()) {
           Map.Entry<TaskAttemptId, ReportTime> entry = iterator.next();
+          
+          System.out.println("TaskAttemptId = "+entry.getKey().toString()+" ReportTime = "+entry.getValue().toString());
+          
           boolean taskTimedOut = (taskTimeOut > 0) && 
               (currentTime > (entry.getValue().getLastProgress() + taskTimeOut));
            
@@ -221,6 +225,7 @@ public class TaskHeartbeatHandler extends AbstractService {
             eventHandler.handle(new TaskAttemptEvent(entry.getKey(),TaskAttemptEventType.TA_TIMED_OUT));
           }
         }
+        System.out.println("\n\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~END PingChecker PRINTING~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n\n");
         try {
           Thread.sleep(taskTimeOutCheckInterval);
         } catch (InterruptedException e) {
@@ -232,6 +237,74 @@ public class TaskHeartbeatHandler extends AbstractService {
       
     }
   }
+  
+  
+ 
+  //EVERYTHING BELOW IS NOT USED
+  //WE USED IT FOR THE THE VERIFIER CLASS, BUT NOW THE VERIFIER IS IN A SEPARATE JAR
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   
   
   
