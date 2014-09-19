@@ -222,7 +222,42 @@ public class WordCount {
 	    FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
 	    FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]+Integer.toString(i)));
 	    //System.exit(job.waitForCompletion(true) ? 0 : 1);
-	    job.submit();
+	    
+	    
+	    switch (BFT_FLAG_LOCAL) 
+		{
+	        case 1://No BFT
+	        {
+	        	System.out.println("------in WordCount.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+	        	job.waitForCompletion(true);
+	        	break;
+	        }
+	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+	        {
+	        	System.out.println("------in WordCount.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+	        	job.submit();
+	        	break;	        
+	        }
+	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+	        {
+	        	System.out.println("------in WordCount.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+	        	job.waitForCompletion(true);
+	        	break;
+	        }
+	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+	        {
+	        	//Not used
+	        	break;	        
+	        }
+	        default://deal with it as No BFT
+	        {
+	        	System.out.println("------in WordCount.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
+	        	job.waitForCompletion(true);
+	        	break;
+	        }
+		}
+	    //job.submit();
+	    
 	   
 //	    System.out.println("Before job.getJar() = "+job.getJar());
 //	    

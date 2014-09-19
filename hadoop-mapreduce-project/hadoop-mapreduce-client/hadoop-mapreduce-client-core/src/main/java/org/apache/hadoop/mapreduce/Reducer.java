@@ -224,7 +224,8 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	 
 	 System.out.println("~~~~~~~~~~~~~~~~~~~~~~context.getWorkingDirectory() = "+context.getWorkingDirectory());
 	 
-	 Thread.sleep(3000);//just for testing the ping checker
+	 System.out.println("Reducer is sleeping for 10000 milli seconds just for testing the ping checker");
+	 Thread.sleep(10000);//just for testing the ping checker
 	  
 	 
 	  
