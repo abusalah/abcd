@@ -224,9 +224,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	 
 	 System.out.println("~~~~~~~~~~~~~~~~~~~~~~context.getWorkingDirectory() = "+context.getWorkingDirectory());
 	 
-	 System.out.println("Reducer is sleeping for 10000 milli seconds just for testing the ping checker");
-	 Thread.sleep(10000);//just for testing the ping checker
-	  
+	 
 	 
 	  
 if(local_BFT_flag==1)	 
@@ -325,6 +323,10 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
       
       if(reducerORmapper.equals("r"))
       {
+    	  
+    	  System.out.println("Reducer is sleeping for 10000 milli seconds just for testing the ping checker");
+    		 Thread.sleep(10000);//just for testing the ping checker
+    		  
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
     	  
