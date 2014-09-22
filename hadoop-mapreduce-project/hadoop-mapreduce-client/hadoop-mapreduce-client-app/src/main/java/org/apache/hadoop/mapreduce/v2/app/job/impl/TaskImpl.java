@@ -929,6 +929,14 @@ public abstract class TaskImpl implements Task, EventHandler<TaskEvent> {
       implements SingleArcTransition<TaskImpl, TaskEvent> {
     @Override
     public void transition(TaskImpl task, TaskEvent event) {
+    	
+    	System.out.println("\n\n~~~ENTERED AttemptSucceededTransition public void transition(TaskImpl task, TaskEvent event) \n\n");
+    	
+    	System.out.println("___________AttemptSucceededTransition_______________Thread.currentThread().getStackTrace() = ");
+    	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+    	
+    	
       TaskTAttemptEvent taskTAttemptEvent = (TaskTAttemptEvent) event;
       TaskAttemptId taskAttemptId = taskTAttemptEvent.getTaskAttemptID();
       task.handleTaskAttemptCompletion(
