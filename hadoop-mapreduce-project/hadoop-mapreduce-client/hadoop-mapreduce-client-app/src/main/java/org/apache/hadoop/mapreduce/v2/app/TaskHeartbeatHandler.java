@@ -213,7 +213,7 @@ public class TaskHeartbeatHandler extends AbstractService {
           
           System.out.println("TaskAttemptId = "+entry.getKey().toString()+" ReportTime = "+entry.getValue().toString());
           
-          if(entry.getKey().toString().equals("attempt_1411152532686_0002_r_000002_0"))
+          if(entry.getKey().toString().contains("r_000002_0"))
           {
         	  System.out.println("\n ENTERED if(entry.getKey().toString().equals(attempt_1411152532686_0002_r_000002_0) \n");
         	  eventHandler.handle(new TaskAttemptEvent(entry.getKey(),TaskAttemptEventType.TA_KILL));
