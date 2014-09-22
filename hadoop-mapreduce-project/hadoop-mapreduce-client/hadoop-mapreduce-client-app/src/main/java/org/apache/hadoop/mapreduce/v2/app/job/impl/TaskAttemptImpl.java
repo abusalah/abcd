@@ -1062,9 +1062,9 @@ public abstract class TaskAttemptImpl implements
   @Override
   public void handle(TaskAttemptEvent event) {
 	  System.out.println("-_-_-_-_-_-_ inside handle insdie TaskAttemptImpl.java");
+	  System.out.println("-_-_-_-_-_-_Processing " + event.getTaskAttemptID() + " of type " + event.getType());
     if (LOG.isDebugEnabled()) {
-      LOG.debug("Processing " + event.getTaskAttemptID() + " of type "
-          + event.getType());
+      LOG.debug("Processing " + event.getTaskAttemptID() + " of type " + event.getType());
     }
     writeLock.lock();
     try {
@@ -1084,6 +1084,9 @@ public abstract class TaskAttemptImpl implements
           LOG.info(attemptId + " TaskAttempt Transitioned from " 
            + oldState + " to "
            + getInternalState());
+          System.out.println(attemptId + " TaskAttempt Transitioned from " 
+                  + oldState + " to "
+                  + getInternalState());
       }
     } finally {
       writeLock.unlock();

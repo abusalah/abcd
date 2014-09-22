@@ -26,6 +26,8 @@ import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.task.ReduceContextImpl;
 import org.apache.hadoop.mapreduce.task.annotation.Checkpointable;
+import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
+import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEventType;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
@@ -53,6 +55,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 
 
+
+import org.apache.hadoop.yarn.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -166,6 +170,9 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	public static int finalValue=0;
 	public static long external_total_hash = 0;
 	
+    //public EventHandler eventHandler2;
+
+	
 	
    /**
    * The <code>Context</code> passed on to the {@link Reducer} implementations.
@@ -206,6 +213,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
     // NOTHING
   }
 
+  
   /**
    * Advanced application writers can use the 
    * {@link #run(org.apache.hadoop.mapreduce.Reducer.Context)} method to
@@ -225,7 +233,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	 System.out.println("~~~~~~~~~~~~~~~~~~~~~~context.getWorkingDirectory() = "+context.getWorkingDirectory());
 	 
 	 
-	 
+	 //eventHandler2.handle(new TaskAttemptEvent(context.getTaskAttemptID(),TaskAttemptEventType.TA_TIMED_OUT));
 	  
 if(local_BFT_flag==1)	 
 {
@@ -346,6 +354,7 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
     	  
     	  totalHash=0;//just for now for testing    	  
     	  stringToSend=flags_to_send+" "+outputFileFullPathOnHDFS+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
+    	  
     	  
     	  
     	  try {

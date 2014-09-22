@@ -181,7 +181,7 @@ public class TaskAttemptListenerImpl extends CompositeService
    */
   @Override
   public boolean canCommit(TaskAttemptID taskAttemptID) throws IOException {
-    LOG.info("Commit go/no-go request from " + taskAttemptID.toString());
+    LOG.info("__~TaskAttemptListenerImpl.java~_______________________________________________________Commit go/no-go request from " + taskAttemptID.toString());
     // An attempt is asking if it can commit its output. This can be decided
     // only by the task which is managing the multiple attempts. So redirect the
     // request there.
@@ -216,7 +216,7 @@ public class TaskAttemptListenerImpl extends CompositeService
   @Override
   public void commitPending(TaskAttemptID taskAttemptID, TaskStatus taskStatsu)
           throws IOException, InterruptedException {
-    LOG.info("Commit-pending state update from " + taskAttemptID.toString());
+    LOG.info("__~TaskAttemptListenerImpl.java~_________________________________________________________Commit-pending state update from " + taskAttemptID.toString());
     // An attempt is asking if it can commit its output. This can be decided
     // only by the task which is managing the multiple attempts. So redirect the
     // request there.
@@ -233,7 +233,7 @@ public class TaskAttemptListenerImpl extends CompositeService
   @Override
   public void preempted(TaskAttemptID taskAttemptID, TaskStatus taskStatus)
           throws IOException, InterruptedException {
-    LOG.info("Preempted state update from " + taskAttemptID.toString());
+    LOG.info("__~TaskAttemptListenerImpl.java~__________________________________________________________________Preempted state update from " + taskAttemptID.toString());
     // An attempt is telling us that it got preempted.
     org.apache.hadoop.mapreduce.v2.api.records.TaskAttemptId attemptID =
         TypeConverter.toYarn(taskAttemptID);
@@ -248,7 +248,7 @@ public class TaskAttemptListenerImpl extends CompositeService
 
   @Override
   public void done(TaskAttemptID taskAttemptID) throws IOException {
-    LOG.info("Done acknowledgement from " + taskAttemptID.toString());
+    LOG.info("__~TaskAttemptListenerImpl.java~_________________________________________________________________Done acknowledgement from " + taskAttemptID.toString());
 
     org.apache.hadoop.mapreduce.v2.api.records.TaskAttemptId attemptID =
         TypeConverter.toYarn(taskAttemptID);
@@ -263,7 +263,7 @@ public class TaskAttemptListenerImpl extends CompositeService
   public void fatalError(TaskAttemptID taskAttemptID, String msg)
       throws IOException {
     // This happens only in Child and in the Task.
-    LOG.fatal("Task: " + taskAttemptID + " - exited : " + msg);
+    LOG.fatal("__~TaskAttemptListenerImpl.java~_______________________________________________________________Task: " + taskAttemptID + " - exited : " + msg);
     reportDiagnosticInfo(taskAttemptID, "Error: " + msg);
 
     org.apache.hadoop.mapreduce.v2.api.records.TaskAttemptId attemptID =
@@ -280,7 +280,7 @@ public class TaskAttemptListenerImpl extends CompositeService
   public void fsError(TaskAttemptID taskAttemptID, String message)
       throws IOException {
     // This happens only in Child.
-    LOG.fatal("Task: " + taskAttemptID + " - failed due to FSError: "
+    LOG.fatal("__~TaskAttemptListenerImpl.java~____________________________________________________________Task: " + taskAttemptID + " - failed due to FSError: "
         + message);
     reportDiagnosticInfo(taskAttemptID, "FSError: " + message);
 
@@ -303,7 +303,7 @@ public class TaskAttemptListenerImpl extends CompositeService
   public MapTaskCompletionEventsUpdate getMapCompletionEvents(
       JobID jobIdentifier, int startIndex, int maxEvents,
       TaskAttemptID taskAttemptID) throws IOException {
-    LOG.info("MapCompletionEvents request from " + taskAttemptID.toString()
+    LOG.info("__~TaskAttemptListenerImpl.java~___________________________________________________________MapCompletionEvents request from " + taskAttemptID.toString()
         + ". startIndex " + startIndex + " maxEvents " + maxEvents);
 
     // TODO: shouldReset is never used. See TT. Ask for Removal.
@@ -323,7 +323,7 @@ public class TaskAttemptListenerImpl extends CompositeService
   public void reportDiagnosticInfo(TaskAttemptID taskAttemptID, String diagnosticInfo)
  throws IOException {
     diagnosticInfo = StringInterner.weakIntern(diagnosticInfo);
-    LOG.info("Diagnostics report from " + taskAttemptID.toString() + ": "
+    LOG.info("__~TaskAttemptListenerImpl.java~___________________________________________________________Diagnostics report from " + taskAttemptID.toString() + ": "
         + diagnosticInfo);
 
     org.apache.hadoop.mapreduce.v2.api.records.TaskAttemptId attemptID =
@@ -354,14 +354,14 @@ public class TaskAttemptListenerImpl extends CompositeService
     if (getConfig().getBoolean(MRJobConfig.TASK_PREEMPTION, false)
         && preemptionPolicy.isPreempted(yarnAttemptID)) {
       feedback.setPreemption(true);
-      LOG.info("Setting preemption bit for task: "+ yarnAttemptID
+      LOG.info("__~TaskAttemptListenerImpl.java~___________________________________________________________________Setting preemption bit for task: "+ yarnAttemptID
           + " of type " + yarnAttemptID.getTaskId().getTaskType());
     }
 
     if (taskStatus == null) {
       //We are using statusUpdate only as a simple ping
       if (LOG.isDebugEnabled()) {
-        LOG.debug("Ping from " + taskAttemptID.toString());
+        LOG.debug("__~TaskAttemptListenerImpl.java~_______________________________________________________________________Ping from " + taskAttemptID.toString());
       }
       return feedback;
     }
@@ -374,7 +374,7 @@ public class TaskAttemptListenerImpl extends CompositeService
     taskAttemptStatus.id = yarnAttemptID;
     // Task sends the updated progress to the TT.
     taskAttemptStatus.progress = taskStatus.getProgress();
-    LOG.info("Progress of TaskAttempt " + taskAttemptID + " is : "
+    LOG.info("__~TaskAttemptListenerImpl.java~______________________________________________________________________Progress of TaskAttempt " + taskAttemptID + " is : "
         + taskStatus.getProgress());
     // Task sends the updated state-string to the TT.
     taskAttemptStatus.stateString = taskStatus.getStateString();
@@ -453,7 +453,7 @@ public class TaskAttemptListenerImpl extends CompositeService
     // A rough imitation of code from TaskTracker.
 
     JVMId jvmId = context.jvmId;
-    LOG.info("JVM with ID : " + jvmId + " asked for a task");
+    LOG.info("__~TaskAttemptListenerImpl.java~_________________________________________________________________________JVM with ID : " + jvmId + " asked for a task");
 
     JvmTask jvmTask = null;
     // TODO: Is it an authorized container to get a task? Otherwise return null.
@@ -467,12 +467,12 @@ public class TaskAttemptListenerImpl extends CompositeService
     // Try to look up the task. We remove it directly as we don't give
     // multiple tasks to a JVM
     if (!jvmIDToActiveAttemptMap.containsKey(wJvmID)) {
-      LOG.info("JVM with ID: " + jvmId + " is invalid and will be killed.");
+      LOG.info("__~TaskAttemptListenerImpl.java~___________________________________________________________JVM with ID: " + jvmId + " is invalid and will be killed.");
       jvmTask = TASK_FOR_INVALID_JVM;
     } else {
       if (!launchedJVMs.contains(wJvmID)) {
         jvmTask = null;
-        LOG.info("JVM with ID: " + jvmId
+        LOG.info("__~TaskAttemptListenerImpl.java~___________________________________________________________JVM with ID: " + jvmId
             + " asking for task before AM launch registered. Given null task");
       } else {
         // remove the task as it is no more needed and free up the memory.
@@ -481,7 +481,7 @@ public class TaskAttemptListenerImpl extends CompositeService
         org.apache.hadoop.mapred.Task task =
             jvmIDToActiveAttemptMap.remove(wJvmID);
         launchedJVMs.remove(wJvmID);
-        LOG.info("JVM with ID: " + jvmId + " given task: " + task.getTaskID());
+        LOG.info("__~TaskAttemptListenerImpl.java~___________________________________________________________JVM with ID: " + jvmId + " given task: " + task.getTaskID());
         jvmTask = new JvmTask(task, false);
       }
     }

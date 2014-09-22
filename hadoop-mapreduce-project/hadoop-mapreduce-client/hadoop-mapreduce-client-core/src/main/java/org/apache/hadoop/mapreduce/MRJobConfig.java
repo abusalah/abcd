@@ -31,9 +31,9 @@ public interface MRJobConfig {
   // Put all of the attribute names in here so that Job and JobContext are
   // consistent.	
 
-  public static final String allAppsString_forbft2 = "mapred.job.allAppsString_forbft2";//---new for bft
+  //public static final String allAppsString_forbft2 = "mapred.job.allAppsString_forbft2";//---new for bft
   
-  public static final String numApps_forbft2 = "0";//---new for bft
+  //public static final String numApps_forbft2 = "0";//---new for bft
 	
   public static final String BFT_FLAG = "mapred.job.bft";//---new for bft
   

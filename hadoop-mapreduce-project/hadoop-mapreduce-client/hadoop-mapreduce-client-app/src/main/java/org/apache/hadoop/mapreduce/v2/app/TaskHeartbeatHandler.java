@@ -213,6 +213,13 @@ public class TaskHeartbeatHandler extends AbstractService {
           
           System.out.println("TaskAttemptId = "+entry.getKey().toString()+" ReportTime = "+entry.getValue().toString());
           
+          if(entry.getKey().toString().equals("attempt_1411152532686_0002_r_000002_0"))
+          {
+        	  System.out.println("\n ENTERED if(entry.getKey().toString().equals(attempt_1411152532686_0002_r_000002_0) \n");
+        	  eventHandler.handle(new TaskAttemptEvent(entry.getKey(),TaskAttemptEventType.TA_KILL));
+        	  System.out.println("After the TA_KILL signal");
+          }
+          
           boolean taskTimedOut = (taskTimeOut > 0) && 
               (currentTime > (entry.getValue().getLastProgress() + taskTimeOut));
            
@@ -225,6 +232,8 @@ public class TaskHeartbeatHandler extends AbstractService {
             eventHandler.handle(new TaskAttemptDiagnosticsUpdateEvent(entry
                 .getKey(), "AttemptID:" + entry.getKey().toString()
                 + " ----____---- Timed out after " + taskTimeOut / 1000 + " secs"));
+            
+            
             eventHandler.handle(new TaskAttemptEvent(entry.getKey(),TaskAttemptEventType.TA_TIMED_OUT));
           }
         }
