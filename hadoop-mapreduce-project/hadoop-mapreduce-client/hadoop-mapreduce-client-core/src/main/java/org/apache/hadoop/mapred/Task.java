@@ -1007,6 +1007,11 @@ abstract public class Task implements Writable, Configurable {
   public void done(TaskUmbilicalProtocol umbilical,
                    TaskReporter reporter
                    ) throws IOException, InterruptedException {
+	  
+	  System.out.println("________who  is calling done ? __________________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+
+	  
     updateCounters();
     if (taskStatus.getRunState() == TaskStatus.State.PREEMPTED ) {
       // If we are preempted, do no output promotion; signal done and exit
