@@ -344,7 +344,7 @@ public class ReduceTask extends Task {
     boolean useNewApi = job.getUseNewReducer();
     initialize(job, getJobID(), reporter, useNewApi);
     
-    if(this.getTaskID().toString().equals("r_000002"))
+    if(this.getTaskID().toString().contains("r_000002"))
 	  {
     	System.out.println("ENTERED if(this.getTaskID().toString().equals(r_000002))");
     	done(umbilical, reporter);
