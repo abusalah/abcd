@@ -320,7 +320,7 @@ public class ReduceTask extends Task {
      }
   }
   
-  public static int globalV=0;
+  public static String globalVString=null;
 
   @Override
   @SuppressWarnings("unchecked")
@@ -330,9 +330,11 @@ public class ReduceTask extends Task {
 	  
 	  System.out.println("INSIDE ReduceTask.java in run function this.getTaskID().toString() = "+this.getTaskID().toString());
 	  
-	  System.out.println("(should be 0) globalV = "+globalV);
+	  globalVString=this.getTaskID().toString();
 	  
-	  globalV=1;
+	  System.out.println(" should be task ID globalVString = "+globalVString);
+	  
+	  //globalVString="1";
 	  
 	  
 	  
@@ -425,7 +427,7 @@ public class ReduceTask extends Task {
 
     shuffleConsumerPlugin.close();
     
-    System.out.println("(should be 2) globalV = "+globalV);
+    System.out.println(" should be 2 globalVString = "+globalVString);
     done(umbilical, reporter);
   }
   }

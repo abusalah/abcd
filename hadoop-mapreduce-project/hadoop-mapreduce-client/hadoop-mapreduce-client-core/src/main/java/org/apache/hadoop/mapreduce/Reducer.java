@@ -224,11 +224,11 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
   public void run(Context context) throws IOException, InterruptedException {
 	  
 	  
-	  System.out.println("(should be 1) ReduceTask.globalV = "+ReduceTask.globalV);
+	  System.out.println("(should be task ID ) ReduceTask.globalV = "+ReduceTask.globalVString);
 	  
-	  ReduceTask.globalV=2;
+	  ReduceTask.globalVString="2";
 	  
-	  System.out.println("(should be 2) ReduceTask.globalV = "+ReduceTask.globalV);
+	  System.out.println("(should be 2) ReduceTask.globalV = "+ReduceTask.globalVString);
 	  
 	 int local_BFT_flag = context.getConfiguration().getInt("mapred.job.bft", 1);//Integer.parseInt(conf.getInt("mapred.job.bft", 1);
 	 int local_NUM_REPLICAS = context.getConfiguration().getInt("mapred.job.numreplicas",4);//Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
