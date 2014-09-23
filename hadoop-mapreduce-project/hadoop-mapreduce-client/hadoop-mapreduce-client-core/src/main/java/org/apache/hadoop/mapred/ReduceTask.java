@@ -323,6 +323,16 @@ public class ReduceTask extends Task {
   @SuppressWarnings("unchecked")
   public void run(JobConf job, final TaskUmbilicalProtocol umbilical)
     throws IOException, InterruptedException, ClassNotFoundException {
+	  
+	  
+	  System.out.println("INSIDE ReduceTask.java in run function this.getTaskID().toString() = "+this.getTaskID().toString());
+	  
+//	  if(this.getTaskID().toString().equals())
+//	  {
+//		  
+//	  }
+	  
+	  
     job.setBoolean(JobContext.SKIP_RECORDS, isSkipping());
 
     if (isMapOrReduce()) {
