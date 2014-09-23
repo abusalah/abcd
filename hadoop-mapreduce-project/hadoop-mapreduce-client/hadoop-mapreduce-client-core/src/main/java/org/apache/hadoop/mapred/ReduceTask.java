@@ -648,7 +648,15 @@ public class ReduceTask extends Task {
                                                reporter, comparator, keyClass,
                                                valueClass);
     try {
-      reducer.run(reducerContext);
+    	
+    	if(this.getTaskID().toString().contains("r_000002"))
+    	{
+    		//Skip r_000002, and process all other reducers
+    	}
+    	else
+		{
+			reducer.run(reducerContext);
+		}
     } finally {
       trackedRW.close(reducerContext);
     }
