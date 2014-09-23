@@ -56,7 +56,7 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 
 
-import org.apache.hadoop.yarn.event.EventHandler;
+//import org.apache.hadoop.yarn.event.EventHandler;
 
 import java.util.ArrayList;
 import java.util.Iterator;

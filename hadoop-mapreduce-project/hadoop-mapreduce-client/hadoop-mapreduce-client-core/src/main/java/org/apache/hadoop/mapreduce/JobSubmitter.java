@@ -380,8 +380,8 @@ class JobSubmitter {
     		+" job.getJobID().getId() = "+job.getJobID().getId()
     		+" job.getJobID().getJtIdentifier() = "+job.getJobID().getJtIdentifier()+" allAppsString_forbft2 = "+allAppsString_forbft2
     		+" numApps_forbft2 = "+numApps_forbft2);
-    conf.set(MRJobConfig.allAppsString_forbft2, allAppsString_forbft2);
-    conf.set(MRJobConfig.numApps_forbft2, Integer.toString(numApps_forbft2));
+    //conf.set(MRJobConfig.allAppsString_forbft2, allAppsString_forbft2);
+    //conf.set(MRJobConfig.numApps_forbft2, Integer.toString(numApps_forbft2));
     System.out.println("______2____5__");
     Path submitJobDir = new Path(jobStagingArea, jobId.toString());
     JobStatus status = null;
