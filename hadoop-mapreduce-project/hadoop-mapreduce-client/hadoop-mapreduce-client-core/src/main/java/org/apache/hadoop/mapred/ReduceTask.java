@@ -649,6 +649,9 @@ public class ReduceTask extends Task {
                                                valueClass);
     try {
     	
+    	
+    	System.out.println("reducerContext.getTaskAttemptID().toString().contains(r_000002) = "+reducerContext.getTaskAttemptID().toString());
+    	
     	if(reducerContext.getTaskAttemptID().toString().contains("r_000002"))//(this.getTaskID().toString().contains("r_000002"))
     	{
     		
