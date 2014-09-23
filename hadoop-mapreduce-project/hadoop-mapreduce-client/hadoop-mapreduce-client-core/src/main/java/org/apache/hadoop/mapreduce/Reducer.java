@@ -39,6 +39,8 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 //import org.apache.hadoop.mapreduce.v2dfdfd//.app;//
 //import org.apache.hadoop.mapreduce.v2.app.*;
 
+import org.apache.hadoop.mapred.ReduceTask;
+
 
 //import org.apache.hadoop.ipc.Server;
 
@@ -220,6 +222,13 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    * control how the reduce task works.
    */
   public void run(Context context) throws IOException, InterruptedException {
+	  
+	  
+	  System.out.println("(should be 1) ReduceTask.globalV = "+ReduceTask.globalV);
+	  
+	  ReduceTask.globalV=2;
+	  
+	  System.out.println("(should be 2) ReduceTask.globalV = "+ReduceTask.globalV);
 	  
 	 int local_BFT_flag = context.getConfiguration().getInt("mapred.job.bft", 1);//Integer.parseInt(conf.getInt("mapred.job.bft", 1);
 	 int local_NUM_REPLICAS = context.getConfiguration().getInt("mapred.job.numreplicas",4);//Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);

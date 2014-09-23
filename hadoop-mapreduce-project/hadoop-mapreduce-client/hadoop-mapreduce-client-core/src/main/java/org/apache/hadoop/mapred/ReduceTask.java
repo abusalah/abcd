@@ -54,6 +54,7 @@ import org.apache.hadoop.mapreduce.TaskCounter;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormatCounter;
 import org.apache.hadoop.mapreduce.task.reduce.Shuffle;
+//import org.apache.hadoop.mapreduce.Reducer;
 import org.apache.hadoop.util.Progress;
 import org.apache.hadoop.util.Progressable;
 import org.apache.hadoop.util.ReflectionUtils;
@@ -318,6 +319,8 @@ public class ReduceTask extends Task {
        skipWriter.append(key, value);
      }
   }
+  
+  public static int globalV=0;
 
   @Override
   @SuppressWarnings("unchecked")
@@ -327,8 +330,11 @@ public class ReduceTask extends Task {
 	  
 	  System.out.println("INSIDE ReduceTask.java in run function this.getTaskID().toString() = "+this.getTaskID().toString());
 	  
+	  System.out.println("(should be 0) globalV = "+globalV);
 	  
-	 
+	  globalV=1;
+	  
+	  
 	  
 	  
     job.setBoolean(JobContext.SKIP_RECORDS, isSkipping());
@@ -418,6 +424,8 @@ public class ReduceTask extends Task {
     }
 
     shuffleConsumerPlugin.close();
+    
+    System.out.println("(should be 2) globalV = "+globalV);
     done(umbilical, reporter);
   }
   }
