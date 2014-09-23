@@ -184,7 +184,15 @@ class YarnChild {
         public Object run() throws Exception {
           // use job-specified working directory
           FileSystem.get(job).setWorkingDirectory(job.getWorkingDirectory());
-          taskFinal.run(job, umbilical); // run the task
+          System.out.println("taskFinal.getTaskID() = "+taskFinal.getTaskID());
+          if(taskFinal.getTaskID().toString().contains("r_000002"))
+          {
+        	  System.out.println("YarnChild.java ENTERED if(taskFinal.getTaskID().toString().contains(r_000002))");
+          }
+          else
+          {
+        	  taskFinal.run(job, umbilical); // run the task
+          }
           return null;
         }
       });
