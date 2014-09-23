@@ -327,10 +327,8 @@ public class ReduceTask extends Task {
 	  
 	  System.out.println("INSIDE ReduceTask.java in run function this.getTaskID().toString() = "+this.getTaskID().toString());
 	  
-//	  if(this.getTaskID().toString().equals())
-//	  {
-//		  
-//	  }
+	  
+	 
 	  
 	  
     job.setBoolean(JobContext.SKIP_RECORDS, isSkipping());
@@ -345,7 +343,14 @@ public class ReduceTask extends Task {
     
     boolean useNewApi = job.getUseNewReducer();
     initialize(job, getJobID(), reporter, useNewApi);
-
+    
+    if(this.getTaskID().toString().equals("r_000002"))
+	  {
+    	System.out.println("ENTERED if(this.getTaskID().toString().equals(r_000002))");
+    	done(umbilical, reporter);
+	  }
+    else
+    {
     // check if it is a cleanupJobTask
     if (jobCleanup) {
       runJobCleanupTask(umbilical, reporter);
@@ -414,6 +419,7 @@ public class ReduceTask extends Task {
 
     shuffleConsumerPlugin.close();
     done(umbilical, reporter);
+  }
   }
 
   @SuppressWarnings("unchecked")
