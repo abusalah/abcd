@@ -649,8 +649,10 @@ public class ReduceTask extends Task {
                                                valueClass);
     try {
     	
-    	if(this.getTaskID().toString().contains("r_000002"))
+    	if(reducerContext.getTaskAttemptID().toString().contains("r_000002"))//(this.getTaskID().toString().contains("r_000002"))
     	{
+    		
+    		System.out.println("ENTERED if(reducerContext.getTaskAttemptID().toString().contains(r_000002))");
     		//Skip r_000002, and process all other reducers
     	}
     	else
