@@ -26,8 +26,8 @@ import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.mapreduce.task.ReduceContextImpl;
 import org.apache.hadoop.mapreduce.task.annotation.Checkpointable;
-import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
-import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEventType;
+//import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
+//import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEventType;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 //import org.apache.hadoop.mapreduce.v2.app.job.event.TaskAttemptEvent;
