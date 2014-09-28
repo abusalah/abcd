@@ -231,7 +231,8 @@ public class TaskHeartbeatHandler extends AbstractService {
             iterator.remove();
             eventHandler.handle(new TaskAttemptDiagnosticsUpdateEvent(entry
                 .getKey(), "AttemptID:" + entry.getKey().toString()
-                + " ----____---- Timed out after " + taskTimeOut / 1000 + " secs"));
+                + " ----____---- Timed out after " + taskTimeOut / 1000 + " secs"));//bft- it will appear in the diagnositcs report in 
+            //DiagnosticInformationUpdater in TaskAttemptImpl.java (at the end of the TaskAttemptImpl.java file)
             
             
             eventHandler.handle(new TaskAttemptEvent(entry.getKey(),TaskAttemptEventType.TA_TIMED_OUT));

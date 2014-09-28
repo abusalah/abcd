@@ -352,13 +352,13 @@ public class ReduceTask extends Task {
     boolean useNewApi = job.getUseNewReducer();
     initialize(job, getJobID(), reporter, useNewApi);
     
-    if(this.getTaskID().toString().contains("r_000002"))
-	  {
-    	System.out.println("ENTERED if(this.getTaskID().toString().equals(r_000002))");
-    	done(umbilical, reporter);
-	  }
-    else
-    {
+//    if(this.getTaskID().toString().contains("r_000002"))
+//	  {
+//    	System.out.println("ENTERED if(this.getTaskID().toString().equals(r_000002))");
+//    	done(umbilical, reporter);
+//	  }
+    //else
+    
     // check if it is a cleanupJobTask
     if (jobCleanup) {
       runJobCleanupTask(umbilical, reporter);
@@ -429,7 +429,7 @@ public class ReduceTask extends Task {
     
     System.out.println(" should be 2 globalVString = "+globalVString);
     done(umbilical, reporter);
-  }
+  
   }
 
   @SuppressWarnings("unchecked")
@@ -660,18 +660,18 @@ public class ReduceTask extends Task {
     try {
     	
     	
-    	System.out.println("reducerContext.getTaskAttemptID().toString().contains(r_000002) = "+reducerContext.getTaskAttemptID().toString());
-    	
-    	if(reducerContext.getTaskAttemptID().toString().contains("r_000002"))//(this.getTaskID().toString().contains("r_000002"))
-    	{
-    		
-    		System.out.println("ENTERED if(reducerContext.getTaskAttemptID().toString().contains(r_000002))");
-    		//Skip r_000002, and process all other reducers
-    	}
-    	else
-		{
+//    	System.out.println("reducerContext.getTaskAttemptID().toString().contains(r_000002) = "+reducerContext.getTaskAttemptID().toString());
+//    	
+//    	if(reducerContext.getTaskAttemptID().toString().contains("r_000002"))//(this.getTaskID().toString().contains("r_000002"))
+//    	{
+//    		
+//    		System.out.println("ENTERED if(reducerContext.getTaskAttemptID().toString().contains(r_000002))");
+//    		//Skip r_000002, and process all other reducers
+//    	}
+//    	else
+		
 			reducer.run(reducerContext);
-		}
+		
     } finally {
       trackedRW.close(reducerContext);
     }
