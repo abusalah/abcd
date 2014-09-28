@@ -697,6 +697,8 @@ public class MapTask extends Task {
       int local_NUM_REPLICAS = conf.getInt(MRJobConfig.NUM_REPLICAS,4); 
             
       //System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
+      
+      System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in=========\n\n");
             
       String[] splittedTaskID = getTaskID().toString().split("_");
       String localMapID = splittedTaskID[4];
