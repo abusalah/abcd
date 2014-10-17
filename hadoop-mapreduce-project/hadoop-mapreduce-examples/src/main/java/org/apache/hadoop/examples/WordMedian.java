@@ -19,9 +19,13 @@ package org.apache.hadoop.examples;
  */
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
@@ -37,6 +41,10 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import com.google.common.base.Charsets;
 
@@ -177,12 +185,89 @@ public class WordMedian extends Configured implements Tool {
       System.err.println("Usage: wordmedian <in> <out>");
       return 0;
     }
+    
+    
+    int r3=0;//default//number of AM replicas
+	  int BFT_FLAG_LOCAL = 0;
+	  
+	  try {//---- mapred-site.xml parser // new for bft
+    	File fXmlFile = new File("etc/hadoop/mapred-site.xml");
+    	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+    	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+    	Document doc = dBuilder.parse(fXmlFile);
+     	doc.getDocumentElement().normalize();
+     	NodeList nList = doc.getElementsByTagName("property");
+     	for (int temp = 0; temp < nList.getLength(); temp++) {
+     		Node nNode = nList.item(temp);
+     		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+     			Element eElement = (Element) nNode;
+    			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.bft"))
+    			{
+    				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+    				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+    				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
+    			}
+    		}
+    	}
+        } catch (Exception e) {
+    	e.printStackTrace();
+        }
+	  
+	     switch (BFT_FLAG_LOCAL) 
+		{
+	        case 1://No BFT
+	        {
+	        	System.out.println("------ENTERED case 1---------");
+	        	r3=1;
+	        	break;
+	        }
+	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+	        {
+	        	System.out.println("------ENTERED case 2---------");
+	        	r3=4;
+	        	break;	        
+	        }
+	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+	        {
+	        	System.out.println("------ENTERED case 3---------");
+	        	r3=1;
+	        	break;
+	        }
+	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+	        {
+	        	System.out.println("------ENTERED case 4---------");
+	        	r3=4;
+	        	break;	        
+	        }
+	        default://deal with it as No BFT
+	        {
+	        	System.out.println("------ENTERED default---------");
+	        	r3=1;
+	        	break;
+	        }
+		}
+	    
 
-    setConf(new Configuration());
-    Configuration conf = getConf();
+    //setConf(new Configuration());//WAS IN THE ORIGINAL CODE
+    //Configuration conf = getConf();//WAS IN THE ORIGINAL CODE
+	     
+	     Configuration[] conf = new Configuration[r3];
+		    for( int i=0; i<r3; i++ )
+		    {
+		    	conf[i] = new Configuration();
+		    		
+		    
+		    
+		    System.out.println("------INSIDE the for loop , r3 = --------- "+r3+" -------------- ");
+		    	
+
 
     @SuppressWarnings("deprecation")
-    Job job = new Job(conf, "word median");
+    Job job = new Job(conf[i], "word median");
+    
+	  System.out.println("job.getJobID() = "+job.getJobID()+" job.getJobName() = "+job.getJobName());
+
+    
     job.setJarByClass(WordMedian.class);
     job.setMapperClass(WordMedianMapper.class);
     job.setCombinerClass(WordMedianReducer.class);
@@ -191,19 +276,62 @@ public class WordMedian extends Configured implements Tool {
     job.setOutputValueClass(IntWritable.class);
     FileInputFormat.addInputPath(job, new Path(args[0]));
     FileOutputFormat.setOutputPath(job, new Path(args[1]));
-    boolean result = job.waitForCompletion(true);
-
-    // Wait for JOB 1 -- get middle value to check for Median
+    //boolean result = job.waitForCompletion(true);
+    
+    switch (BFT_FLAG_LOCAL) 
+	{
+        case 1://No BFT
+        {
+        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	job.waitForCompletion(true);
+        	break;
+        }
+        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+        {
+        	System.out.println("------in WordMedian.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	job.submit();
+        	break;	        
+        }
+        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+        {
+        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	job.waitForCompletion(true);
+        	break;
+        }
+        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+        {
+        	//Not used
+        	break;	        
+        }
+        default://deal with it as No BFT
+        {
+        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
+        	job.waitForCompletion(true);
+        	break;
+        }
+	}
+    
+ // Wait for JOB 1 -- get middle value to check for Median
 
     long totalWords = job.getCounters()
         .getGroup(TaskCounter.class.getCanonicalName())
         .findCounter("MAP_OUTPUT_RECORDS", "Map output records").getValue();
+    
     int medianIndex1 = (int) Math.ceil((totalWords / 2.0));
     int medianIndex2 = (int) Math.floor((totalWords / 2.0));
 
-    median = readAndFindMedian(args[1], medianIndex1, medianIndex2, conf);
+    median = readAndFindMedian(args[1], medianIndex1, medianIndex2, conf[0]);
 
-    return (result ? 0 : 1);
+
+
+		    
+		    }
+		    
+
+		    		   
+    
+
+    return 0;//(result ? 0 : 1);
   }
 
   public double getMedian() {

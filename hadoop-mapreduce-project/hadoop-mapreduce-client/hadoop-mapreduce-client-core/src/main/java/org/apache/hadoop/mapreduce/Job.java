@@ -18,9 +18,13 @@
 
 package org.apache.hadoop.mapreduce;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.security.PrivilegedExceptionAction;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -29,16 +33,27 @@ import org.apache.hadoop.classification.InterfaceStability;
 import org.apache.hadoop.classification.InterfaceAudience.Private;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configuration.IntegerRanges;
+//import org.apache.hadoop.examples.WordCount;
+//import org.apache.hadoop.examples.WordCount.IntSumReducer;
+//import org.apache.hadoop.examples.WordCount.TokenizerMapper;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
+import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.RawComparator;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapred.JobConf;
 //import org.apache.hadoop.mapred.YARNRunner.VerifierThreadClass;
 import org.apache.hadoop.mapreduce.filecache.DistributedCache;
+import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
+import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.mapreduce.protocol.ClientProtocol;
 import org.apache.hadoop.mapreduce.task.JobContextImpl;
 import org.apache.hadoop.mapreduce.util.ConfigUtil;
 import org.apache.hadoop.util.StringUtils;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * The job submitter's view of the Job.
@@ -1377,9 +1392,20 @@ public class submitJobThreadClass implements Runnable   {
 	  
 	  }
 }
-  
-  
-  /**
+
+
+
+public int FlagforJobs = 0;
+
+public int getFlagforJobs() {
+	return FlagforJobs;
+}
+
+public void setFlagforJobs(int flagforJobs) {
+	FlagforJobs = flagforJobs;
+}
+
+/**
    * Submit the job to the cluster and wait for it to finish.
    * @param verbose print the progress to the user
    * @return true if the job succeeded
@@ -1389,6 +1415,141 @@ public class submitJobThreadClass implements Runnable   {
   public boolean waitForCompletion(boolean verbose
                                    ) throws IOException, InterruptedException,
                                             ClassNotFoundException {
+	  
+//		//---- start new code to make bft generic for all applicatoins not only wordcount
+//
+//	  
+//	  if(this.getFlagforJobs()!=1)
+//	  {
+//	  int r3=0;//default//number of AM replicas
+//	  int BFT_FLAG_LOCAL = 0;
+//	  
+//	  
+//	  try {//---- mapred-site.xml parser // new for bft
+//	      	File fXmlFile = new File("etc/hadoop/mapred-site.xml");
+//	      	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+//	      	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+//	      	Document doc = dBuilder.parse(fXmlFile);
+//	       	doc.getDocumentElement().normalize();
+//	       	NodeList nList = doc.getElementsByTagName("property");
+//	       	for (int temp = 0; temp < nList.getLength(); temp++) {
+//	       		Node nNode = nList.item(temp);
+//	       		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+//	       			Element eElement = (Element) nNode;
+//	      			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.bft"))
+//	      			{
+//	      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+//	      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+//	      				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
+//	      			}
+//	      		}
+//	      	}
+//	          } catch (Exception e) {
+//	      	e.printStackTrace();
+//	          }
+//	  
+//	  switch (BFT_FLAG_LOCAL) 
+//		{
+//	        case 1://No BFT
+//	        {
+//	        	System.out.println("------ENTERED case 1---------");
+//	        	r3=1;
+//	        	break;
+//	        }
+//	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+//	        {
+//	        	System.out.println("------ENTERED case 2---------");
+//	        	r3=4;
+//	        	break;	        
+//	        }
+//	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+//	        {
+//	        	System.out.println("------ENTERED case 3---------");
+//	        	r3=1;
+//	        	break;
+//	        }
+//	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+//	        {
+//	        	System.out.println("------ENTERED case 4---------");
+//	        	r3=4;
+//	        	break;	        
+//	        }
+//	        default://deal with it as No BFT
+//	        {
+//	        	System.out.println("------ENTERED default---------");
+//	        	r3=1;
+//	        	break;
+//	        }
+//		}
+//	  
+//	    Configuration[] conf = new Configuration[r3];
+//	    for( int i=0; i<r3; i++ )//combined the two for loops
+//	    {
+//	    	conf[i] = new Configuration();
+//	    	System.out.println("------INSIDE the for loop , r3 = --------- "+r3+" -------------- ");
+//			  
+//		    Job job = new Job(conf[i], this.getJobName());//getJobName should be "word count" or sth similar
+//		    
+//		    job.setFlagforJobs(1);
+//		  
+//		    System.out.println("job.getJobID() = "+job.getJobID()+" job.getJobName() = "+job.getJobName());
+//		    
+//		    job.setJarByClass(this.getJar().getClass());//was WordCount.class
+//		    job.setMapperClass(this.getMapperClass());//TokenizerMapper.class
+//		    job.setCombinerClass(this.getCombinerClass());//IntSumReducer.class
+//		    job.setReducerClass(this.getReducerClass());//IntSumReducer.class
+//		    job.setOutputKeyClass(this.getOutputKeyClass());//Text.class
+//		    job.setOutputValueClass(this.getOutputValueClass());//IntWritable.class
+//		    
+//		    FileInputFormat.addInputPath(job, FileInputFormat.getInputPaths(this)[0]);//FileInputFormat.getInputPaths(this)
+//		    FileOutputFormat.setOutputPath(job, FileOutputFormat.getOutputPath(this));
+//		    //FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
+//		    //FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]+Integer.toString(i)));
+//		    
+//		    switch (BFT_FLAG_LOCAL) 
+//			{
+//		        case 1://No BFT
+//		        {
+//		        	System.out.println("----------job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+//		        	job.waitForCompletion(true);
+//		        	break;
+//		        }
+//		        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+//		        {
+//		        	System.out.println("----------job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+//		        	job.submit();
+//		        	break;	        
+//		        }
+//		        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+//		        {
+//		        	System.out.println("----------job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+//		        	job.waitForCompletion(true);
+//		        	break;
+//		        }
+//		        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+//		        {
+//		        	//Not used
+//		        	break;	        
+//		        }
+//		        default://deal with it as No BFT
+//		        {
+//		        	System.out.println("----------job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
+//		        	job.waitForCompletion(true);
+//		        	break;
+//		        }
+//			}
+//    		
+//	    }
+//  }
+//	    
+//	    
+//	    
+//		  
+//	  
+//	  
+//	//---- end new code
+	  
+	  
     if (state == JobState.DEFINE) {
       submit();
     }
