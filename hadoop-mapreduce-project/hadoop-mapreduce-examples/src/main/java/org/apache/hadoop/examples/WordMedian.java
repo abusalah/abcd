@@ -343,19 +343,24 @@ public class WordMedian extends Configured implements Tool {
     totalWords = job.getCounters()
        .getGroup(TaskCounter.class.getCanonicalName())
        .findCounter("MAP_OUTPUT_RECORDS", "Map output records").getValue();
-   
     
+   
+   
+    medianIndex1 = (int) Math.ceil((totalWords / 2.0));
+    medianIndex2 = (int) Math.floor((totalWords / 2.0));
+    
+
+   median = readAndFindMedian(args[1], medianIndex1, medianIndex2, conf[0]);
+
+   System.out.println("my median = "+median + " totalWords = "+totalWords + " medianIndex1 = "+medianIndex1 +" medianIndex2 = "+medianIndex2 );
+
     
     
 		    }
 
 		 
 		    
-		     medianIndex1 = (int) Math.ceil((totalWords / 2.0));
-		     medianIndex2 = (int) Math.floor((totalWords / 2.0));
-
-		    median = readAndFindMedian(args[1], medianIndex1, medianIndex2, conf[0]);
-
+		   
 
 		    		   
     
