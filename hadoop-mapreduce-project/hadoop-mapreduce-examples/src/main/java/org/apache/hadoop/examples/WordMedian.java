@@ -149,9 +149,15 @@ public class WordMedian extends Configured implements Tool {
     	
       br = new BufferedReader(new InputStreamReader(fs.open(file), Charsets.UTF_8));
       int num = 0;
+      
+  	 System.out.println("----_4");
+
    
       String line;  
       while ((line = br.readLine()) != null) {
+    	  
+      	System.out.println("----_5");
+
         StringTokenizer st = new StringTokenizer(line);
 
         // grab length
@@ -163,11 +169,18 @@ public class WordMedian extends Configured implements Tool {
         int prevNum = num;
         num += Integer.parseInt(lengthFreq);
 
+    	System.out.println("----_5");
+
+        
         if (medianIndex2 >= prevNum && medianIndex1 <= num) {
+        	System.out.println("----_6 1");
+
           System.out.println("The median is: " + currLen);
           br.close();
           return Double.parseDouble(currLen);
         } else if (medianIndex2 >= prevNum && medianIndex1 < num) {
+        	System.out.println("----_6 2");
+
           String nextCurrLen = st.nextToken();
           double theMedian = (Integer.parseInt(currLen) + Integer
               .parseInt(nextCurrLen)) / 2.0;
