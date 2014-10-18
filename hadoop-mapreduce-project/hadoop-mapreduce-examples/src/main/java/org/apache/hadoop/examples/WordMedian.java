@@ -128,19 +128,29 @@ public class WordMedian extends Configured implements Tool {
    * */
   private double readAndFindMedian(String path, int medianIndex1,
       int medianIndex2, Configuration conf) throws IOException {
+	  
+	  System.out.println("----_0");
+	  
     FileSystem fs = FileSystem.get(conf);
-    Path file = new Path(path, "part-r-00000");
+    Path file = new Path(path, "part-r-00000"); 
+    
+    System.out.println("----_1");
 
     if (!fs.exists(file))
       throw new IOException("Output not found!");
 
+    System.out.println("----_2");
+    
     BufferedReader br = null;
 
     try {
+    	
+    	System.out.println("----_3");
+    	
       br = new BufferedReader(new InputStreamReader(fs.open(file), Charsets.UTF_8));
       int num = 0;
-
-      String line;
+   
+      String line;  
       while ((line = br.readLine()) != null) {
         StringTokenizer st = new StringTokenizer(line);
 
