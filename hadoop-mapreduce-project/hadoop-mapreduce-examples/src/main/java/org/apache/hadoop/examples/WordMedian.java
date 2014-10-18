@@ -209,6 +209,10 @@ public class WordMedian extends Configured implements Tool {
       return 0;
     }
     
+    long totalWords = 0;
+    int medianIndex1;
+    int medianIndex2;
+    
     
     int r3=0;//default//number of AM replicas
 	  int BFT_FLAG_LOCAL = 0;
@@ -336,20 +340,22 @@ public class WordMedian extends Configured implements Tool {
     
  // Wait for JOB 1 -- get middle value to check for Median
 
-    long totalWords = job.getCounters()
-        .getGroup(TaskCounter.class.getCanonicalName())
-        .findCounter("MAP_OUTPUT_RECORDS", "Map output records").getValue();
+    totalWords = job.getCounters()
+       .getGroup(TaskCounter.class.getCanonicalName())
+       .findCounter("MAP_OUTPUT_RECORDS", "Map output records").getValue();
+   
     
-    int medianIndex1 = (int) Math.ceil((totalWords / 2.0));
-    int medianIndex2 = (int) Math.floor((totalWords / 2.0));
-
-    median = readAndFindMedian(args[1], medianIndex1, medianIndex2, conf[0]);
-
-
-
-		    
+    
+    
 		    }
+
+		 
 		    
+		     medianIndex1 = (int) Math.ceil((totalWords / 2.0));
+		     medianIndex2 = (int) Math.floor((totalWords / 2.0));
+
+		    median = readAndFindMedian(args[1], medianIndex1, medianIndex2, conf[0]);
+
 
 		    		   
     
