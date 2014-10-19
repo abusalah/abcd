@@ -60,6 +60,8 @@ import org.apache.hadoop.mapred.ReduceTask;
 
 //import org.apache.hadoop.yarn.event.EventHandler;
 
+
+import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -363,6 +365,8 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
     	  
     	  totalHash=0;//just for now for testing    	  
     	  stringToSend=flags_to_send+" "+outputFileFullPathOnHDFS+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
+    	  
+
     	  
     	  
     	  

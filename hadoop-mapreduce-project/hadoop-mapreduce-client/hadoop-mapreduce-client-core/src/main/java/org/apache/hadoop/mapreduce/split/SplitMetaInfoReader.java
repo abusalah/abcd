@@ -49,6 +49,9 @@ public class SplitMetaInfoReader {
 		
 		int local_NUM_REPLICAS = conf.getInt(MRJobConfig.NUM_REPLICAS,4);
 		
+		
+		System.out.println("ENTERED readSplitMetaInfo in SplitMetaInfoReader.java ");
+		
 		 //System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
 		 
 		
@@ -85,6 +88,7 @@ public class SplitMetaInfoReader {
 		{
 	        case 1://No BFT
 	        {
+	        	System.out.println("ENTERED readSplitMetaInfo in SplitMetaInfoReader.java case 1");
 	        	//JobSplit.TaskSplitMetaInfo[] 
 	        			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits];
 			    for (int i = 0; i < numSplits; i++) {
@@ -101,6 +105,7 @@ public class SplitMetaInfoReader {
 	        }
 	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
 	        {
+	        	System.out.println("ENTERED readSplitMetaInfo in SplitMetaInfoReader.java case 2");
 	        	//JobSplit.TaskSplitMetaInfo[] 
     			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits];
 			    for (int i = 0; i < numSplits; i++) {
@@ -117,6 +122,7 @@ public class SplitMetaInfoReader {
 	        }
 	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
 	        {
+	        	System.out.println("ENTERED readSplitMetaInfo in SplitMetaInfoReader.java case 3");
 	        	//JobSplit.TaskSplitMetaInfo[] 
 	        			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits * local_NUM_REPLICAS];// wasnumSplits				
 				// --------------note that we didn't change the original numSplits,
@@ -142,6 +148,7 @@ public class SplitMetaInfoReader {
 	        }
 	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
 	        {
+	        	System.out.println("ENTERED readSplitMetaInfo in SplitMetaInfoReader.java case 4");
 	        	//JobSplit.TaskSplitMetaInfo[] 
 	        			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits * local_NUM_REPLICAS];// was numSplits				
 				// --------------note that we didn't change the original numSplits,
@@ -167,6 +174,7 @@ public class SplitMetaInfoReader {
 	        }
 	        default://deal with it as No BFT
 	        {
+	        	System.out.println("ENTERED readSplitMetaInfo in SplitMetaInfoReader.java case default");
 	        	//JobSplit.TaskSplitMetaInfo[] 
 	        			allSplitMetaInfo = new JobSplit.TaskSplitMetaInfo[numSplits];
 			    for (int i = 0; i < numSplits; i++) {
