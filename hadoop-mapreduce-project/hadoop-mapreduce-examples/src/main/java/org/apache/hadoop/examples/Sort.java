@@ -253,7 +253,7 @@ public class Sort<K,V> extends Configured implements Tool {
 		        return printUsage();
 		      }
 		      FileInputFormat.setInputPaths(job, otherArgs.get(0));
-		      FileOutputFormat.setOutputPath(job, new Path(otherArgs.get(1)));
+		      FileOutputFormat.setOutputPath(job, new Path(otherArgs.get(1)+Integer.toString(i)));
 		      
 		      if (sampler != null) {
 		        System.out.println("Sampling input to effect total-order sort...");
