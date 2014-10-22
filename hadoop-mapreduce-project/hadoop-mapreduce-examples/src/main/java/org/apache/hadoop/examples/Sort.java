@@ -18,15 +18,23 @@
 
 package org.apache.hadoop.examples;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.util.*;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.mapreduce.filecache.DistributedCache;
+import org.apache.hadoop.examples.WordCount.IntSumReducer;
+import org.apache.hadoop.examples.WordCount.TokenizerMapper;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.BytesWritable;
+import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.io.Writable;
 import org.apache.hadoop.io.WritableComparable;
 import org.apache.hadoop.mapred.ClusterStatus;
@@ -40,6 +48,10 @@ import org.apache.hadoop.mapreduce.lib.partition.InputSampler;
 import org.apache.hadoop.mapreduce.lib.partition.TotalOrderPartitioner;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * This is the trivial map/reduce program that does absolutely nothing
@@ -78,12 +90,83 @@ public class Sort<K,V> extends Configured implements Tool {
    *                     job tracker.
    */
   public int run(String[] args) throws Exception {
+	  
+	  
+	  
+	  int r3=0;//default//number of AM replicas
+	  int BFT_FLAG_LOCAL = 0;
+	  
+	  try {//---- mapred-site.xml parser // new for bft
+      	File fXmlFile = new File("etc/hadoop/mapred-site.xml");
+      	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+      	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+      	Document doc = dBuilder.parse(fXmlFile);
+       	doc.getDocumentElement().normalize();
+       	NodeList nList = doc.getElementsByTagName("property");
+       	for (int temp = 0; temp < nList.getLength(); temp++) {
+       		Node nNode = nList.item(temp);
+       		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+       			Element eElement = (Element) nNode;
+      			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.bft"))
+      			{
+      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+      				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
+      			}
+      		}
+      	}
+          } catch (Exception e) {
+      	e.printStackTrace();
+          }
+	  
+	     switch (BFT_FLAG_LOCAL) 
+		{
+	        case 1://No BFT
+	        {
+	        	System.out.println("------ENTERED case 1---------");
+	        	r3=1;
+	        	break;
+	        }
+	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+	        {
+	        	System.out.println("------ENTERED case 2---------");
+	        	r3=4;
+	        	break;	        
+	        }
+	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+	        {
+	        	System.out.println("------ENTERED case 3---------");
+	        	r3=1;
+	        	break;
+	        }
+	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+	        {
+	        	System.out.println("------ENTERED case 4---------");
+	        	r3=4;
+	        	break;	        
+	        }
+	        default://deal with it as No BFT
+	        {
+	        	System.out.println("------ENTERED default---------");
+	        	r3=1;
+	        	break;
+	        }
+		}
+	     
+	     Configuration[] conf = new Configuration[r3];
+		    for( int i=0; i<r3; i++ )
+		    {
+		    	conf[i] = new Configuration();
+		    	conf[i]= getConf();
+		    		
+		    }
+	    
 
-    Configuration conf = getConf();
-    JobClient client = new JobClient(conf);
+    //Configuration conf[0] = getConf();
+    JobClient client = new JobClient(conf[0]);
     ClusterStatus cluster = client.getClusterStatus();
     int num_reduces = (int) (cluster.getMaxReduceTasks() * 0.9);
-    String sort_reduces = conf.get(REDUCES_PER_HOST);
+    String sort_reduces = conf[0].get(REDUCES_PER_HOST);
     if (sort_reduces != null) {
        num_reduces = cluster.getTaskTrackers() * 
                        Integer.parseInt(sort_reduces);
@@ -131,58 +214,166 @@ public class Sort<K,V> extends Configured implements Tool {
         return printUsage(); // exits
       }
     }
-    // Set user-supplied (possibly default) job configs
-    job = new Job(conf);
-    job.setJobName("sorter");
-    job.setJarByClass(Sort.class);
+    
+    
+    
+    for (int i=0;i<r3;i++)
+	  {
+		  System.out.println("------INSIDE the for loop , r3 = --------- "+r3+" -------------- ");
+		  
+		  //Job job = new Job(conf[i], "word count");
+		  
+		  
+		  
+		  
+		  
+		  // Set user-supplied (possibly default) job configs
+		    job = new Job(conf[i]);
+		    job.setJobName("sorter");
+		    job.setJarByClass(Sort.class);
 
-    job.setMapperClass(Mapper.class);        
-    job.setReducerClass(Reducer.class);
+		    System.out.println("job.getJobID() = "+job.getJobID()+" job.getJobName() = "+job.getJobName());
+			
+		    job.setMapperClass(Mapper.class);        
+		    job.setReducerClass(Reducer.class);
 
-    job.setNumReduceTasks(num_reduces);
+		    job.setNumReduceTasks(num_reduces);
 
-    job.setInputFormatClass(inputFormatClass);
-    job.setOutputFormatClass(outputFormatClass);
+		    job.setInputFormatClass(inputFormatClass);
+		    job.setOutputFormatClass(outputFormatClass);
 
-    job.setOutputKeyClass(outputKeyClass);
-    job.setOutputValueClass(outputValueClass);
+		    job.setOutputKeyClass(outputKeyClass);
+		    job.setOutputValueClass(outputValueClass);
+
+		  
+	    
+		    if (otherArgs.size() != 2) {
+		        System.out.println("ERROR: Wrong number of parameters: " +
+		            otherArgs.size() + " instead of 2.");
+		        return printUsage();
+		      }
+		      FileInputFormat.setInputPaths(job, otherArgs.get(0));
+		      FileOutputFormat.setOutputPath(job, new Path(otherArgs.get(1)));
+		      
+		      if (sampler != null) {
+		        System.out.println("Sampling input to effect total-order sort...");
+		        job.setPartitionerClass(TotalOrderPartitioner.class);
+		        Path inputDir = FileInputFormat.getInputPaths(job)[0];
+		        inputDir = inputDir.makeQualified(inputDir.getFileSystem(conf[0]));
+		        Path partitionFile = new Path(inputDir, "_sortPartitioning");
+		        TotalOrderPartitioner.setPartitionFile(conf[0], partitionFile);
+		        InputSampler.<K,V>writePartitionFile(job, sampler);
+		        URI partitionUri = new URI(partitionFile.toString() +
+		                                   "#" + "_sortPartitioning");
+		        DistributedCache.addCacheFile(partitionUri, conf[0]);
+		      }
+
+		      System.out.println("Running on " +
+		          cluster.getTaskTrackers() +
+		          " nodes to sort from " + 
+		          FileInputFormat.getInputPaths(job)[0] + " into " +
+		          FileOutputFormat.getOutputPath(job) +
+		          " with " + num_reduces + " reduces.");
+		      Date startTime = new Date();
+		      System.out.println("Job started: " + startTime);
+
+		    
+		    
+	    
+	    switch (BFT_FLAG_LOCAL) 
+		{
+	        case 1://No BFT
+	        {
+	        	System.out.println("------in Sort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+	        	job.waitForCompletion(true);
+	        	break;
+	        }
+	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+	        {
+	        	System.out.println("------in Sort.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+	        	job.submit();
+	        	break;	        
+	        }
+	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+	        {
+	        	System.out.println("------in Sort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+	        	job.waitForCompletion(true);
+	        	break;
+	        }
+	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+	        {
+	        	//Not used
+	        	break;	        
+	        }
+	        default://deal with it as No BFT
+	        {
+	        	System.out.println("------in Sort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
+	        	job.waitForCompletion(true);
+	        	break;
+	        }
+		}
+	    
+	    
+	    Date end_time = new Date();
+	    System.out.println("Job ended: " + end_time);
+	    System.out.println("The job took " + 
+	        (end_time.getTime() - startTime.getTime()) /1000 + " seconds.");
+	    
+	  }
+    
+    
+//    // Set user-supplied (possibly default) job configs
+//    job = new Job(conf[0]);
+//    job.setJobName("sorter");
+//    job.setJarByClass(Sort.class);
+//
+//    job.setMapperClass(Mapper.class);        
+//    job.setReducerClass(Reducer.class);
+//
+//    job.setNumReduceTasks(num_reduces);
+//
+//    job.setInputFormatClass(inputFormatClass);
+//    job.setOutputFormatClass(outputFormatClass);
+//
+//    job.setOutputKeyClass(outputKeyClass);
+//    job.setOutputValueClass(outputValueClass);
 
     // Make sure there are exactly 2 parameters left.
-    if (otherArgs.size() != 2) {
-      System.out.println("ERROR: Wrong number of parameters: " +
-          otherArgs.size() + " instead of 2.");
-      return printUsage();
-    }
-    FileInputFormat.setInputPaths(job, otherArgs.get(0));
-    FileOutputFormat.setOutputPath(job, new Path(otherArgs.get(1)));
-    
-    if (sampler != null) {
-      System.out.println("Sampling input to effect total-order sort...");
-      job.setPartitionerClass(TotalOrderPartitioner.class);
-      Path inputDir = FileInputFormat.getInputPaths(job)[0];
-      inputDir = inputDir.makeQualified(inputDir.getFileSystem(conf));
-      Path partitionFile = new Path(inputDir, "_sortPartitioning");
-      TotalOrderPartitioner.setPartitionFile(conf, partitionFile);
-      InputSampler.<K,V>writePartitionFile(job, sampler);
-      URI partitionUri = new URI(partitionFile.toString() +
-                                 "#" + "_sortPartitioning");
-      DistributedCache.addCacheFile(partitionUri, conf);
-    }
-
-    System.out.println("Running on " +
-        cluster.getTaskTrackers() +
-        " nodes to sort from " + 
-        FileInputFormat.getInputPaths(job)[0] + " into " +
-        FileOutputFormat.getOutputPath(job) +
-        " with " + num_reduces + " reduces.");
-    Date startTime = new Date();
-    System.out.println("Job started: " + startTime);
-    int ret = job.waitForCompletion(true) ? 0 : 1;
-    Date end_time = new Date();
-    System.out.println("Job ended: " + end_time);
-    System.out.println("The job took " + 
-        (end_time.getTime() - startTime.getTime()) /1000 + " seconds.");
-    return ret;
+//    if (otherArgs.size() != 2) {
+//      System.out.println("ERROR: Wrong number of parameters: " +
+//          otherArgs.size() + " instead of 2.");
+//      return printUsage();
+//    }
+//    FileInputFormat.setInputPaths(job, otherArgs.get(0));
+//    FileOutputFormat.setOutputPath(job, new Path(otherArgs.get(1)));
+//    
+//    if (sampler != null) {
+//      System.out.println("Sampling input to effect total-order sort...");
+//      job.setPartitionerClass(TotalOrderPartitioner.class);
+//      Path inputDir = FileInputFormat.getInputPaths(job)[0];
+//      inputDir = inputDir.makeQualified(inputDir.getFileSystem(conf[0]));
+//      Path partitionFile = new Path(inputDir, "_sortPartitioning");
+//      TotalOrderPartitioner.setPartitionFile(conf[0], partitionFile);
+//      InputSampler.<K,V>writePartitionFile(job, sampler);
+//      URI partitionUri = new URI(partitionFile.toString() +
+//                                 "#" + "_sortPartitioning");
+//      DistributedCache.addCacheFile(partitionUri, conf[0]);
+//    }
+//
+//    System.out.println("Running on " +
+//        cluster.getTaskTrackers() +
+//        " nodes to sort from " + 
+//        FileInputFormat.getInputPaths(job)[0] + " into " +
+//        FileOutputFormat.getOutputPath(job) +
+//        " with " + num_reduces + " reduces.");
+//    Date startTime = new Date();
+//    System.out.println("Job started: " + startTime);
+//    int ret = job.waitForCompletion(true) ? 0 : 1;
+//    Date end_time = new Date();
+//    System.out.println("Job ended: " + end_time);
+//    System.out.println("The job took " + 
+//        (end_time.getTime() - startTime.getTime()) /1000 + " seconds.");
+    return 0;//return ret;
   }
 
 
