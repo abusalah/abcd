@@ -278,6 +278,7 @@ public class TeraSort extends Configured implements Tool {
   }
 
   public int run(String[] args) throws Exception {
+	  System.out.println("\n\nENTERED run in TeraSort.java\n\n");
     LOG.info("starting");
     Job job = Job.getInstance(getConf());
     Path inputDir = new Path(args[0]);
