@@ -323,6 +323,7 @@ public class TeraSort extends Configured implements Tool {
    * @param args
    */
   public static void main(String[] args) throws Exception {
+	  System.out.println("\n\nENTERED main in TeraSort.java\n\n");
     int res = ToolRunner.run(new Configuration(), new TeraSort(), args);
     System.exit(res);
   }

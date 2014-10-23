@@ -58,6 +58,9 @@ public class ToolRunner {
    */
   public static int run(Configuration conf, Tool tool, String[] args) 
     throws Exception{
+	  
+	  System.out.println("\n\nENTERED run in ToolRunner.java\n\n");
+	  
     if(conf == null) {
       conf = new Configuration();
     }
