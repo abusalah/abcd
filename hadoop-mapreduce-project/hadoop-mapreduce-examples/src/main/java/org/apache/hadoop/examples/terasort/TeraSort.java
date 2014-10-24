@@ -19,9 +19,13 @@
 package org.apache.hadoop.examples.terasort;
 
 import java.io.DataInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.net.URI;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -38,6 +42,10 @@ import org.apache.hadoop.mapreduce.Partitioner;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import org.apache.hadoop.util.Tool;
 import org.apache.hadoop.util.ToolRunner;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 /**
  * Generates the sampled split points, launches the job, and waits for it to
@@ -280,6 +288,7 @@ public class TeraSort extends Configured implements Tool {
   public int run(String[] args) throws Exception {
 	  System.out.println("\n\nENTERED run in TeraSort.java\n\n");
     LOG.info("starting");
+    
     Job job = Job.getInstance(getConf());
     Path inputDir = new Path(args[0]);
     Path outputDir = new Path(args[1]);
@@ -314,18 +323,150 @@ public class TeraSort extends Configured implements Tool {
     
     job.getConfiguration().setInt("dfs.replication", getOutputReplication(job));
     TeraOutputFormat.setFinalSync(job, true);
-    int ret = job.waitForCompletion(true) ? 0 : 1;
+    //int ret = job.waitForCompletion(true) ? 0 : 1;
+    
+    
+    switch (BFT_FLAG_LOCAL) 
+	{
+        case 1://No BFT
+        {
+        	System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	job.waitForCompletion(true);
+        	break;
+        }
+        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+        {
+        	System.out.println("------in TeraSort.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	job.submit();
+        	break;	        
+        }
+        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+        {
+        	System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	job.waitForCompletion(true);
+        	break;
+        }
+        case 4://BFT: replicate the AM (r3 times in TeraSort.java) and replicate mappers and reducers (both r times)
+        {
+        	//Not used
+        	break;	        
+        }
+        default://deal with it as No BFT
+        {
+        	System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
+        	job.waitForCompletion(true);
+        	break;
+        }
+	}
+    
+    
+    
     LOG.info("done");
-    return ret;
+    //return ret;
+    return 0;
   }
+  
+  public static int r3=0;
+  public static int BFT_FLAG_LOCAL = 0;
 
   /**
    * @param args
    */
   public static void main(String[] args) throws Exception {
 	  System.out.println("\n\nENTERED main in TeraSort.java\n\n");
-    int res = ToolRunner.run(new Configuration(), new TeraSort(), args);
-    System.exit(res);
+	  
+	  
+	  //int r3=0;//default//number of AM replicas
+	  //int BFT_FLAG_LOCAL = 0;
+	  
+	  try {//---- mapred-site.xml parser // new for bft
+      	File fXmlFile = new File("etc/hadoop/mapred-site.xml");
+      	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+      	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+      	Document doc = dBuilder.parse(fXmlFile);
+       	doc.getDocumentElement().normalize();
+       	NodeList nList = doc.getElementsByTagName("property");
+       	for (int temp = 0; temp < nList.getLength(); temp++) {
+       		Node nNode = nList.item(temp);
+       		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+       			Element eElement = (Element) nNode;
+      			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.bft"))
+      			{
+      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+      				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
+      			}
+      		}
+      	}
+          } catch (Exception e) {
+      	e.printStackTrace();
+          }
+	  
+	     switch (BFT_FLAG_LOCAL) 
+		{
+	        case 1://No BFT
+	        {
+	        	System.out.println("------ENTERED case 1---------");
+	        	r3=1;
+	        	break;
+	        }
+	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+	        {
+	        	System.out.println("------ENTERED case 2---------");
+	        	r3=4;
+	        	break;	        
+	        }
+	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+	        {
+	        	System.out.println("------ENTERED case 3---------");
+	        	r3=1;
+	        	break;
+	        }
+	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+	        {
+	        	System.out.println("------ENTERED case 4---------");
+	        	r3=4;
+	        	break;	        
+	        }
+	        default://deal with it as No BFT
+	        {
+	        	System.out.println("------ENTERED default---------");
+	        	r3=1;
+	        	break;
+	        }
+		}
+	    
+	    
+	    Configuration[] conf = new Configuration[r3];
+	    for( int i=0; i<r3; i++ )
+	    {
+	    	conf[i] = new Configuration();
+	    	ToolRunner.run(conf[i], new TeraSort(), args);
+	    		
+	    }
+	    	
+	    
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+    //int res = ToolRunner.run(new Configuration(), new TeraSort(), args);
+	    
+    //System.exit(res);
+	    System.exit(0);
   }
 
 }
