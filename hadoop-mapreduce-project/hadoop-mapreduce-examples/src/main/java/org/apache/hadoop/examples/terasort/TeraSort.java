@@ -258,6 +258,7 @@ public class TeraSort extends Configured implements Tool {
     public int getPartition(Text key, Text value, int numPartitions) {
     	System.out.println("in getPartition in TeraSort.java BFT_FLAG_LOCAL = "+BFT_FLAG_LOCAL);
     	System.out.println("in getPartition in TeraSort.java Globals.BFT_FLAG_LOCAL_global = "+Globals.BFT_FLAG_LOCAL_global);
+    	System.out.println("in getPartition in TeraSort.java conf.getInt(\"mapred.job.bft\", 1) = "+conf.getInt("mapred.job.bft", 1));
     	if(BFT_FLAG_LOCAL==3)
     	{
     		System.out.println("numPartitions = "+numPartitions);
