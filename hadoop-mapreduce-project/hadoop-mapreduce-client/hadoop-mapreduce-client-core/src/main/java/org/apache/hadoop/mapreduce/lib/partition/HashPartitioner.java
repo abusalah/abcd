@@ -30,6 +30,8 @@ public class HashPartitioner<K, V> extends Partitioner<K, V> {
   /** Use {@link Object#hashCode()} to partition. */
   public int getPartition(K key, V value,
                           int numReduceTasks) {
+	  System.out.println("-------inside getPartition inside HashPartitioner class in mapreduce"
+	  		+ "----------numPartitions = numReduceTasks ="+numReduceTasks);
     return (key.hashCode() & Integer.MAX_VALUE) % numReduceTasks;
   }
 
