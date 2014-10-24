@@ -97,6 +97,7 @@ public class TeraSort extends Configured implements Tool {
         super(level);
       }
       int findPartition(Text key) {
+    	  System.out.println("\n\nENTERED findPartition 1 in TeraSort.java \n\n");
         int level = getLevel();
         if (key.getLength() <= level) {
           return child[0].findPartition(key);
@@ -135,6 +136,7 @@ public class TeraSort extends Configured implements Tool {
         this.upper = upper;
       }
       int findPartition(Text key) {
+    	  System.out.println("\n\nENTERED findPartition 2 in TeraSort.java \n\n");
         for(int i=lower; i<upper; ++i) {
           if (splitPoints[i].compareTo(key) > 0) {
             return i;
@@ -163,6 +165,9 @@ public class TeraSort extends Configured implements Tool {
      */
     private static Text[] readPartitions(FileSystem fs, Path p,
         Configuration conf) throws IOException {
+    	
+    	System.out.println("\n\nENTERED readPartitions in TeraSort.java \n\n");
+    	
       int reduces = conf.getInt(MRJobConfig.NUM_REDUCES, 1);
       Text[] result = new Text[reduces - 1];
       DataInputStream reader = fs.open(p);
@@ -235,6 +240,7 @@ public class TeraSort extends Configured implements Tool {
     }
 
     public int getPartition(Text key, Text value, int numPartitions) {
+    	System.out.println("\n\nENTERED getPartition 1 in TeraSort.java \n\n");
       return trie.findPartition(key);
     }
     
@@ -261,6 +267,7 @@ public class TeraSort extends Configured implements Tool {
     
     @Override
     public int getPartition(Text key, Text value, int numPartitions) {
+    	System.out.println("\n\nENTERED getPartition 2 in TeraSort.java \n\n");
       byte[] bytes = key.getBytes();
       int len = Math.min(PREFIX_LENGTH, key.getLength());
       int prefix = 0;
