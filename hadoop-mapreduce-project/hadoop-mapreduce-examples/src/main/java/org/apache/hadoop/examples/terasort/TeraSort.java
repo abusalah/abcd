@@ -290,7 +290,7 @@ public class TeraSort extends Configured implements Tool {
     public void setConf(Configuration conf) {
     	int newNumReduces=conf.getInt(MRJobConfig.NUM_REDUCES, 1);
     	
-    	if(conf.getInt("mapred.job.bft", 1)==3){newNumReduces=newNumReduces/conf.getInt("mapred.job.numreplicas", 1);}   	
+    	//if(conf.getInt("mapred.job.bft", 1)==3){newNumReduces=newNumReduces/conf.getInt("mapred.job.numreplicas", 1);}   	
     	
       this.conf = conf;
       prefixesPerReduce = (int) Math.ceil((1 << (8 * PREFIX_LENGTH)) / 
