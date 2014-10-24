@@ -183,6 +183,10 @@ public class TeraSort extends Configured implements Tool {
     	
       int reduces = conf.getInt(MRJobConfig.NUM_REDUCES, 1);
       
+      if(conf.getInt("mapred.job.bft", 1)==3){reduces=reduces/conf.getInt("mapred.job.numreplicas", 1);}
+      
+      
+      
       System.out.println("\n\nENTERED readPartitions in TeraSort.java and reduces = "+reduces+"\n\n ");
       
       Text[] result = new Text[reduces - 1];
@@ -284,9 +288,13 @@ public class TeraSort extends Configured implements Tool {
     private static final int PREFIX_LENGTH = 3;
     private Configuration conf = null;
     public void setConf(Configuration conf) {
+    	int newNumReduces=conf.getInt(MRJobConfig.NUM_REDUCES, 1);
+    	
+    	if(conf.getInt("mapred.job.bft", 1)==3){newNumReduces=newNumReduces/conf.getInt("mapred.job.numreplicas", 1);}   	
+    	
       this.conf = conf;
       prefixesPerReduce = (int) Math.ceil((1 << (8 * PREFIX_LENGTH)) / 
-        (float) conf.getInt(MRJobConfig.NUM_REDUCES, 1));
+        (float) newNumReduces);
     }
     
     public Configuration getConf() {
