@@ -742,8 +742,10 @@ public class MapTask extends Task {
       	  }
       }
       
-      System.out.println("(Key : "+key+", Value : "+value+") from Mapper Task ID : "+getTaskID()+" is going to Reducer : "+newgetPartitionValue+
-    		  " where originally it should go to Reducer : "+originalgetPartitionValue);
+      
+      System.out.println("originalgetPartitionValue = "+originalgetPartitionValue+" newgetPartitionValue = "+newgetPartitionValue + " local_NUM_REPLICAS = "+local_NUM_REPLICAS);
+//      System.out.println("(Key : "+key+", Value : "+value+") from Mapper Task ID : "+getTaskID()+" is going to Reducer : "+newgetPartitionValue+
+//    		  " where originally it should go to Reducer : "+originalgetPartitionValue);
       collector.collect(key, value, newgetPartitionValue);//---partitioner.getPartition(key, value, partitions);
     }
 
