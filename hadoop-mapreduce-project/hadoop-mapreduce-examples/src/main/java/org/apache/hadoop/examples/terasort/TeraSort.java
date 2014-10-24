@@ -266,7 +266,7 @@ public class TeraSort extends Configured implements Tool {
     	if(conf.getInt("mapred.job.bft", 1)==3)
     	{
     		System.out.println("numPartitions = "+numPartitions);
-    		numPartitions=numPartitions/conf.getInt("mapred.job.numreplicas", 1);
+    		//numPartitions=numPartitions/conf.getInt("mapred.job.numreplicas", 1);
     		System.out.println("numPartitions = "+numPartitions);
 		}
     	System.out.println("\n\nENTERED getPartition 1 in TeraSort.java \n\n");
@@ -304,7 +304,7 @@ public class TeraSort extends Configured implements Tool {
     @Override
     public int getPartition(Text key, Text value, int numPartitions) {
     	System.out.println("\n\nENTERED getPartition 2 in TeraSort.java \n\n");
-    	if(conf.getInt("mapred.job.bft", 1)==3){numPartitions=numPartitions/conf.getInt("mapred.job.numreplicas", 1);}
+    	//if(conf.getInt("mapred.job.bft", 1)==3){numPartitions=numPartitions/conf.getInt("mapred.job.numreplicas", 1);}
       byte[] bytes = key.getBytes();
       int len = Math.min(PREFIX_LENGTH, key.getLength());
       int prefix = 0;
