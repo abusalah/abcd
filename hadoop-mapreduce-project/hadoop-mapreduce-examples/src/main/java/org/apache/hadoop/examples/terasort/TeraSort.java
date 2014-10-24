@@ -266,7 +266,10 @@ public class TeraSort extends Configured implements Tool {
     		System.out.println("numPartitions = "+numPartitions);
 		}
     	System.out.println("\n\nENTERED getPartition 1 in TeraSort.java \n\n");
-      return trie.findPartition(key);
+    	int partitionReturnValue=trie.findPartition(key);
+    	System.out.println("partitionReturnValue = "+partitionReturnValue);
+    	return partitionReturnValue;
+      //return trie.findPartition(key);
     }
     
   }
