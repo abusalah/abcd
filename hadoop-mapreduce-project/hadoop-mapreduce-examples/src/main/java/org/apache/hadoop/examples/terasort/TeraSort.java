@@ -166,9 +166,12 @@ public class TeraSort extends Configured implements Tool {
     private static Text[] readPartitions(FileSystem fs, Path p,
         Configuration conf) throws IOException {
     	
-    	System.out.println("\n\nENTERED readPartitions in TeraSort.java \n\n");
+    	
     	
       int reduces = conf.getInt(MRJobConfig.NUM_REDUCES, 1);
+      
+      System.out.println("\n\nENTERED readPartitions in TeraSort.java and reduces = "+reduces+"\n\n ");
+      
       Text[] result = new Text[reduces - 1];
       DataInputStream reader = fs.open(p);
       for(int i=0; i < reduces - 1; ++i) {
@@ -240,6 +243,7 @@ public class TeraSort extends Configured implements Tool {
     }
 
     public int getPartition(Text key, Text value, int numPartitions) {
+    	if(BFT_FLAG_LOCAL==3){numPartitions=numPartitions/r3;}
     	System.out.println("\n\nENTERED getPartition 1 in TeraSort.java \n\n");
       return trie.findPartition(key);
     }
@@ -268,6 +272,7 @@ public class TeraSort extends Configured implements Tool {
     @Override
     public int getPartition(Text key, Text value, int numPartitions) {
     	System.out.println("\n\nENTERED getPartition 2 in TeraSort.java \n\n");
+    	if(BFT_FLAG_LOCAL==3){numPartitions=numPartitions/r3;}
       byte[] bytes = key.getBytes();
       int len = Math.min(PREFIX_LENGTH, key.getLength());
       int prefix = 0;
