@@ -60,6 +60,9 @@ public class TeraSort extends Configured implements Tool {
   private static final Log LOG = LogFactory.getLog(TeraSort.class);
   static String SIMPLE_PARTITIONER = "mapreduce.terasort.simplepartitioner";
   static String OUTPUT_REPLICATION = "mapreduce.terasort.output.replication";
+  
+  public static int r3=0;
+  public static int BFT_FLAG_LOCAL = 0;
 
   /**
    * A partitioner that splits text keys into roughly equal partitions
@@ -397,8 +400,7 @@ public class TeraSort extends Configured implements Tool {
     return 0;
   }
   
-  public static int r3=0;
-  public static int BFT_FLAG_LOCAL = 0;
+  
 
   /**
    * @param args
