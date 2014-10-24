@@ -49,6 +49,10 @@ import org.w3c.dom.NodeList;
 
 import com.jcraft.jsch.Random;
 
+
+
+
+
 /**
  * Generates the sampled split points, launches the job, and waits for it to
  * finish. 
@@ -63,6 +67,12 @@ public class TeraSort extends Configured implements Tool {
   
   public static int r3=0;
   public static int BFT_FLAG_LOCAL = 0;
+  
+  public static class Globals {
+	    public static int r3_global=0;
+	    public static int BFT_FLAG_LOCAL_global=0;
+	}
+
 
   /**
    * A partitioner that splits text keys into roughly equal partitions
@@ -247,6 +257,7 @@ public class TeraSort extends Configured implements Tool {
 
     public int getPartition(Text key, Text value, int numPartitions) {
     	System.out.println("in getPartition in TeraSort.java BFT_FLAG_LOCAL = "+BFT_FLAG_LOCAL);
+    	System.out.println("in getPartition in TeraSort.java Globals.BFT_FLAG_LOCAL_global = "+Globals.BFT_FLAG_LOCAL_global);
     	if(BFT_FLAG_LOCAL==3)
     	{
     		System.out.println("numPartitions = "+numPartitions);
@@ -428,6 +439,7 @@ public class TeraSort extends Configured implements Tool {
       				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
       				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
       				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
+      				Globals.BFT_FLAG_LOCAL_global=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
       			}
       		}
       	}
