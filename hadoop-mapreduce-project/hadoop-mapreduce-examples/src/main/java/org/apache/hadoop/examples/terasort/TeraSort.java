@@ -153,7 +153,7 @@ public class TeraSort extends Configured implements Tool {
         this.upper = upper;
       }
       int findPartition(Text key) {
-    	  System.out.println("\n\nENTERED findPartition 2 in TeraSort.java \n\n");
+    	  System.out.println("\n\nENTERED findPartition 2 in TeraSort.java lower = "+lower+" upper = "+upper+"\n\n");
         for(int i=lower; i<upper; ++i) {
           if (splitPoints[i].compareTo(key) > 0) {
         	  System.out.println("ret3 = "+i);
@@ -217,8 +217,10 @@ public class TeraSort extends Configured implements Tool {
      */
     private static TrieNode buildTrie(Text[] splits, int lower, int upper, 
                                       Text prefix, int maxDepth) {
+    	System.out.println("lower = "+lower+" upper = "+upper);
       int depth = prefix.getLength();
       if (depth >= maxDepth || lower == upper) {
+    	  System.out.println("ENETERD lower = "+lower+" upper = "+upper+" depth = "+depth+" maxDepth = "+maxDepth); 
         return new LeafTrieNode(depth, splits, lower, upper);
       }
       InnerTrieNode result = new InnerTrieNode(depth);
