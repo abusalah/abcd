@@ -47,6 +47,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import com.jcraft.jsch.Random;
+
 /**
  * Generates the sampled split points, launches the job, and waits for it to
  * finish. 
@@ -291,11 +293,14 @@ public class TeraSort extends Configured implements Tool {
     
     Job job = Job.getInstance(getConf());
     Path inputDir = new Path(args[0]);
-    Path outputDir =new Path(args[1]);
-    for (int i=0;i<r3;i++)
-    {
-    	outputDir= new Path(args[1]+Integer.toString(i));
-    }
+    //Path[] outputDir ;//Path outputDir=new Path(args[1]);
+    double test = Math.random() ;//* ( 10 - 1 );
+    //Random rand;// = new Random();
+    Path outputDir = new Path(args[1]+test);
+//    for (int i=0;i<r3;i++)
+//    {
+//    	outputDir[i]= new Path(args[1]+Integer.toString(i));
+//    }
     boolean useSimplePartitioner = getUseSimplePartitioner(job);
     TeraInputFormat.setInputPaths(job, inputDir);
     FileOutputFormat.setOutputPath(job, outputDir);
