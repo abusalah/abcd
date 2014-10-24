@@ -698,7 +698,7 @@ public class MapTask extends Task {
             
       //System.out.println("\n\n================MRJobConfig.BFT_FLAG = "+conf.getInt(MRJobConfig.BFT_FLAG, 1));
       
-      //System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in=========\n\n");
+      System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in=========\n\n");
             
       String[] splittedTaskID = getTaskID().toString().split("_");
       String localMapID = splittedTaskID[4];
@@ -707,35 +707,35 @@ public class MapTask extends Task {
       {
       	  case 1://No BFT
 	      {
-	    	  //System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case 1=========\n\n");
+	    	  System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case 1=========\n\n");
 	    	  originalgetPartitionValue=partitioner.getPartition(key, value, partitions);
 		      newgetPartitionValue = originalgetPartitionValue;
 		      break;
 	      }	      
       	  case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)       //deal with it as No BFT
 		  {
-			  //System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case 2=========\n\n");
+			  System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case 2=========\n\n");
 			  originalgetPartitionValue=partitioner.getPartition(key, value, partitions);
 		      newgetPartitionValue = originalgetPartitionValue;			
 			  break;
 		  }	      
       	  case 3://BFT: replicate mappers and reducers (both r times ?), single AM
 	      {    	  
-	    	  //System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case 3=========\n\n");
+	    	  System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case 3=========\n\n");
 		      originalgetPartitionValue=partitioner.getPartition(key, value, partitions/local_NUM_REPLICAS);
 		      newgetPartitionValue = (originalgetPartitionValue*local_NUM_REPLICAS) + (Integer.parseInt(localMapID)%local_NUM_REPLICAS);
 		      break;
 	      }
       	  case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
 	      {    	  
-	    	  //System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case 4=========\n\n");
+	    	  System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case 4=========\n\n");
 		      originalgetPartitionValue=partitioner.getPartition(key, value, partitions/local_NUM_REPLICAS);
 		      newgetPartitionValue = (originalgetPartitionValue*local_NUM_REPLICAS) + (Integer.parseInt(localMapID)%local_NUM_REPLICAS);
 		      break;
 	      }
       	  default://deal with it as No BFT
       	  {
-      		//System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case default=========\n\n");
+      		  System.out.println("\n\n=======ENTERED write in MapTask.java where newgetPartitionValue is in case default=========\n\n");
       		  originalgetPartitionValue=partitioner.getPartition(key, value, partitions);
 		      newgetPartitionValue = originalgetPartitionValue;
 		      break;      		  
