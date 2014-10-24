@@ -113,9 +113,13 @@ public class TeraSort extends Configured implements Tool {
     	  System.out.println("\n\nENTERED findPartition 1 in TeraSort.java \n\n");
         int level = getLevel();
         if (key.getLength() <= level) {
-          return child[0].findPartition(key);
+        	int ret1 = child[0].findPartition(key);
+        	System.out.println("ret1 = "+ret1);
+          return ret1;
         }
-        return child[key.getBytes()[level] & 0xff].findPartition(key);
+        int ret2 = child[key.getBytes()[level] & 0xff].findPartition(key); 
+        System.out.println("ret2 = "+ret2);
+        return ret2;
       }
       void setChild(int idx, TrieNode child) {
         this.child[idx] = child;
@@ -152,9 +156,11 @@ public class TeraSort extends Configured implements Tool {
     	  System.out.println("\n\nENTERED findPartition 2 in TeraSort.java \n\n");
         for(int i=lower; i<upper; ++i) {
           if (splitPoints[i].compareTo(key) > 0) {
+        	  System.out.println("ret3 = "+i);
             return i;
           }
         }
+        System.out.println("ret4 = "+upper);
         return upper;
       }
       void print(PrintStream strm) throws IOException {
