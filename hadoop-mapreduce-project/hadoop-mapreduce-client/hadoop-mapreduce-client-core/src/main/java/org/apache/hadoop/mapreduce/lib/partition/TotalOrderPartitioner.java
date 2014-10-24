@@ -124,6 +124,8 @@ public class TotalOrderPartitioner<K,V>
   // by construction, we know if our keytype
   @SuppressWarnings("unchecked") // is memcmp-able and uses the trie
   public int getPartition(K key, V value, int numPartitions) {
+	  System.out.println("-------inside getPartition inside TotalOrderPartitioner class in mapreduce"
+		  		+ "----------numPartitions = numReduceTasks ="+numPartitions);
     return partitions.findPartition(key);
   }
 

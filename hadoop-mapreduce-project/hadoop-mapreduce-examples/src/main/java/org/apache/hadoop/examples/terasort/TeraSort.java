@@ -243,7 +243,12 @@ public class TeraSort extends Configured implements Tool {
     }
 
     public int getPartition(Text key, Text value, int numPartitions) {
-    	if(BFT_FLAG_LOCAL==3){numPartitions=numPartitions/r3;}
+    	if(BFT_FLAG_LOCAL==3)
+    	{
+    		System.out.println("numPartitions = "+numPartitions);
+    		numPartitions=numPartitions/r3;
+    		System.out.println("numPartitions = "+numPartitions);
+		}
     	System.out.println("\n\nENTERED getPartition 1 in TeraSort.java \n\n");
       return trie.findPartition(key);
     }
