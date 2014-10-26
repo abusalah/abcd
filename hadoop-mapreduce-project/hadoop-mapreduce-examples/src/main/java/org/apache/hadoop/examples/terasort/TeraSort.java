@@ -108,6 +108,7 @@ public class TeraSort extends Configured implements Tool {
       
       InnerTrieNode(int level) {
         super(level);
+        System.out.println("in InnerTrieNode level = "+level);
       }
       int findPartition(Text key) {
     	  System.out.println("\n\nENTERED findPartition 1 in TeraSort.java \n\n");
@@ -221,7 +222,7 @@ public class TeraSort extends Configured implements Tool {
      */
     private static TrieNode buildTrie(Text[] splits, int lower, int upper, 
                                       Text prefix, int maxDepth) {
-    	System.out.println("lower = "+lower+" upper = "+upper);
+    	System.out.println("lower = "+lower+" upper = "+upper+" maxDepth = "+maxDepth);
       int depth = prefix.getLength();
       if (depth >= maxDepth || lower == upper) {
     	  System.out.println("ENETERD lower = "+lower+" upper = "+upper+" depth = "+depth+" maxDepth = "+maxDepth); 
@@ -275,11 +276,15 @@ public class TeraSort extends Configured implements Tool {
     	System.out.println("in getPartition in TeraSort.java BFT_FLAG_LOCAL = "+BFT_FLAG_LOCAL);
     	System.out.println("in getPartition in TeraSort.java Globals.BFT_FLAG_LOCAL_global = "+Globals.BFT_FLAG_LOCAL_global);
     	System.out.println("in getPartition in TeraSort.java conf.getInt(\"mapred.job.bft\", 1) = "+conf.getInt("mapred.job.bft", 1));
+    	
+    	System.out.println("numPartitions = "+numPartitions);
+    	
+    	
     	if(conf.getInt("mapred.job.bft", 1)==3)
     	{
-    		System.out.println("numPartitions = "+numPartitions);
+    		//System.out.println("numPartitions = "+numPartitions);
     		//numPartitions=numPartitions/conf.getInt("mapred.job.numreplicas", 1);
-    		System.out.println("numPartitions = "+numPartitions);
+    		//System.out.println("numPartitions = "+numPartitions);
 		}
     	System.out.println("\n\nENTERED getPartition 1 in TeraSort.java \n\n");
     	int partitionReturnValue=trie.findPartition(key);
