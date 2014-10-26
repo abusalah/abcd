@@ -308,7 +308,13 @@ public class TeraSort extends Configured implements Tool {
     public void setConf(Configuration conf) {
     	int newNumReduces=conf.getInt(MRJobConfig.NUM_REDUCES, 1);
     	
-    	//if(conf.getInt("mapred.job.bft", 1)==3){newNumReduces=newNumReduces/conf.getInt("mapred.job.numreplicas", 1);}   	
+    	if(conf.getInt("mapred.job.bft", 1)==3)
+    	{
+    		System.out.println("IN setConf");
+    		
+    		newNumReduces=newNumReduces/conf.getInt("mapred.job.numreplicas", 1);
+		}   	
+    	
     	
       this.conf = conf;
       prefixesPerReduce = (int) Math.ceil((1 << (8 * PREFIX_LENGTH)) / 
@@ -367,7 +373,7 @@ public class TeraSort extends Configured implements Tool {
     TeraInputFormat.setInputPaths(job, inputDir);
     FileOutputFormat.setOutputPath(job, outputDir);
     
-    
+    System.out.println("\n\n job.getNumReduceTasks() = "+job.getNumReduceTasks()+"\n\n");
     
     job.setJobName("TeraSort");
     job.setJarByClass(TeraSort.class);
@@ -516,6 +522,13 @@ public class TeraSort extends Configured implements Tool {
 	    for( int i=0; i<r3; i++ )
 	    {
 	    	conf[i] = new Configuration();
+//	    	if(conf[i].getInt("mapred.job.bft", 1)==3)
+//	    	{
+//	    		System.out.println("IN setConf");
+//	    		
+//	    		//conf[i]=newNumReduces/conf.getInt("mapred.job.numreplicas", 1);
+//			}   	
+	   
 	    	ToolRunner.run(conf[i], new TeraSort(), args);
 	    		
 	    }
