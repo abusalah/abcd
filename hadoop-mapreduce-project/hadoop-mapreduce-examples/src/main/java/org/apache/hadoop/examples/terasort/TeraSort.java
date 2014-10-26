@@ -308,6 +308,7 @@ public class TeraSort extends Configured implements Tool {
     public void setConf(Configuration conf) {
     	int newNumReduces=conf.getInt(MRJobConfig.NUM_REDUCES, 1);
     	
+    	//not needed
     	if(conf.getInt("mapred.job.bft", 1)==3)
     	{
     		System.out.println("IN setConf");
@@ -374,6 +375,13 @@ public class TeraSort extends Configured implements Tool {
     FileOutputFormat.setOutputPath(job, outputDir);
     
     System.out.println("\n\n job.getNumReduceTasks() = "+job.getNumReduceTasks()+"\n\n");
+    
+    if(job.getConfiguration().getInt("mapred.job.bft", 1)==3)
+    {
+    	job.setNumReduceTasks(job.getNumReduceTasks()/job.getConfiguration().getInt("mapred.job.numreplicas", 1));
+    	
+    	System.out.println("\n\n new job.getNumReduceTasks() = "+job.getNumReduceTasks()+"\n\n");
+	}
     
     job.setJobName("TeraSort");
     job.setJarByClass(TeraSort.class);
