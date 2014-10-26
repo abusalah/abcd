@@ -259,6 +259,7 @@ public class TeraSort extends Configured implements Tool {
         this.conf = conf;
         Path partFile = new Path(TeraInputFormat.PARTITION_FILENAME);
         splitPoints = readPartitions(fs, partFile, conf);
+        System.out.println("----------- splitPoints.length = "+splitPoints.length);
         trie = buildTrie(splitPoints, 0, splitPoints.length, new Text(), 2);
       } catch (IOException ie) {
         throw new IllegalArgumentException("can't read partitions file", ie);
