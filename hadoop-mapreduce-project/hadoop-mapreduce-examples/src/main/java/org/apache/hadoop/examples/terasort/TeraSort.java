@@ -112,6 +112,7 @@ public class TeraSort extends Configured implements Tool {
       int findPartition(Text key) {
     	  System.out.println("\n\nENTERED findPartition 1 in TeraSort.java \n\n");
         int level = getLevel();
+        System.out.println("in findPartition in InnerTrieNode level = "+level);
         if (key.getLength() <= level) {
         	int ret1 = child[0].findPartition(key);
         	System.out.println("ret1 = "+ret1);
@@ -151,6 +152,8 @@ public class TeraSort extends Configured implements Tool {
         this.splitPoints = splitPoints;
         this.lower = lower;
         this.upper = upper;
+        System.out.println("in LeafTrieNode constructor in LeafTrieNode level = "+level+
+        		" splitPoints.length = "+splitPoints.length+" lower = "+lower+" upper = "+upper);
       }
       int findPartition(Text key) {
     	  System.out.println("\n\nENTERED findPartition 2 in TeraSort.java lower = "+lower+" upper = "+upper+"\n\n");
