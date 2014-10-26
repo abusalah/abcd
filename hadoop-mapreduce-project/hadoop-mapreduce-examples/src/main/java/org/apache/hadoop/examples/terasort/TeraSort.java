@@ -320,6 +320,8 @@ public class TeraSort extends Configured implements Tool {
       this.conf = conf;
       prefixesPerReduce = (int) Math.ceil((1 << (8 * PREFIX_LENGTH)) / 
         (float) newNumReduces);
+      
+      System.out.println("prefixesPerReduce = "+prefixesPerReduce);
     }
     
     public Configuration getConf() {
