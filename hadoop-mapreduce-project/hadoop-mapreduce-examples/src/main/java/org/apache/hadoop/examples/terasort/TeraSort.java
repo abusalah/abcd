@@ -311,7 +311,7 @@ public class TeraSort extends Configured implements Tool {
     	//not needed
     	if(conf.getInt("mapred.job.bft", 1)==3)
     	{
-    		System.out.println("IN setConf");
+    		//System.out.println("IN setConf");
     		
     		newNumReduces=newNumReduces/conf.getInt("mapred.job.numreplicas", 1);
 		}   	
