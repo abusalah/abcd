@@ -75,6 +75,9 @@ public class TotalOrderPartitioner<K,V>
    */
   @SuppressWarnings("unchecked") // keytype from conf not static
   public void setConf(Configuration conf) {
+	  
+	  System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
+	  
     try {
       this.conf = conf;
       String parts = getPartitionFile(conf);
@@ -118,6 +121,7 @@ public class TotalOrderPartitioner<K,V>
   }
 
   public Configuration getConf() {
+	  System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
     return conf;
   }
   
@@ -135,6 +139,7 @@ public class TotalOrderPartitioner<K,V>
    * keys in the SequenceFile.
    */
   public static void setPartitionFile(Configuration conf, Path p) {
+	  System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
     conf.set(PARTITIONER_PATH, p.toString());
   }
 
@@ -143,6 +148,7 @@ public class TotalOrderPartitioner<K,V>
    * @see #setPartitionFile(Configuration, Path)
    */
   public static String getPartitionFile(Configuration conf) {
+	  System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
     return conf.get(PARTITIONER_PATH, DEFAULT_PATH);
   }
 
@@ -185,6 +191,7 @@ public class TotalOrderPartitioner<K,V>
       this.comparator = comparator;
     }
     public int findPartition(K key) {
+    	System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
       final int pos = Arrays.binarySearch(splitPoints, key, comparator) + 1;
       return (pos < 0) ? -pos : pos;
     }
@@ -201,6 +208,7 @@ public class TotalOrderPartitioner<K,V>
       super(level);
     }
     public int findPartition(BinaryComparable key) {
+    	System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
       int level = getLevel();
       if (key.getLength() <= level) {
         return child[0].findPartition(key);
@@ -254,6 +262,7 @@ public class TotalOrderPartitioner<K,V>
       this.splitPoints = splitPoints;
     }
     public int findPartition(BinaryComparable key) {
+    	System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
       final int pos = Arrays.binarySearch(splitPoints, lower, upper, key) + 1;
       return (pos < 0) ? -pos : pos;
     }
@@ -283,6 +292,7 @@ public class TotalOrderPartitioner<K,V>
       }
       
       public int findPartition(BinaryComparable key) {
+    	  System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
           return lower + (key.compareTo(mySplitPoint) < 0 ? 0 : 1);
       }
   }
@@ -300,6 +310,7 @@ public class TotalOrderPartitioner<K,V>
   @SuppressWarnings("unchecked") // map output key class
   private K[] readPartitions(FileSystem fs, Path p, Class<K> keyClass,
       Configuration conf) throws IOException {
+	  System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
     SequenceFile.Reader reader = new SequenceFile.Reader(
         conf,
         SequenceFile.Reader.file(p));
@@ -374,6 +385,7 @@ public class TotalOrderPartitioner<K,V>
    */
   private TrieNode buildTrieRec(BinaryComparable[] splits, int lower,
       int upper, byte[] prefix, int maxDepth, CarriedTrieNodeRef ref) {
+	  System.out.println("\n\n\n\n\n-----------\n\n\n\n\n");
     final int depth = prefix.length;
     // We generate leaves for a single split point as well as for 
     // no split points.

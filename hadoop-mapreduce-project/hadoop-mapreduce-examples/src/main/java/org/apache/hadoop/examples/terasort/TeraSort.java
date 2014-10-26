@@ -358,6 +358,10 @@ public class TeraSort extends Configured implements Tool {
 
   public int run(String[] args) throws Exception {
 	  System.out.println("\n\nENTERED run in TeraSort.java\n\n");
+	  
+	  System.out.println("------------who calls run in TeraSort.java : --------------");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  
     LOG.info("starting");
     
     Job job = Job.getInstance(getConf());
