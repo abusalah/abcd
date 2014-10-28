@@ -1228,7 +1228,12 @@ public class Configuration implements Iterable<Map.Entry<String,String>>,
     }
     if(name.equals("mapreduce.job.reduces"))
     {
+    	
+    	System.out.println("\n WHO IS CALLING  mapreduce.job.reduces \n"); 
+    	
     	System.out.println("---Integer.parseInt(valueString)*numReducersReplicas = "+Integer.parseInt(valueString)*numReducersReplicas);return Integer.parseInt(valueString)*numReducersReplicas;
+    	
+    	   	
 	}
     return Integer.parseInt(valueString);
   }
