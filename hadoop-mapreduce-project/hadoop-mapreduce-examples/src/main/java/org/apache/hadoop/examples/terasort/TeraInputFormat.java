@@ -123,6 +123,17 @@ public class TeraInputFormat extends FileInputFormat<Text,Text> {
     final TeraInputFormat inFormat = new TeraInputFormat();
     final TextSampler sampler = new TextSampler();
     int partitions = job.getNumReduceTasks();
+    
+    System.out.println("INSIDE BEFORE TeraInputFormat partitions = "+partitions);
+    
+    if(job.getConfiguration().getInt("mapred.job.bft", 1)==3)
+    {
+    
+	    partitions=partitions/job.getConfiguration().getInt("mapred.job.numreplicas", 1);
+	    
+	    System.out.println("INSIDE AFTER TeraInputFormat partitions = "+partitions);
+    
+    }
     long sampleSize = conf.getLong(SAMPLE_SIZE, 100000);
     final List<InputSplit> splits = inFormat.getSplits(job);
     long t2 = System.currentTimeMillis();
