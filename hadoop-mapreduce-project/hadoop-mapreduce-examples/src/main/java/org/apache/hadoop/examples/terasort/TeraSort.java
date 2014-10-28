@@ -245,11 +245,18 @@ public class TeraSort extends Configured implements Tool {
         trial.getBytes()[depth] = (byte) ch;
         result.child[ch] = buildTrie(splits, lower, currentBound, trial, 
                                      maxDepth);
+        
+        System.out.println("~~~~INSIDE buildTrie insdie the while splits = "+splits+" lower = "+lower+" currentBound = "
+        +currentBound+" maxDepth = "+maxDepth);
       }
       // pick up the rest
       trial.getBytes()[depth] = (byte) 255;
       result.child[255] = buildTrie(splits, currentBound, upper, trial,
                                     maxDepth);
+      
+      System.out.println("++++INSIDE buildTrie outside the while splits = "+splits+" upper = "+upper+" currentBound = "
+    	        +currentBound+" maxDepth = "+maxDepth);
+      
       return result;
     }
 
@@ -338,7 +345,11 @@ public class TeraSort extends Configured implements Tool {
       for(int i=0; i < len; ++i) {
         prefix = (prefix << 8) | (0xff & bytes[i]);
       }
-      return prefix / prefixesPerReduce;
+      int retValue = prefix / prefixesPerReduce;
+      
+      System.out.println("==== retValue = "+retValue);
+      
+      return retValue;
     }
   }
 
