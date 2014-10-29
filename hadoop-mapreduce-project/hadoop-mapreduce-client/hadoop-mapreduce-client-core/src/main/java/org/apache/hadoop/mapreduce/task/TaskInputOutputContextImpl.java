@@ -25,6 +25,8 @@ import java.io.InputStreamReader;
 import java.io.PrintStream;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Iterator;
 
 import org.apache.hadoop.classification.InterfaceAudience;
@@ -68,6 +70,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 	public String local_taskID = null;
 	public String KV = null;
 	public long total_hash=0;
+	public String total_hash_string=null;
   
   
 
@@ -121,8 +124,23 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 	  if(reducerORmapper.equals("r"))
 	  {
 		  KV=key.toString()+value.toString();
-		  total_hash+=KV.hashCode();
-		  Reducer.external_total_hash=total_hash;
+		  //total_hash+=KV.hashCode();//This was the old way of doing the hashes and it worked perfectly
+		  //This old hash value was an integer, now it is becoming a String
+		  //Reducer.external_total_hash=total_hash;
+		  MessageDigest messageDigest;
+		try {
+			messageDigest = MessageDigest.getInstance("SHA-256");
+			messageDigest.update(KV.getBytes());
+			String encryptedString = new String(messageDigest.digest());
+			total_hash_string+=encryptedString;
+			Reducer.external_total_hash_string=total_hash_string;
+			  
+		} catch (NoSuchAlgorithmException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
+			
 		  
 //		  System.out.println("this.local_taskID = "+this.local_taskID);
 //		  System.out.println("++++++ inside write in TaskInputOutputContextImpl key.toString() = "

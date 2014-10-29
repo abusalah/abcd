@@ -13,7 +13,7 @@ public static PrintWriter writer;
 
     public static int bft2VerifierThreadFlag=0;
   
-    private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
+    private static String[] replicasHashes;//private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
     private static int[] replicasHashes_set;
     public static int resetArraysFlagCount=0;//a count to know when to reset replicasHashes and replicasHashes_set arrays
     public static int resetArraysFlag=0;
@@ -24,8 +24,8 @@ public static PrintWriter writer;
     //private static Long[] replicasHashes_forbft2;
     //private static String[] applicationsNames;
     //private static Map<String, List<Long>> AMsMap = new HashMap<String, List<Long>>();
-    private static Map<String, Map<Integer, Long>> AMsMap = new HashMap<String, Map<Integer, Long>>();
-    private static Map<String, Long> hash_sum_per_App_replica = new HashMap<String, Long>();
+    private static Map<String, Map<Integer, String>> AMsMap = new HashMap<String, Map<Integer, String>>();//new HashMap<String, Map<Integer, Long>>();
+    private static Map<String, String> hash_sum_per_App_replica = new HashMap<String, String>();//new HashMap<String, Long>();
     private static Map<String, Integer> ApplicationNumberBase_Touch = new HashMap<String, Integer>();
 
     private static int local_BFT_flag=0;
@@ -125,7 +125,7 @@ public static PrintWriter writer;
 	int receivedApplicationNumber_2 =0;
 	String ApplicationNumberwithReplicaNumber_withOutputName=null;
 	String ApplicationNumberBase_withOutputName=null;
-	long receivedHash= 0;
+	String receivedHash= null;
 	Integer unreplicatedReducerNumber=null;
 	boolean firstandsecond,thirdandforth,allofthem;
        
@@ -166,7 +166,7 @@ public static PrintWriter writer;
 			    if(resetArraysFlag==0)//new application for bft=3, need new arrays
 			    {
 			    	System.out.println("ENTERED if(resetArraysFlag==0)");
-				    replicasHashes = new Long[local_NUM_REDUCES];
+				    replicasHashes = new String[local_NUM_REDUCES];//new Long[local_NUM_REDUCES];
 				    replicasHashes_set = new int[local_NUM_REDUCES/local_NUM_REPLICAS]; 
 				    resetArraysFlag=1;
 			    }
@@ -181,7 +181,7 @@ public static PrintWriter writer;
 			    //receivedReducerNumber = Integer.parseInt(lineReceived.split(" ")[0]);
 			    receivedOutputPath = lineReceived.split(" ")[1];
 			    receivedTaskAttemptID = lineReceived.split(" ")[2];		
-			    receivedHash = Long.parseLong(lineReceived.split(" ")[3]);
+			    receivedHash = lineReceived.split(" ")[3];//Long.parseLong(lineReceived.split(" ")[3]);
 			    receivedReducerNumber = Integer.parseInt(receivedTaskAttemptID.toString().split("_")[4]);
 			    receivedApplicationNumber_1=Long.parseLong(receivedTaskAttemptID.toString().split("_")[1]);
 			    receivedApplicationNumber_2=Integer.parseInt(receivedTaskAttemptID.toString().split("_")[2]);
@@ -290,7 +290,7 @@ public static PrintWriter writer;
 					    if(resetArraysFlag==0)//new application for bft=3, need new arrays
 					    {
 					    	System.out.println("ENTERED if(resetArraysFlag==0)");
-						    replicasHashes = new Long[local_NUM_REDUCES];
+						    replicasHashes = new String[local_NUM_REDUCES];//new Long[local_NUM_REDUCES];
 						    replicasHashes_set = new int[local_NUM_REDUCES/local_NUM_REPLICAS]; 
 						    resetArraysFlag=1;
 					    }
@@ -336,7 +336,7 @@ public static PrintWriter writer;
 					}
 				    else//first time to see the application, add it to the hashmap
 					{
-				    	Map<Integer, Long> new_replicasHashes_forbft2_MAP = new HashMap<Integer, Long>();
+				    	Map<Integer, String> new_replicasHashes_forbft2_MAP = new HashMap<Integer, String>();//new HashMap<Integer, Long>();
 				    	
 					    System.out.println("ENTERED if(AMsMap.containsKey(ApplicationName))  ....   else");
 					    new_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
@@ -362,19 +362,19 @@ public static PrintWriter writer;
 						   " ApplicationNumberwithReplicaNumber = "+ApplicationNumberwithReplicaNumber_withOutputName+
 						   " AMsMap.size()"+AMsMap.size()
 						   );
-				    for (Map.Entry<String, Map<Integer, Long>> AppEntry: AMsMap.entrySet())
+				    for (Map.Entry<String, Map<Integer, String>> AppEntry: AMsMap.entrySet())
 					{
 					    System.out.println("AppEntry.getKey() = "+AppEntry.getKey());
 					    //temp_replicasHashes_forbft2_MAP=AppEntry.getValue();
 					    System.out.println("AppEntry.getValue().size() = "+AppEntry.getValue().size());
-					    for(Map.Entry<Integer, Long> AppEntry2: AppEntry.getValue().entrySet())//(int i =0;i<AppEntry.getValue().size();i++)
+					    for(Map.Entry<Integer, String> AppEntry2: AppEntry.getValue().entrySet())//(int i =0;i<AppEntry.getValue().size();i++)
 						{
 						    //writer.println("temp_replicasHashes_forbft2_MAP.get(i) i = "+i+" is "+temp_replicasHashes_forbft2_MAP.get(i));
 						    System.out.println("AppEntry2.getKey() = "+AppEntry2.getKey()+" AppEntry2.getValue() = "+AppEntry2.getValue());
 						}
 					    //temp_replicasHashes_forbft2_MAP.clear();          					    
 					}
-				    for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
+				    for (Map.Entry<String, String> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    {
 				    	System.out.println("hash_sum_per_App_Entery.getKey() = "+hash_sum_per_App_Entery.getKey()+" hash_sum_per_App_Entery.getValue() = "+hash_sum_per_App_Entery.getValue());
 				    }
@@ -392,11 +392,11 @@ public static PrintWriter writer;
 				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase_withOutputName);
 				    	int q=0;//hash_sum_per_App loop variable
 				    	//Map.Entry<String,int> entry = new AbstractMap.SimpleEntry<String, int>("exmpleString", 42);
-				    	Map.Entry<String,Long> tempEntry = new AbstractMap.SimpleEntry<String, Long>(" ",(long) 0);//("exmpleString", (long)42);
+				    	Map.Entry<String,String> tempEntry = new AbstractMap.SimpleEntry<String, String>(" ",(String) " ");//("exmpleString", (long)42);
 				    	allofthem=false;
 				    	System.out.println("-----");
 				    	System.out.println("hash_sum_per_App_replica.size() = "+hash_sum_per_App_replica.size());
-				    	for (Map.Entry<String, Long> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
+				    	for (Map.Entry<String, String> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    	{//in case we have many applications running in parallel; check for the ApplicationNumberBase first
 				    		
 				    		System.out.println("hash_sum_per_App_Entery.getKey().split(\"_\")[0] = "+hash_sum_per_App_Entery.getKey().split("_")[0]);

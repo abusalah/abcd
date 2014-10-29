@@ -173,6 +173,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	
 	public static int finalValue=0;
 	public static long external_total_hash = 0;
+	public static String external_total_hash_string = null;
 	
     //public EventHandler eventHandler2;
 
@@ -361,10 +362,10 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
 					
     	  
     	  System.out.println("++++++ inside run in Reducer.java context.getTaskAttemptID().toString() = "
-    	  +context.getTaskAttemptID().toString()+" external_total_hash = "+external_total_hash);
+    	  +context.getTaskAttemptID().toString()+" external_total_hash_string = "+external_total_hash_string);
     	  
     	  totalHash=0;//just for now for testing    	  
-    	  stringToSend=flags_to_send+" "+outputFileFullPathOnHDFS+" "+context.getTaskAttemptID().toString()+" "+external_total_hash;
+    	  stringToSend=flags_to_send+" "+outputFileFullPathOnHDFS+" "+context.getTaskAttemptID().toString()+" "+external_total_hash_string;
     	  
 
     	  
