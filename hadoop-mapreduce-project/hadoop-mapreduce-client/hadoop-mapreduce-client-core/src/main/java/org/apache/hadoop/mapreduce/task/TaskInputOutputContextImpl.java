@@ -72,6 +72,8 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 	public long total_hash=0;
 	public String total_hash_string=null;
 	public byte[] total_hash_byteArray=null;
+	public static int firstKey=0;
+	
   
   
 
@@ -117,6 +119,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
   public void write(KEYOUT key, VALUEOUT value
                     ) throws IOException, InterruptedException {
 	  
+	  
 //	  System.out.println("___________inside write() in TaskInputOutputContextImpl.java_______________Thread.currentThread().getStackTrace() = ");
 //	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 //	  
@@ -137,7 +140,14 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 			//total_hash_string+=encryptedString;
 			//Reducer.external_total_hash_string=total_hash_string;
 		    for(int i=0; i< hash.length;i++){//(byte b : hash) {
-				Reducer.external_total_hash_byteArray[i]=(byte)(Reducer.external_total_hash_byteArray[i]+hash[i]);//Integer.toHexString(hash[i] & 0xff);
+		    	if(firstKey==0)
+		    	{
+		    		Reducer.external_total_hash_byteArray[i]=hash[i];//Integer.toHexString(hash[i] & 0xff);
+		    	}
+		    	else
+		    	{
+		    		Reducer.external_total_hash_byteArray[i]=(byte)(Reducer.external_total_hash_byteArray[i]+hash[i]);
+		    	}
 		    }
 			//Reducer.external_total_hash_byteArray+=hash;
 			  
@@ -146,7 +156,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 			e.printStackTrace();
 		}
 			
-			
+		firstKey++;
 		  
 //		  System.out.println("this.local_taskID = "+this.local_taskID);
 //		  System.out.println("++++++ inside write in TaskInputOutputContextImpl key.toString() = "

@@ -174,7 +174,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	public static int finalValue=0;
 	public static long external_total_hash = 0;
 	public static String external_total_hash_string = null;
-	public static byte[] external_total_hash_byteArray = null;
+	public static byte[] external_total_hash_byteArray =null;
 	
     //public EventHandler eventHandler2;
 
