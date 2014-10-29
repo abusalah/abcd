@@ -174,6 +174,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	public static int finalValue=0;
 	public static long external_total_hash = 0;
 	public static String external_total_hash_string = null;
+	public static byte[] external_total_hash_byteArray = null;
 	
     //public EventHandler eventHandler2;
 
@@ -359,6 +360,14 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
 				+JobSubmitter.allAppsString_forbft2);
 				System.out.println("JobSubmitter.numApps_forbft2 = "
 				+JobSubmitter.numApps_forbft2);
+				
+				StringBuffer sb = new StringBuffer();
+			    for(byte b : external_total_hash_byteArray) {
+			        sb.append(Integer.toHexString(b & 0xff));
+			    }
+
+				
+		  external_total_hash_string=sb.toString();
 					
     	  
     	  System.out.println("++++++ inside run in Reducer.java context.getTaskAttemptID().toString() = "

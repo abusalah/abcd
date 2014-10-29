@@ -71,6 +71,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 	public String KV = null;
 	public long total_hash=0;
 	public String total_hash_string=null;
+	public byte[] total_hash_byteArray=null;
   
   
 
@@ -130,10 +131,15 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 		  MessageDigest messageDigest;
 		try {
 			messageDigest = MessageDigest.getInstance("SHA-256");
-			messageDigest.update(KV.getBytes());
-			String encryptedString = new String(messageDigest.digest());
-			total_hash_string+=encryptedString;
-			Reducer.external_total_hash_string=total_hash_string;
+			byte[] hash = messageDigest.digest(KV.getBytes("UTF-8"));
+			//messageDigest.update(KV.getBytes());
+			//String encryptedString = new String(messageDigest.digest());
+			//total_hash_string+=encryptedString;
+			//Reducer.external_total_hash_string=total_hash_string;
+		    for(int i=0; i< hash.length;i++){//(byte b : hash) {
+				Reducer.external_total_hash_byteArray[i]=(byte)(Reducer.external_total_hash_byteArray[i]+hash[i]);//Integer.toHexString(hash[i] & 0xff);
+		    }
+			//Reducer.external_total_hash_byteArray+=hash;
 			  
 		} catch (NoSuchAlgorithmException e) {
 			// TODO Auto-generated catch block
