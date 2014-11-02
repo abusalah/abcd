@@ -135,13 +135,22 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 		try {
 			messageDigest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = messageDigest.digest(KV.getBytes("UTF-8"));
+			
+			System.out.println("firstKey = "+firstKey);
+			
+			if(firstKey==0)
+			{
+				System.out.println("1 ENTERED firstKey==0");
+				Reducer.external_total_hash_byteArray=new byte[hash.length];				
+			}
 			//messageDigest.update(KV.getBytes());
 			//String encryptedString = new String(messageDigest.digest());
 			//total_hash_string+=encryptedString;
 			//Reducer.external_total_hash_string=total_hash_string;
 		    for(int i=0; i< hash.length;i++){//(byte b : hash) {
 		    	if(firstKey==0)
-		    	{
+		    	{		    		
+		    		System.out.println("2 ENTERED firstKey==0");
 		    		Reducer.external_total_hash_byteArray[i]=hash[i];//Integer.toHexString(hash[i] & 0xff);
 		    	}
 		    	else
