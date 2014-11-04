@@ -136,7 +136,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 			messageDigest = MessageDigest.getInstance("SHA-256");
 			byte[] hash = messageDigest.digest(KV.getBytes("UTF-8"));
 			
-			System.out.println("firstKey = "+firstKey);
+			//System.out.println("firstKey = "+firstKey);
 			
 			if(firstKey==0)
 			{

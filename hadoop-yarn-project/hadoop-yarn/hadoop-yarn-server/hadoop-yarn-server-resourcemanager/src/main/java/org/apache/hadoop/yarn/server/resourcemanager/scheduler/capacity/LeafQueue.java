@@ -1133,6 +1133,14 @@ public class LeafQueue implements CSQueue {
   private CSAssignment assignContainersOnNode(Resource clusterResource, 
       FiCaSchedulerNode node, FiCaSchedulerApp application, 
       Priority priority, RMContainer reservedContainer) {
+	  
+//	  this.
+//	  
+//	  List<RMContainer> conList = node.getRunningContainers();
+//	  
+//	  RMContainer runcon = conList.get(1);
+//	  
+//	  runcon.createContainerReport();
 
     Resource assigned = Resources.none();
 

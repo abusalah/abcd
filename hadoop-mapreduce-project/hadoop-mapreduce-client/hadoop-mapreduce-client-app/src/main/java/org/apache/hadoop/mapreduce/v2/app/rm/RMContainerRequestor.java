@@ -107,11 +107,17 @@ public abstract class RMContainerRequestor extends RMCommunicator {
     public ContainerRequest(ContainerRequestEvent event, Priority priority) {
       this(event.getAttemptID(), event.getCapability(), event.getHosts(),
           event.getRacks(), priority);
+      
+      System.out.println("INSIDE 1 ContainerRequest and attemptID = "+attemptID);
+      
     }
     
     public ContainerRequest(TaskAttemptId attemptID,
         Resource capability, String[] hosts, String[] racks, 
         Priority priority) {
+    	
+    	System.out.println("INSIDE 2 ContainerRequest and attemptID = "+attemptID);
+    	
       this.attemptID = attemptID;
       this.capability = capability;
       this.hosts = hosts;
@@ -158,6 +164,9 @@ public abstract class RMContainerRequestor extends RMCommunicator {
           super.getApplicationProgress(), new ArrayList<ResourceRequest>(ask),
           new ArrayList<ContainerId>(release), blacklistRequest);
     AllocateResponse allocateResponse;
+    
+    
+    
     try {
       allocateResponse = scheduler.allocate(allocateRequest);
     } catch (YarnException e) {
