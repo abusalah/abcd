@@ -64,7 +64,10 @@ import org.apache.hadoop.yarn.util.Records;
 @Public
 @Stable
 public abstract class AllocateResponse {
-
+	
+	
+	
+	
   @Public
   @Stable
   public static AllocateResponse newInstance(int responseId,

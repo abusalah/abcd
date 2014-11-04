@@ -171,7 +171,15 @@ public abstract class RMContainerRequestor extends RMCommunicator {
           new ArrayList<ContainerId>(release), blacklistRequest);
     AllocateResponse allocateResponse;
     
+    System.out.println("in makeRemoteRequest taskAttemptID_from_RMContainerRequestor = "
+    +taskAttemptID_from_RMContainerRequestor);
+    
+    allocateRequest.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_from_RMContainerRequestor;
+    
     allocateRequest.setTaskAttemptID_IN_AllocateRequest_abstract(taskAttemptID_from_RMContainerRequestor);
+    
+    System.out.println("allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract() = "
+    +allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract());
     
     try {
       allocateResponse = scheduler.allocate(allocateRequest);

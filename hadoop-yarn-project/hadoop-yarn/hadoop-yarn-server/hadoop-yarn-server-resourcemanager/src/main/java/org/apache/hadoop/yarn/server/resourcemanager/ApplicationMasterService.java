@@ -403,6 +403,9 @@ public class ApplicationMasterService extends AbstractService implements
 	  testTaskID=request.getTaskAttemptID_IN_AllocateRequest_abstract();
 	  
 	  System.out.println("\n\n\n\n\n\n testTaskID = "+testTaskID+"\n\n\n\n\n");
+	  
+	  System.out.println("in allocate request.taskAttemptID_IN_AllocateRequest_abstract = "
+	  +request.taskAttemptID_IN_AllocateRequest_abstract);
 
     ApplicationAttemptId appAttemptId = authorizeRequest();
 

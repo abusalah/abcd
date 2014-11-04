@@ -60,7 +60,7 @@ public abstract class AllocateRequest {
 	
 
   public String getTaskAttemptID_IN_AllocateRequest_abstract() {
-		return taskAttemptID_IN_AllocateRequest_abstract;
+		return this.taskAttemptID_IN_AllocateRequest_abstract;
 	}
 
 	public void setTaskAttemptID_IN_AllocateRequest_abstract(
