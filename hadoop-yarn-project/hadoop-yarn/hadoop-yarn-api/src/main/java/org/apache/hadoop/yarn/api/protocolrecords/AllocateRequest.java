@@ -54,8 +54,21 @@ import org.apache.hadoop.yarn.util.Records;
 @Public
 @Stable
 public abstract class AllocateRequest {
+	
+	public String taskAttemptID_IN_AllocateRequest_abstract ="";
+	
+	
 
-  @Public
+  public String getTaskAttemptID_IN_AllocateRequest_abstract() {
+		return taskAttemptID_IN_AllocateRequest_abstract;
+	}
+
+	public void setTaskAttemptID_IN_AllocateRequest_abstract(
+			String taskAttemptID_IN_AllocateRequest_abstract) {
+		this.taskAttemptID_IN_AllocateRequest_abstract = taskAttemptID_IN_AllocateRequest_abstract;
+	}
+
+@Public
   @Stable
   public static AllocateRequest newInstance(int responseID, float appProgress,
       List<ResourceRequest> resourceAsk,

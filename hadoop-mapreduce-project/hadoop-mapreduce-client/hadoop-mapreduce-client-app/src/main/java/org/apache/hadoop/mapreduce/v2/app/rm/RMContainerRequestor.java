@@ -56,6 +56,8 @@ public abstract class RMContainerRequestor extends RMCommunicator {
   
   private static final Log LOG = LogFactory.getLog(RMContainerRequestor.class);
 
+  public static String taskAttemptID_from_RMContainerRequestor="";
+  
   private int lastResponseID;
   private Resource availableResources;
 
@@ -117,6 +119,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
         Priority priority) {
     	
     	System.out.println("INSIDE 2 ContainerRequest and attemptID = "+attemptID);
+    	taskAttemptID_from_RMContainerRequestor=attemptID.toString();
     	
       this.attemptID = attemptID;
       this.capability = capability;
@@ -159,13 +162,16 @@ public abstract class RMContainerRequestor extends RMCommunicator {
     ResourceBlacklistRequest blacklistRequest =
         ResourceBlacklistRequest.newInstance(new ArrayList<String>(blacklistAdditions),
             new ArrayList<String>(blacklistRemovals));
+    
+    
+    
     AllocateRequest allocateRequest =
         AllocateRequest.newInstance(lastResponseID,
           super.getApplicationProgress(), new ArrayList<ResourceRequest>(ask),
           new ArrayList<ContainerId>(release), blacklistRequest);
     AllocateResponse allocateResponse;
     
-    
+    allocateRequest.setTaskAttemptID_IN_AllocateRequest_abstract(taskAttemptID_from_RMContainerRequestor);
     
     try {
       allocateResponse = scheduler.allocate(allocateRequest);

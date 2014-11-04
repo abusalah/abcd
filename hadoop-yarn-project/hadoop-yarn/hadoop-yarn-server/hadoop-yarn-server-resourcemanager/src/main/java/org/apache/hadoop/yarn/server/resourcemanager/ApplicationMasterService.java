@@ -397,6 +397,12 @@ public class ApplicationMasterService extends AbstractService implements
   @Override
   public AllocateResponse allocate(AllocateRequest request)
       throws YarnException, IOException {
+	  
+	  String testTaskID="";
+	  
+	  testTaskID=request.getTaskAttemptID_IN_AllocateRequest_abstract();
+	  
+	  System.out.println("\n\n\n\n\n\n testTaskID = "+testTaskID+"\n\n\n\n\n");
 
     ApplicationAttemptId appAttemptId = authorizeRequest();
 
