@@ -49,6 +49,23 @@ public class AllocateRequestPBImpl extends AllocateRequest {
   AllocateRequestProto proto = AllocateRequestProto.getDefaultInstance();
   AllocateRequestProto.Builder builder = null;
   boolean viaProto = false;
+  
+  
+  public String taskAttemptID_IN_AllocateRequest_abstract222 ="";
+	
+	
+
+  public String getTaskAttemptID_IN_AllocateRequest_abstract() {
+		return this.taskAttemptID_IN_AllocateRequest_abstract222;
+	}
+
+	public void setTaskAttemptID_IN_AllocateRequest_abstract(
+			String taskAttemptID_IN_AllocateRequest_abstract222) {
+		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
+		this.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_IN_AllocateRequest_abstract222;
+	}
+
+  
 
   private List<ResourceRequest> ask = null;
   private List<ContainerId> release = null;

@@ -181,6 +181,9 @@ public abstract class RMContainerRequestor extends RMCommunicator {
     System.out.println("allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract() = "
     +allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract());
     
+    
+    
+    
     try {
       allocateResponse = scheduler.allocate(allocateRequest);
     } catch (YarnException e) {

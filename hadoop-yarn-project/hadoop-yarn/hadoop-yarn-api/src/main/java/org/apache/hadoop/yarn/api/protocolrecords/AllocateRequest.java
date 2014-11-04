@@ -95,6 +95,21 @@ public abstract class AllocateRequest {
     return allocateRequest;
   }
   
+  
+  
+  public abstract String getTaskAttemptID_IN_AllocateRequest_abstract222(); 
+//  {
+//		return this.taskAttemptID_IN_AllocateRequest_abstract222;
+//	}
+
+	public abstract void setTaskAttemptID_IN_AllocateRequest_abstract222l(
+			String taskAttemptID_IN_AllocateRequest_abstract222);
+//	{
+//		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
+//	}
+
+  
+  
   /**
    * Get the <em>response id</em> used to track duplicate responses.
    * @return <em>response id</em>
