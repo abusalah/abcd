@@ -71,6 +71,11 @@ public class ApplicationMasterProtocolPBClientImpl implements ApplicationMasterP
   @Override
   public AllocateResponse allocate(AllocateRequest request)
       throws YarnException, IOException {
+	  
+	  System.out.println("aaabbbccc2");
+	  
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  
     AllocateRequestProto requestProto =
         ((AllocateRequestPBImpl) request).getProto();
     try {

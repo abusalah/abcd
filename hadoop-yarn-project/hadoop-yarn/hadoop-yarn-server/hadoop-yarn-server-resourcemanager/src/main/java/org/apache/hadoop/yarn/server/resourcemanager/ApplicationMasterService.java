@@ -410,6 +410,9 @@ public class ApplicationMasterService extends AbstractService implements
 	  
 	  System.out.println("aaabbbccc = "+request.taskAttemptID_IN_AllocateRequest_abstract+request.getTaskAttemptID_IN_AllocateRequest_abstract222()
 			  +request.getTaskAttemptID_IN_AllocateRequest_abstract());
+	  
+	  
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 
     ApplicationAttemptId appAttemptId = authorizeRequest();
 
