@@ -55,11 +55,11 @@ public class AllocateRequestPBImpl extends AllocateRequest {
 	
 	
 
-  public String getTaskAttemptID_IN_AllocateRequest_abstract() {
+  public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
 		return this.taskAttemptID_IN_AllocateRequest_abstract222;
 	}
 
-	public void setTaskAttemptID_IN_AllocateRequest_abstract(
+	public void setTaskAttemptID_IN_AllocateRequest_abstract222(
 			String taskAttemptID_IN_AllocateRequest_abstract222) {
 		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
 		this.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_IN_AllocateRequest_abstract222;

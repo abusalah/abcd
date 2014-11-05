@@ -102,7 +102,7 @@ public abstract class AllocateRequest {
 //		return this.taskAttemptID_IN_AllocateRequest_abstract222;
 //	}
 
-	public abstract void setTaskAttemptID_IN_AllocateRequest_abstract222l(
+	public abstract void setTaskAttemptID_IN_AllocateRequest_abstract222(
 			String taskAttemptID_IN_AllocateRequest_abstract222);
 //	{
 //		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
