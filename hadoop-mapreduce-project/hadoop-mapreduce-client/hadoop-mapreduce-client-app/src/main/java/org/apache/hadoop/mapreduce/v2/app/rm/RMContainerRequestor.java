@@ -181,6 +181,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
     System.out.println("allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract() = "
     +allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract());
     
+    allocateRequest.setTaskAttemptID_IN_AllocateRequest_abstract222(taskAttemptID_from_RMContainerRequestor);
     
     
     
