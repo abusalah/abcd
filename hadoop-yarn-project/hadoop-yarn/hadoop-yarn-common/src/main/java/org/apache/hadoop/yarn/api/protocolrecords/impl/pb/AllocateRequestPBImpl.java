@@ -59,20 +59,6 @@ public class AllocateRequestPBImpl extends AllocateRequest {
 //		return this.taskAttemptID_IN_AllocateRequest_abstract222;
 //	}
 
-	public void setTaskAttemptID_IN_AllocateRequest_abstract222(
-			String taskAttemptID_IN_AllocateRequest_abstract222) {
-		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
-		this.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_IN_AllocateRequest_abstract222;
-		maybeInitBuilder();
-	    builder.setTasksidinproto(taskAttemptID_IN_AllocateRequest_abstract222);
-	}
-	
-	
-	public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
-	    AllocateRequestProtoOrBuilder p = viaProto ? proto : builder;
-	    return p.gettasksidinproto();
-	  }
-
   
 
   private List<ResourceRequest> ask = null;
@@ -170,6 +156,26 @@ public class AllocateRequestPBImpl extends AllocateRequest {
     builder.setProgress(progress);
   }
 
+  
+
+	public void setTaskAttemptID_IN_AllocateRequest_abstract222(
+			String taskAttemptID_IN_AllocateRequest_abstract222) {
+		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
+		this.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_IN_AllocateRequest_abstract222;
+		maybeInitBuilder();
+	    builder.setTasksidinproto(taskAttemptID_IN_AllocateRequest_abstract222);
+	}
+	
+	
+	public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
+	    AllocateRequestProtoOrBuilder p = viaProto ? proto : builder;
+	    return p.gettasksidinproto();
+	  }
+
+  
+  
+  
+  
   @Override
   public List<ResourceRequest> getAskList() {
     initAsks();
