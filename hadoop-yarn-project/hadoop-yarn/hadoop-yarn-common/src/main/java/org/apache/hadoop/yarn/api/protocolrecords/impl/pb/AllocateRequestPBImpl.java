@@ -154,7 +154,7 @@ public class AllocateRequestPBImpl extends AllocateRequest {
   }
 
   
-
+  @Override
 	public void setTaskAttemptID_IN_AllocateRequest_abstract222(
 			String taskAttemptID_IN_AllocateRequest_abstract222) {
 //		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
@@ -163,11 +163,11 @@ public class AllocateRequestPBImpl extends AllocateRequest {
 	    builder.setTasksidinproto(taskAttemptID_IN_AllocateRequest_abstract222);
 	}
 	
-	
+  
+  @Override
 	public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
 	    AllocateRequestProtoOrBuilder p = viaProto ? proto : builder;
-	    //return Integer.toString(p.getResponseId());//.gettasksidinproto();
-	    return builder.gettasksidinproto();
+	    return p.gettasksidinproto();//.gettasksidinproto();	    Integer.toString(p.getResponseId())
 	  }
 	
 //  public String getTaskAttemptID_IN_AllocateRequest_abstract222() {

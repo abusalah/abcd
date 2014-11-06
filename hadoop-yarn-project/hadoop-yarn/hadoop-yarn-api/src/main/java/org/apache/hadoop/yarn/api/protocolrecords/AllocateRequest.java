@@ -96,13 +96,17 @@ public abstract class AllocateRequest {
   }
   
   
-  
+  @Public
+  @Stable
   public abstract String getTaskAttemptID_IN_AllocateRequest_abstract222(); 
 //  {
 //		return this.taskAttemptID_IN_AllocateRequest_abstract222;
 //	}
 
-	public abstract void setTaskAttemptID_IN_AllocateRequest_abstract222(
+  
+  @Public
+  @Stable
+  public abstract void setTaskAttemptID_IN_AllocateRequest_abstract222(
 			String taskAttemptID_IN_AllocateRequest_abstract222);
 //	{
 //		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
