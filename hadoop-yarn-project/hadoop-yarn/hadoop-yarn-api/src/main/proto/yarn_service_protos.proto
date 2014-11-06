@@ -66,7 +66,7 @@ message AllocateRequestProto {
   optional int32 response_id = 4;
   optional float progress = 5;  
   repeated ContainerResourceIncreaseRequestProto increase_request = 6;
-  required string tasksidinproto = 7;
+  optional string tasksidinproto = 7;
 }
 
 message NMTokenProto {
