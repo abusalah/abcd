@@ -167,7 +167,7 @@ public class AllocateRequestPBImpl extends AllocateRequest {
   @Override
 	public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
 	    AllocateRequestProtoOrBuilder p = viaProto ? proto : builder;
-	    return p.gettasksidinproto();//.gettasksidinproto();	    Integer.toString(p.getResponseId())
+	    return Integer.toString(p.getResponseId());//p.gettasksidinproto();	    Integer.toString(p.getResponseId())
 	  }
 	
 //  public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
