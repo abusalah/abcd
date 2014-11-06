@@ -76,11 +76,17 @@ public class ApplicationMasterProtocolPBClientImpl implements ApplicationMasterP
 	  
 	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 	  
-	  System.out.println("----------"+request.taskAttemptID_IN_AllocateRequest_abstract + request.getTaskAttemptID_IN_AllocateRequest_abstract()
+	  System.out.println("----------"+request.taskAttemptID_IN_AllocateRequest_abstract 
+			  +request.getTaskAttemptID_IN_AllocateRequest_abstract()
 			  +request.getTaskAttemptID_IN_AllocateRequest_abstract222());
 	  
     AllocateRequestProto requestProto =
         ((AllocateRequestPBImpl) request).getProto();
+    
+    requestProto.settaskIDIN_AllocateRequestProto(request.taskAttemptID_IN_AllocateRequest_abstract);
+    
+    
+    
     try {
       return new AllocateResponsePBImpl(proxy.allocate(null, requestProto));
     } catch (ServiceException e) {
