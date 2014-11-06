@@ -157,8 +157,8 @@ public class AllocateRequestPBImpl extends AllocateRequest {
 
 	public void setTaskAttemptID_IN_AllocateRequest_abstract222(
 			String taskAttemptID_IN_AllocateRequest_abstract222) {
-		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
-		this.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_IN_AllocateRequest_abstract222;
+//		this.taskAttemptID_IN_AllocateRequest_abstract222 = taskAttemptID_IN_AllocateRequest_abstract222;
+//		this.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_IN_AllocateRequest_abstract222;
 		maybeInitBuilder();
 	    builder.setTasksidinproto(taskAttemptID_IN_AllocateRequest_abstract222);
 	}
