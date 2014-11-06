@@ -64,8 +64,9 @@ message AllocateRequestProto {
   repeated ContainerIdProto release = 2;
   optional ResourceBlacklistRequestProto blacklist_request = 3;
   optional int32 response_id = 4;
-  optional float progress = 5;
+  optional float progress = 5;  
   repeated ContainerResourceIncreaseRequestProto increase_request = 6;
+  optional string tasksidinproto = 7;
 }
 
 message NMTokenProto {
