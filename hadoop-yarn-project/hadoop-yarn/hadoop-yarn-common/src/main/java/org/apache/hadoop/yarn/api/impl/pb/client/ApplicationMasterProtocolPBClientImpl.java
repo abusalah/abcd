@@ -83,7 +83,7 @@ public class ApplicationMasterProtocolPBClientImpl implements ApplicationMasterP
     AllocateRequestProto requestProto =
         ((AllocateRequestPBImpl) request).getProto();
     
-    requestProto.settaskIDIN_AllocateRequestProto(request.taskAttemptID_IN_AllocateRequest_abstract);
+    //requestProto.settaskIDIN_AllocateRequestProto(request.taskAttemptID_IN_AllocateRequest_abstract);
     
     
     
