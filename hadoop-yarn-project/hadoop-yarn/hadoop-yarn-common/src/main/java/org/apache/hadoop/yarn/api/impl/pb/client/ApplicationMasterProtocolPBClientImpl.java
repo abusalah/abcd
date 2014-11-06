@@ -85,7 +85,7 @@ public class ApplicationMasterProtocolPBClientImpl implements ApplicationMasterP
     
     
     
-    requestProto.setTaskAttemptID_IN_AllocateRequest_abstract222(request.taskAttemptID_IN_AllocateRequest_abstract);
+    request.setTaskAttemptID_IN_AllocateRequest_abstract222(request.taskAttemptID_IN_AllocateRequest_abstract);
     
     
     
