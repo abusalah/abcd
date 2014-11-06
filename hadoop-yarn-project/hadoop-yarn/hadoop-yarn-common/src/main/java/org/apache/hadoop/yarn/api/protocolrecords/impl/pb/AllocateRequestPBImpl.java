@@ -164,14 +164,14 @@ public class AllocateRequestPBImpl extends AllocateRequest {
 	}
 	
 	
-//	public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
-//	    AllocateRequestProtoOrBuilder p = viaProto ? proto : builder;
-//	    return p.gettasksidinproto();
-//	  }
+	public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
+	    AllocateRequestProtoOrBuilder p = viaProto ? proto : builder;
+	    return p.getResponseId();//.gettasksidinproto();
+	  }
 	
-  public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
-		return this.taskAttemptID_IN_AllocateRequest_abstract222;
-	}
+//  public String getTaskAttemptID_IN_AllocateRequest_abstract222() {
+//		return this.taskAttemptID_IN_AllocateRequest_abstract222;
+//	}
 
 
   
