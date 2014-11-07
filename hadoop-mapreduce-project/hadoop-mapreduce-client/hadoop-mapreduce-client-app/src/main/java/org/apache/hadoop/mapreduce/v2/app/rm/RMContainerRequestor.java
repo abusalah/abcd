@@ -112,6 +112,8 @@ public abstract class RMContainerRequestor extends RMCommunicator {
       
       System.out.println("INSIDE 1 ContainerRequest and attemptID = "+attemptID);
       
+      taskAttemptID_from_RMContainerRequestor=attemptID.toString();
+      
     }
     
     public ContainerRequest(TaskAttemptId attemptID,
@@ -119,7 +121,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
         Priority priority) {
     	
     	System.out.println("INSIDE 2 ContainerRequest and attemptID = "+attemptID);
-    	taskAttemptID_from_RMContainerRequestor=attemptID.toString();
+    	
     	
       this.attemptID = attemptID;
       this.capability = capability;
