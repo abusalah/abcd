@@ -1139,7 +1139,7 @@ public class LeafQueue implements CSQueue {
       FiCaSchedulerNode node, FiCaSchedulerApp application, 
       Priority priority, RMContainer reservedContainer) {
 	  
-	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("assignContainersOnNode = "+ste);}
 	  
 //	  this.
 //	  
