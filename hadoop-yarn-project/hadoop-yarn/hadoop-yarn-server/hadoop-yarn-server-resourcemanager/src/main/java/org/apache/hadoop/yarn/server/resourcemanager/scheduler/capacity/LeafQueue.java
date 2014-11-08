@@ -803,6 +803,9 @@ public class LeafQueue implements CSQueue {
   public synchronized CSAssignment 
   assignContainers(Resource clusterResource, FiCaSchedulerNode node) {
 
+	  LOG.info("assignContainers: node=" + node.getNodeName()
+		        + " #applications=" + activeApplications.size());
+	  
   
     if(LOG.isDebugEnabled()) {
       LOG.debug("assignContainers: node=" + node.getNodeName()
@@ -1153,6 +1156,9 @@ public class LeafQueue implements CSQueue {
               node, application, priority, reservedContainer); 
       if (Resources.greaterThan(resourceCalculator, clusterResource, 
           assigned, Resources.none())) {
+    	  
+    	  System.out.println("\n\n>>>> in Data-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
+    	  
         return new CSAssignment(assigned, NodeType.NODE_LOCAL);
       }
     }
@@ -1170,6 +1176,9 @@ public class LeafQueue implements CSQueue {
               node, application, priority, reservedContainer);
       if (Resources.greaterThan(resourceCalculator, clusterResource, 
           assigned, Resources.none())) {
+    	  
+    	  System.out.println("\n\n>>>> in Rack-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
+    	  
         return new CSAssignment(assigned, NodeType.RACK_LOCAL);
       }
     }
@@ -1182,6 +1191,8 @@ public class LeafQueue implements CSQueue {
         return SKIP_ASSIGNMENT;
       }
 
+      System.out.println("\n\n>>>> in off-switch and node = "+node.getHttpAddress()+"  <<<<\n\n");
+      
       return new CSAssignment(
           assignOffSwitchContainers(clusterResource, offSwitchResourceRequest,
               node, application, priority, reservedContainer), 
