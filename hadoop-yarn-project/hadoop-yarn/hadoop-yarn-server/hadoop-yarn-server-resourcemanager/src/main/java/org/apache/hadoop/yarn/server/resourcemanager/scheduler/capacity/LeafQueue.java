@@ -802,6 +802,8 @@ public class LeafQueue implements CSQueue {
   @Override
   public synchronized CSAssignment 
   assignContainers(Resource clusterResource, FiCaSchedulerNode node) {
+	  
+	  
 
 	  LOG.info("assignContainers: node=" + node.getNodeName()
 		        + " #applications=" + activeApplications.size());
@@ -1136,6 +1138,8 @@ public class LeafQueue implements CSQueue {
   private CSAssignment assignContainersOnNode(Resource clusterResource, 
       FiCaSchedulerNode node, FiCaSchedulerApp application, 
       Priority priority, RMContainer reservedContainer) {
+	  
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 	  
 //	  this.
 //	  
