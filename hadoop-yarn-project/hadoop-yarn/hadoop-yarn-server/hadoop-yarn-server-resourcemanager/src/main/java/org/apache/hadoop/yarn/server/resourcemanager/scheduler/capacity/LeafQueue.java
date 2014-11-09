@@ -1270,7 +1270,7 @@ public class LeafQueue implements CSQueue {
         return SKIP_ASSIGNMENT;
       }
 
-      System.out.println("\n\n>>>> in off-switch and node = "+node.getHttpAddress()+numOfMachines+"  <<<<\n\n");
+      System.out.println("\n\n>>>> in off-switch and node = "+node.getHttpAddress()+"  <<<<\n\n");
       if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
 	  {
 		  fifoCMsList.add(node.getHttpAddress());
