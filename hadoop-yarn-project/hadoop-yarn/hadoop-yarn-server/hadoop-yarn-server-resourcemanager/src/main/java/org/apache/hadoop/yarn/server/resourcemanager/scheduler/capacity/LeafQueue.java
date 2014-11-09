@@ -235,13 +235,16 @@ public class LeafQueue implements CSQueue {
         new TreeSet<FiCaSchedulerApp>(applicationComparator);
     this.activeApplications = new TreeSet<FiCaSchedulerApp>(applicationComparator);
     
+    System.out.println("before .....");
     
     File file = new File("/scratch/babusala/apache-hadoop-bft/hadoop-dist/target/hadoop-3.0.0-SNAPSHOT/etc/hadoop/slaves");
     Scanner fileScanner;
 	try {
+		System.out.println("before 1 .....");
 		fileScanner = new Scanner(file);
 		while(fileScanner.hasNextLine())
 	    {
+			System.out.println("inside .....");
 	    	globalNumCMs++;
 	    }
 	    fileScanner.close();
@@ -250,6 +253,8 @@ public class LeafQueue implements CSQueue {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
+	
+	System.out.println("after .....");
     
       
     //globalNumCMs=cs.getNumClusterNodes();
