@@ -19,6 +19,7 @@
 package org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -78,7 +79,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import com.sun.tools.javac.parser.Scanner;
+//import com.sun.tools.javac.parser.Scanner;
 
 @Private
 @Unstable
@@ -146,7 +147,7 @@ public class LeafQueue implements CSQueue {
   private final ResourceCalculator resourceCalculator;
   
   public LeafQueue(CapacitySchedulerContext cs, 
-      String queueName, CSQueue parent, CSQueue old) {
+      String queueName, CSQueue parent, CSQueue old) throws FileNotFoundException {
     this.scheduler = cs;
     this.queueName = queueName;
     this.parent = parent;
