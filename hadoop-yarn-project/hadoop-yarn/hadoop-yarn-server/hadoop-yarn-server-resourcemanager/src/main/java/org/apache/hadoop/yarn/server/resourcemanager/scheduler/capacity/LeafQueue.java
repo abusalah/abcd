@@ -147,7 +147,7 @@ public class LeafQueue implements CSQueue {
   private final ResourceCalculator resourceCalculator;
   
   public LeafQueue(CapacitySchedulerContext cs, 
-      String queueName, CSQueue parent, CSQueue old) throws FileNotFoundException {
+      String queueName, CSQueue parent, CSQueue old) {
     this.scheduler = cs;
     this.queueName = queueName;
     this.parent = parent;
@@ -236,13 +236,21 @@ public class LeafQueue implements CSQueue {
     this.activeApplications = new TreeSet<FiCaSchedulerApp>(applicationComparator);
     
     
-    File file = new File("etc/hadoop/slaves");
-    Scanner fileScanner = new Scanner(file);
-    while(fileScanner.hasNextLine())
-    {
-    	globalNumCMs++;
-    }
-    fileScanner.close();
+    File file = new File("/scratch/babusala/apache-hadoop-bft/hadoop-dist/target/hadoop-3.0.0-SNAPSHOT/etc/hadoop/slaves");
+    Scanner fileScanner;
+	try {
+		fileScanner = new Scanner(file);
+		while(fileScanner.hasNextLine())
+	    {
+	    	globalNumCMs++;
+	    }
+	    fileScanner.close();
+	} catch (FileNotFoundException e) {
+		System.out.println("\n\n\nfile not found exception\n\n\n");
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+    
       
     //globalNumCMs=cs.getNumClusterNodes();
     fifoCMsList = new LinkedList<String>();
