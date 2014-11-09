@@ -20,6 +20,8 @@ package org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.LineNumberReader;
 import java.util.Scanner;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -238,22 +240,39 @@ public class LeafQueue implements CSQueue {
     System.out.println("before .....");
     
     File file = new File("/scratch/babusala/apache-hadoop-bft/hadoop-dist/target/hadoop-3.0.0-SNAPSHOT/etc/hadoop/slaves");
-    Scanner fileScanner;
-	try {
-		System.out.println("before 1 .....");
-		fileScanner = new Scanner(file);
-		while(fileScanner.hasNextLine())
-	    {
-			System.out.println("inside .....");
-	    	globalNumCMs++;
-	    }
-	    fileScanner.close();
-	} catch (FileNotFoundException e) {
-		System.out.println("\n\n\nfile not found exception\n\n\n");
+    try {
+		FileReader fr = new FileReader(file);
+		LineNumberReader lnr = new LineNumberReader(fr);
+		 while (lnr.readLine() != null){
+			 		System.out.println("inside .....");
+			 		globalNumCMs++;
+	            }
+	} catch (FileNotFoundException e1) {
+		// TODO Auto-generated catch block
+		e1.printStackTrace();
+	} catch (IOException e) {
 		// TODO Auto-generated catch block
 		e.printStackTrace();
 	}
-	
+    
+    
+    
+//    Scanner fileScanner;
+//	try {
+//		System.out.println("before 1 .....");
+//		fileScanner = new Scanner(file);
+//		while(fileScanner.hasNextLine())
+//	    {
+//			System.out.println("inside .....");
+//	    	globalNumCMs++;
+//	    }
+//	    fileScanner.close();
+//	} catch (FileNotFoundException e) {
+//		System.out.println("\n\n\nfile not found exception\n\n\n");
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
+//	
 	System.out.println("after .....");
     
       
