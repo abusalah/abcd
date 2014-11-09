@@ -18,6 +18,8 @@
 
 package org.apache.hadoop.yarn.server.resourcemanager.scheduler.capacity;
 
+import java.io.File;
+import java.util.Scanner;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -30,6 +32,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -68,6 +73,12 @@ import org.apache.hadoop.yarn.server.utils.Lock;
 import org.apache.hadoop.yarn.server.utils.Lock.NoLock;
 import org.apache.hadoop.yarn.util.resource.ResourceCalculator;
 import org.apache.hadoop.yarn.util.resource.Resources;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
+import com.sun.tools.javac.parser.Scanner;
 
 @Private
 @Unstable
@@ -223,7 +234,40 @@ public class LeafQueue implements CSQueue {
         new TreeSet<FiCaSchedulerApp>(applicationComparator);
     this.activeApplications = new TreeSet<FiCaSchedulerApp>(applicationComparator);
     
-    globalNumCMs=cs.getNumClusterNodes();
+    
+    File file = new File("etc/hadoop/slaves");
+    Scanner fileScanner = new Scanner(file);
+    while(fileScanner.hasNextLine())
+    {
+    	globalNumCMs++;
+    }
+    fileScanner.close();
+    //lineScanner = new Scanner(fileScanner.nextLine());
+    
+    try {//---- mapred-site.xml parser // new for bft
+      	File fXmlFile = new File("etc/hadoop/slaves");
+      	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+      	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+      	Document doc = dBuilder.parse(fXmlFile);
+       	doc.getDocumentElement().normalize();
+       	NodeList nList = doc.getElementsByTagName("property");
+       	for (int temp = 0; temp < nList.getLength(); temp++) {
+       		Node nNode = nList.item(temp);
+       		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+       			Element eElement = (Element) nNode;
+      			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.bft"))
+      			{
+      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+      				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
+      			}
+      		}
+      	}
+          } catch (Exception e) {
+      	e.printStackTrace();
+          }
+    
+    //globalNumCMs=cs.getNumClusterNodes();
     fifoCMsList = new LinkedList<String>();
     
     System.out.println("\n\n>>>> in LeafQueue constructor globalNumCMs = "+globalNumCMs+"<<<<\n\n");
@@ -1182,7 +1226,7 @@ public class LeafQueue implements CSQueue {
 
     Resource assigned = Resources.none();
     
-    System.out.println("this.scheduler.getNumClusterNodes() = "+this.scheduler.getNumClusterNodes());
+    //System.out.println("this.scheduler.getNumClusterNodes() = "+this..scheduler.getConfiguration().getConf().getNumClusterNodes());
     
     System.out.println("\n\n>>>> in assignContainersOnNode globalNumCMs = "+globalNumCMs+"<<<<\n\n");
     
