@@ -166,7 +166,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
 
   private Configuration conf;
   
-  public static int numOfMachines=0;
+  //public static int numOfMachines=0;
   
   //public static Configuration myConf;
   
@@ -425,7 +425,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
       addService(nodesListManager);
       rmContext.setNodesListManager(nodesListManager);
       
-      numOfMachines=nodesListManager.getHostsReader().getHosts().size();
+      //numOfMachines=nodesListManager.getHostsReader().getHosts().size();
 
       // Initialize the scheduler
       scheduler = createScheduler();
