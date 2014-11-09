@@ -242,31 +242,7 @@ public class LeafQueue implements CSQueue {
     	globalNumCMs++;
     }
     fileScanner.close();
-    //lineScanner = new Scanner(fileScanner.nextLine());
-    
-    try {//---- mapred-site.xml parser // new for bft
-      	File fXmlFile = new File("etc/hadoop/slaves");
-      	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-      	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-      	Document doc = dBuilder.parse(fXmlFile);
-       	doc.getDocumentElement().normalize();
-       	NodeList nList = doc.getElementsByTagName("property");
-       	for (int temp = 0; temp < nList.getLength(); temp++) {
-       		Node nNode = nList.item(temp);
-       		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-       			Element eElement = (Element) nNode;
-      			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.bft"))
-      			{
-      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
-      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
-      				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
-      			}
-      		}
-      	}
-          } catch (Exception e) {
-      	e.printStackTrace();
-          }
-    
+      
     //globalNumCMs=cs.getNumClusterNodes();
     fifoCMsList = new LinkedList<String>();
     
