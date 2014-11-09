@@ -1220,39 +1220,39 @@ public class LeafQueue implements CSQueue {
     System.out.println("\n\n>>>> in assignContainersOnNode globalNumCMs = "+globalNumCMs+"<<<<\n\n");
     
     
-//    //while the list is being filled, and this node is already in the list(which means there are other nodes not visited yet)
-//    if(!fifoCMsList.isEmpty() && fifoCMsList.size()!=globalNumCMs && fifoCMsList.contains(node.getHttpAddress()))
-//	{
-//    	System.out.println("\n\n>>>> ENTERED 1 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-//    	System.out.println("\n\n>>>> ENTERED 1 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-//    	MyPrint(fifoCMsList);
-//    	
-//		return SKIP_ASSIGNMENT;
-//	}
-//    
-//    //the list is full, check if the node is NOT the first one in the queue (last one visited)
-//    if(fifoCMsList.size()==globalNumCMs && !fifoCMsList.getFirst().equals(node.getHttpAddress()))
-//    {
-//    	System.out.println("\n\n>>>> ENTERED 2 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-//    	System.out.println("\n\n>>>> ENTERED 2 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-//    	MyPrint(fifoCMsList);
-//    	
-//    	return SKIP_ASSIGNMENT;
-//    }
-//    
-//    //the list is full, check if the node is the first one in the queue (last one visited)
-//    //if yes, then remove the first element(last visited, which is now the most recent visited) and put it at the end of the queue
-//    if(fifoCMsList.size()==globalNumCMs && fifoCMsList.getFirst().equals(node.getHttpAddress()))
-//    {
-//    	System.out.println("\n\n>>>> ENTERED 3 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-//    	System.out.println("\n\n>>>> ENTERED 3 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-//    	MyPrint(fifoCMsList);
-//    	
-//    	fifoCMsList.removeFirst();
-//    	fifoCMsList.add(node.getHttpAddress());
-//    	//....and keep going (no return stmt here)
-//    }
-//    
+    //while the list is being filled, and this node is already in the list(which means there are other nodes not visited yet)
+    if(!fifoCMsList.isEmpty() && fifoCMsList.size()!=globalNumCMs && fifoCMsList.contains(node.getHttpAddress()))
+	{
+    	System.out.println("\n\n>>>> ENTERED 1 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+    	System.out.println("\n\n>>>> ENTERED 1 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+    	MyPrint(fifoCMsList);
+    	
+		return SKIP_ASSIGNMENT;
+	}
+    
+    //the list is full, check if the node is NOT the first one in the queue (last one visited)
+    if(fifoCMsList.size()==globalNumCMs && !fifoCMsList.getFirst().equals(node.getHttpAddress()))
+    {
+    	System.out.println("\n\n>>>> ENTERED 2 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+    	System.out.println("\n\n>>>> ENTERED 2 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+    	MyPrint(fifoCMsList);
+    	
+    	return SKIP_ASSIGNMENT;
+    }
+    
+    //the list is full, check if the node is the first one in the queue (last one visited)
+    //if yes, then remove the first element(last visited, which is now the most recent visited) and put it at the end of the queue
+    if(fifoCMsList.size()==globalNumCMs && fifoCMsList.getFirst().equals(node.getHttpAddress()))
+    {
+    	System.out.println("\n\n>>>> ENTERED 3 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+    	System.out.println("\n\n>>>> ENTERED 3 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+    	MyPrint(fifoCMsList);
+    	
+    	fifoCMsList.removeFirst();
+    	fifoCMsList.add(node.getHttpAddress());
+    	//....and keep going (no return stmt here)
+    }
+    
 
     // Data-local
     ResourceRequest nodeLocalResourceRequest =
