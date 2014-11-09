@@ -1182,6 +1182,8 @@ public class LeafQueue implements CSQueue {
 
     Resource assigned = Resources.none();
     
+    System.out.println("this.scheduler.getNumClusterNodes() = "+this.scheduler.getNumClusterNodes());
+    
     System.out.println("\n\n>>>> in assignContainersOnNode globalNumCMs = "+globalNumCMs+"<<<<\n\n");
     
     
