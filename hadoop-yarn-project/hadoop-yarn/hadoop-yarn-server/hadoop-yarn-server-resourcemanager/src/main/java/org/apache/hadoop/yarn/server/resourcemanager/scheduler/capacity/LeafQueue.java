@@ -25,6 +25,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -72,6 +73,10 @@ import org.apache.hadoop.yarn.util.resource.Resources;
 @Unstable
 public class LeafQueue implements CSQueue {
   private static final Log LOG = LogFactory.getLog(LeafQueue.class);
+  
+  public static LinkedList<String> fifoCMsList; //= new LinkedList<String>();
+  
+  public static int globalNumCMs=0;
 
   private final String queueName;
   private CSQueue parent;
@@ -134,7 +139,8 @@ public class LeafQueue implements CSQueue {
     this.scheduler = cs;
     this.queueName = queueName;
     this.parent = parent;
-    
+   
+        
     this.resourceCalculator = cs.getResourceCalculator();
 
     // must be after parent and queueName are initialized
@@ -216,6 +222,13 @@ public class LeafQueue implements CSQueue {
     this.pendingApplications = 
         new TreeSet<FiCaSchedulerApp>(applicationComparator);
     this.activeApplications = new TreeSet<FiCaSchedulerApp>(applicationComparator);
+    
+    globalNumCMs=cs.getNumClusterNodes();
+    fifoCMsList = new LinkedList<String>();
+    
+    System.out.println("\n\n>>>> in LeafQueue constructor globalNumCMs = "+globalNumCMs+"<<<<\n\n");
+    
+    
   }
 
   private synchronized void setupQueueConfigs(
@@ -1134,10 +1147,28 @@ public class LeafQueue implements CSQueue {
     }
     return (((starvation + requiredContainers) - reservedContainers) > 0);
   }
+  
+  
+  public void MyPrint(LinkedList<String> localList){
+	  System.out.println("ENTER MyPrint");
+	  System.out.println("localList.size() = "+localList.size());
+	  if(!localList.isEmpty())
+	  {
+		  for(String x : localList)
+		  {
+			  System.out.println(x);
+			  
+		  }
+		  
+	  }
+	  System.out.println("EXIT MyPrint");
+  }
 
   private CSAssignment assignContainersOnNode(Resource clusterResource, 
       FiCaSchedulerNode node, FiCaSchedulerApp application, 
       Priority priority, RMContainer reservedContainer) {
+	  
+	  
 	  
 	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("assignContainersOnNode = "+ste);}
 	  
@@ -1150,6 +1181,43 @@ public class LeafQueue implements CSQueue {
 //	  runcon.createContainerReport();
 
     Resource assigned = Resources.none();
+    
+    System.out.println("\n\n>>>> in assignContainersOnNode globalNumCMs = "+globalNumCMs+"<<<<\n\n");
+    
+    
+    //while the list is being filled, and this node is already in the list(which means there are other nodes not visited yet)
+    if(!fifoCMsList.isEmpty() && fifoCMsList.size()!=globalNumCMs && fifoCMsList.contains(node.getHttpAddress()))
+	{
+    	System.out.println("\n\n>>>> ENTERED 1 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+    	System.out.println("\n\n>>>> ENTERED 1 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+    	MyPrint(fifoCMsList);
+    	
+		return SKIP_ASSIGNMENT;
+	}
+    
+    //the list is full, check if the node is NOT the first one in the queue (last one visited)
+    if(fifoCMsList.size()==globalNumCMs && !fifoCMsList.getFirst().equals(node.getHttpAddress()))
+    {
+    	System.out.println("\n\n>>>> ENTERED 2 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+    	System.out.println("\n\n>>>> ENTERED 2 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+    	MyPrint(fifoCMsList);
+    	
+    	return SKIP_ASSIGNMENT;
+    }
+    
+    //the list is full, check if the node is the first one in the queue (last one visited)
+    //if yes, then remove the first element(last visited, which is now the most recent visited) and put it at the end of the queue
+    if(fifoCMsList.size()==globalNumCMs && fifoCMsList.getFirst().equals(node.getHttpAddress()))
+    {
+    	System.out.println("\n\n>>>> ENTERED 3 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+    	System.out.println("\n\n>>>> ENTERED 3 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+    	MyPrint(fifoCMsList);
+    	
+    	fifoCMsList.removeFirst();
+    	fifoCMsList.add(node.getHttpAddress());
+    	//....and keep going (no return stmt here)
+    }
+    
 
     // Data-local
     ResourceRequest nodeLocalResourceRequest =
@@ -1162,6 +1230,10 @@ public class LeafQueue implements CSQueue {
           assigned, Resources.none())) {
     	  
     	  System.out.println("\n\n>>>> in Data-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
+    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
+    	  {
+    		  fifoCMsList.add(node.getHttpAddress());
+    	  }
     	  
         return new CSAssignment(assigned, NodeType.NODE_LOCAL);
       }
@@ -1182,7 +1254,10 @@ public class LeafQueue implements CSQueue {
           assigned, Resources.none())) {
     	  
     	  System.out.println("\n\n>>>> in Rack-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
-    	  
+    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
+    	  {
+    		  fifoCMsList.add(node.getHttpAddress());
+    	  }    	  
         return new CSAssignment(assigned, NodeType.RACK_LOCAL);
       }
     }
@@ -1195,8 +1270,11 @@ public class LeafQueue implements CSQueue {
         return SKIP_ASSIGNMENT;
       }
 
-      System.out.println("\n\n>>>> in off-switch and node = "+node.getHttpAddress()+"  <<<<\n\n");
-      
+      System.out.println("\n\n>>>> in off-switch and node = "+node.getHttpAddress()+numOfMachines+"  <<<<\n\n");
+      if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
+	  {
+		  fifoCMsList.add(node.getHttpAddress());
+	  }      
       return new CSAssignment(
           assignOffSwitchContainers(clusterResource, offSwitchResourceRequest,
               node, application, priority, reservedContainer), 

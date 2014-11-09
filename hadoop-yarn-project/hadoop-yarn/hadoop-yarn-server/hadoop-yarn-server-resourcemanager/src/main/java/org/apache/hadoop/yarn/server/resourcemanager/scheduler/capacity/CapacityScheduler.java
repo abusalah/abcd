@@ -103,7 +103,7 @@ import com.google.common.annotations.VisibleForTesting;
 public class CapacityScheduler extends AbstractYarnScheduler
   implements PreemptableResourceScheduler, CapacitySchedulerContext,
              Configurable {
-
+	
   private static final Log LOG = LogFactory.getLog(CapacityScheduler.class);
 
   private CSQueue root;

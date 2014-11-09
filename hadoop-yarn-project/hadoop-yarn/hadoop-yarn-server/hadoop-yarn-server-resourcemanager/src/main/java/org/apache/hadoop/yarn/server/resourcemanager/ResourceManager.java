@@ -166,6 +166,8 @@ public class ResourceManager extends CompositeService implements Recoverable {
 
   private Configuration conf;
   
+  public static int numOfMachines=0;
+  
   //public static Configuration myConf;
   
 //  private static Long[] replicasHashes; //= new Long[MRJobConfig.NUM_REDUCES];
@@ -422,6 +424,8 @@ public class ResourceManager extends CompositeService implements Recoverable {
       rmDispatcher.register(NodesListManagerEventType.class, nodesListManager);
       addService(nodesListManager);
       rmContext.setNodesListManager(nodesListManager);
+      
+      numOfMachines=nodesListManager.getHostsReader().getHosts().size();
 
       // Initialize the scheduler
       scheduler = createScheduler();
@@ -815,6 +819,7 @@ public class ResourceManager extends CompositeService implements Recoverable {
       @Override
       public void run() {
     	  SchedulerEvent event;
+    	  
 
         while (!stopped && !Thread.currentThread().isInterrupted()) {
           try {
