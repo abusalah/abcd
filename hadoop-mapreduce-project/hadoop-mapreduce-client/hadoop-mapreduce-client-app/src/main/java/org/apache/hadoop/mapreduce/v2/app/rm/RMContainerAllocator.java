@@ -1270,7 +1270,7 @@ public class RMContainerAllocator extends RMContainerRequestor
           }
         }
       }
-    	}
+    	}//end of if(y==1)
       
       // assign remaining
       it = allocatedContainers.iterator();
