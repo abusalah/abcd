@@ -941,6 +941,9 @@ public class RMContainerAllocator extends RMContainerRequestor
     }
     
     private ContainerRequest assignWithoutLocality(Container allocated) {
+    	
+    	System.out.println("\nin assignWithoutLocality\n");
+    	
       ContainerRequest assigned = null;
       
       Priority priority = allocated.getPriority();
@@ -958,6 +961,9 @@ public class RMContainerAllocator extends RMContainerRequestor
     }
         
     private void assignContainers(List<Container> allocatedContainers) {
+    	
+    	System.out.println("\nin assignContainers\n");
+    	
       Iterator<Container> it = allocatedContainers.iterator();
       while (it.hasNext()) {
         Container allocated = it.next();
@@ -1029,6 +1035,8 @@ public class RMContainerAllocator extends RMContainerRequestor
     }
     
     private ContainerRequest assignToReduce(Container allocated) {
+    	System.out.println("\nin assignToReduce\n");
+    	
       ContainerRequest assigned = null;
       TaskAttemptId tId;
       int reducer_number1=0;
