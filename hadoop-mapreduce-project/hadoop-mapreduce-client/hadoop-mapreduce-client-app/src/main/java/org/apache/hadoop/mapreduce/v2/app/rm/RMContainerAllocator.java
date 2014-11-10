@@ -1046,11 +1046,11 @@ public class RMContainerAllocator extends RMContainerRequestor
       //try to assign to reduces if present
       if (assigned == null && reduces.size() > 0) {
     	  
-    	  System.out.println("}}} entered 1");
+    	  System.out.println("@@@ entered 1");
     	  
     	  if(taskidtomachine_map.isEmpty())
     	  {
-    		    System.out.println("}}} entered 2");
+    		    System.out.println("@@@ entered 2");
     		  	tId = reduces.keySet().iterator().next();
     	        //bft____________here add a check  
     	        assigned = reduces.remove(tId);
@@ -1058,21 +1058,21 @@ public class RMContainerAllocator extends RMContainerRequestor
     	  }
     	  else
     	  {
-    		  System.out.println("}}} entered 3");
+    		  System.out.println("@@@ entered 3");
     		  while((tId = reduces.keySet().iterator().next()) != null)
     		  {
     			  dontassignflag=0;
-    			  System.out.println("}}} entered 3 1");
+    			  System.out.println("@@@ entered 3 1");
 	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
 	    		  {
-	    			  System.out.println("}}} entered 3 2");
+	    			  System.out.println("@@@ entered 3 2");
 	    			  //check for reduces, if yes then check if there are other reduces in the same allocated container node ....
 	    			  if(x.getKey().contains("r"))
 	    			  {
 	    				  if(x.getValue().equals(allocated.getNodeHttpAddress()))
 	    				  {
 		    				  //if yes, check if the reduce in that node is actually a replica of the task that we want to assign
-		    				  System.out.println("}}} entered 4");
+		    				  System.out.println("@@@ entered 4");
 		    				  System.out.println("---+1");
 		    				  System.out.println("x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "
 		    				  +tId.getTaskId().toString());
@@ -1085,7 +1085,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 		    				  System.out.println("((double)reducer_number1)/4 = "+((double)reducer_number2)/4);		    				  
 		    				  if(Math.floor(((double)reducer_number1)/4)==Math.floor(((double)reducer_number2)/4))//another task replica of this reducer is running on this machine
 		    				  {
-		    					  System.out.println("}}} entered 5");
+		    					  System.out.println("@@@ entered 5");
 		    					  dontassignflag=1;
 		    					  break;//the first loop, but keep iterating in the second loop because the allocated container is still empty					  
 		    				  }
@@ -1095,7 +1095,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 	    		  if(nextloopbreakflag==1){nextloopbreakflag=0;break;}
 	    		  if(dontassignflag==0)
 	    		  {
-				    System.out.println("}}} entered 6 6");
+				    System.out.println("@@@ entered 6 6");
 	    	        assigned = reduces.remove(tId);
 	    	        LOG.info("Assigned to reduce");    	
 	    	        break;
@@ -1109,11 +1109,19 @@ public class RMContainerAllocator extends RMContainerRequestor
     
     @SuppressWarnings("unchecked")
     private void assignMapsWithLocality(List<Container> allocatedContainers) {
-      // try to assign to all nodes first to match node local
-      Iterator<Container> it = allocatedContainers.iterator();
-      while(it.hasNext() && maps.size() > 0){
+    	// try to assign to all nodes first to match node local
+        Iterator<Container> it = allocatedContainers.iterator();
+    	int y=0;
+    	if(y==1){
+      
+      while(it.hasNext() && maps.size() > 0){//alloctedContainers iterator
     	  
     	  System.out.println("entered assignMapsWithLocality first while");
+    	  TaskAttemptId tId;
+          int mapper_number1=0;
+          int mapper_number2=0;
+          int nextloopbreakflag =0;
+          int dontassignflag = 0;
     	  
         Container allocated = it.next();        
         Priority priority = allocated.getPriority();
@@ -1122,26 +1130,112 @@ public class RMContainerAllocator extends RMContainerRequestor
         // hence this while loop would almost always have O(1) complexity
         String host = allocated.getNodeId().getHost();
         LinkedList<TaskAttemptId> list = mapsHostMapping.get(host);
-        while (list != null && list.size() > 0) {
-          if (LOG.isDebugEnabled()) {
-            LOG.debug("Host matched to the request list " + host);
+        Iterator<TaskAttemptId> listIterator_my = list.iterator();
+        
+        
+        while (list != null && list.size() > 0 && (tId = listIterator_my.next()) != null) {//taskids iterator
+        	
+        	if (maps.containsKey(tId))
+        	{
+	        	  if(taskidtomachine_map.isEmpty())
+	        	  {
+	        		if (LOG.isDebugEnabled()) {
+	                    LOG.debug("Host matched to the request list " + host);
+	                  }
+	    		    System.out.println("}}} entered 2");
+	      	  		ContainerRequest assigned = maps.remove(tId);
+	      	        containerAssigned(allocated, assigned);
+	      	        it.remove();
+	      	        list.remove(tId);//________not sure
+	      	        listIterator_my.remove();//________not sure
+	      	        JobCounterUpdateEvent jce =
+	      	         new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+	      	        jce.addCounterUpdate(JobCounter.OTHER_LOCAL_MAPS, 1);
+	      	        eventHandler.handle(jce);
+	      	        if (LOG.isDebugEnabled()) {
+	      	        	LOG.debug("Assigned based on host match " + host);
+	      	        }
+	      	      break;//cuz the container has already been assigned        		  
+	        	  }
+	        	  else
+	          	  {
+	          		  System.out.println("}}} entered 3");
+	          		  //while((tId = maps.keySet().iterator().next()) != null)
+	          		  {
+	          			dontassignflag=0;
+	          			  System.out.println("}}} entered 3 1");
+	        	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
+	        	    		  {
+	        	    			  System.out.println("}}} entered 3 2");
+	        	    			  //check for reduces, if yes then check if there are other reduces in the same allocated container node ....
+	        	    			  if(x.getKey().contains("m"))
+	        	    			  {
+	        	    				  if(x.getValue().equals(allocated.getNodeHttpAddress()))//here this allocated.getNodeHttpAddress() shoud be = host 
+	        	    				  {
+	        		    				  //if yes, check if the mapper in that node is actually a replica of the task that we want to assign
+	        		    				  System.out.println("}}} entered 4");
+	        		    				  mapper_number1=Integer.parseInt(x.getKey().split("_")[4]);
+	        		    				  mapper_number2=Integer.parseInt(tId.getTaskId().toString().split("_")[4]);
+	        		    				  System.out.println("---+2");
+	        		    				  System.out.println("mapper_number1 = "+mapper_number1+" mapper_number2 = "+mapper_number2+
+	        		    						  " x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "+tId.getTaskId().toString());
+	        		    				  System.out.println("((double)mapper_number1)/4 = "+((double)mapper_number1)/4);
+	        		    				  System.out.println("((double)mapper_number2)/4 = "+((double)mapper_number2)/4);		    				  
+	        		    				  if(Math.floor(((double)mapper_number1)/4)==Math.floor(((double)mapper_number2)/4))//another task replica of this reducer is running on this machine
+	        		    				  {
+	        		    					  System.out.println("}}} entered 5");
+	        		    					  dontassignflag=1;
+	        		    					  break;//the first loop, but keep iterating in the second loop because the allocated container is still empty					  
+	        		    				  }
+	        	    				  }
+	        	    			  }	    			  
+	        	    		  }	    		  
+	        	    		  if(nextloopbreakflag==1){nextloopbreakflag=0;break;}
+	        	    		  if(dontassignflag==0)
+	        	    		  {
+	        	    			  if (LOG.isDebugEnabled()) {
+	        		                    LOG.debug("Host matched to the request list " + host);
+	        		                  }
+	        				    System.out.println("}}} entered 6 6");
+	        				    ContainerRequest assigned = maps.remove(tId);
+	        			        containerAssigned(allocated, assigned);
+	        			        it.remove();
+	        			        list.remove(tId);//________not sure
+	        	      	        listIterator_my.remove();//________not sure
+	        			        JobCounterUpdateEvent jce =
+	        			         new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+	        			        jce.addCounterUpdate(JobCounter.OTHER_LOCAL_MAPS, 1);
+	        			        eventHandler.handle(jce);
+	        			        if (LOG.isDebugEnabled()) {
+	        			        	LOG.debug("Assigned based on host match " + host);
+	        			        }    	
+	        	    	        break;//the second loop. Remember there is still another third loop cuz these are mappers not reducers.
+	        	    		  }
+	          		  }
+	          	  }
+        	}
           }
-          TaskAttemptId tId = list.removeFirst();
-          if (maps.containsKey(tId)) {
-            ContainerRequest assigned = maps.remove(tId);
-            containerAssigned(allocated, assigned);
-            it.remove();
-            JobCounterUpdateEvent jce =
-              new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
-            jce.addCounterUpdate(JobCounter.DATA_LOCAL_MAPS, 1);
-            eventHandler.handle(jce);
-            hostLocalAssigned++;
-            if (LOG.isDebugEnabled()) {
-              LOG.debug("Assigned based on host match " + host);
-            }
-            break;
-          }
-        }
+        
+//        while (list != null && list.size() > 0) {
+//          if (LOG.isDebugEnabled()) {
+//            LOG.debug("Host matched to the request list " + host);
+//          }
+//          TaskAttemptId tId = list.removeFirst();
+//          if (maps.containsKey(tId)) {
+//            ContainerRequest assigned = maps.remove(tId);
+//            containerAssigned(allocated, assigned);
+//            it.remove();
+//            JobCounterUpdateEvent jce =
+//              new JobCounterUpdateEvent(assigned.attemptID.getTaskId().getJobId());
+//            jce.addCounterUpdate(JobCounter.DATA_LOCAL_MAPS, 1);
+//            eventHandler.handle(jce);
+//            hostLocalAssigned++;
+//            if (LOG.isDebugEnabled()) {
+//              LOG.debug("Assigned based on host match " + host);
+//            }
+//            break;
+//          }
+//        }
       }
       
       // try to match all rack local
@@ -1176,6 +1270,7 @@ public class RMContainerAllocator extends RMContainerRequestor
           }
         }
       }
+    	}
       
       // assign remaining
       it = allocatedContainers.iterator();
@@ -1223,12 +1318,12 @@ public class RMContainerAllocator extends RMContainerRequestor
 	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
 	    		  {
 	    			  System.out.println("}}} entered 3 2");
-	    			  //check for reduces, if yes then check if there are other reduces in the same allocated container node ....
+	    			  //check for reduces, if yes then check if there are other mappers in the same allocated container node ....
 	    			  if(x.getKey().contains("m"))
 	    			  {
 	    				  if(x.getValue().equals(allocated.getNodeHttpAddress()))
 	    				  {
-		    				  //if yes, check if the reduce in that node is actually a replica of the task that we want to assign
+		    				  //if yes, check if the mapper in that node is actually a replica of the task that we want to assign
 		    				  System.out.println("}}} entered 4");
 		    				  mapper_number1=Integer.parseInt(x.getKey().split("_")[4]);
 		    				  mapper_number2=Integer.parseInt(tId.getTaskId().toString().split("_")[4]);
@@ -1260,7 +1355,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 			        if (LOG.isDebugEnabled()) {
 			          LOG.debug("Assigned based on * match");
 			        }    	
-	    	        break;
+	    	        break;//the second loop. Remember there is still another third loop cuz these are mappers not reducers.
 	    		  }
   		  }
   	  }
