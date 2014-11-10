@@ -851,9 +851,9 @@ public class LeafQueue implements CSQueue {
 	  
 	  
 
-	  LOG.info("assignContainers: node=" + node.getNodeName()
-		        + " #applications=" + activeApplications.size());
-	  
+//	  LOG.info("assignContainers: node=" + node.getNodeName()
+//		        + " #applications=" + activeApplications.size());
+//	  
   
     if(LOG.isDebugEnabled()) {
       LOG.debug("assignContainers: node=" + node.getNodeName()
