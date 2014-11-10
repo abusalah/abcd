@@ -1254,49 +1254,49 @@ public class LeafQueue implements CSQueue {
     }
     
 
-    // Data-local
-    ResourceRequest nodeLocalResourceRequest =
-        application.getResourceRequest(priority, node.getNodeName());
-    if (nodeLocalResourceRequest != null) {
-      assigned = 
-          assignNodeLocalContainers(clusterResource, nodeLocalResourceRequest, 
-              node, application, priority, reservedContainer); 
-      if (Resources.greaterThan(resourceCalculator, clusterResource, 
-          assigned, Resources.none())) {
-    	  
-    	  System.out.println("\n\n>>>> in Data-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
-    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
-    	  {
-    		  fifoCMsList.add(node.getHttpAddress());
-    	  }
-    	  
-        return new CSAssignment(assigned, NodeType.NODE_LOCAL);
-      }
-    }
-
-    // Rack-local
-    ResourceRequest rackLocalResourceRequest =
-        application.getResourceRequest(priority, node.getRackName());
-    if (rackLocalResourceRequest != null) {
-      if (!rackLocalResourceRequest.getRelaxLocality()) {
-        return SKIP_ASSIGNMENT;
-      }
-      
-      assigned = 
-          assignRackLocalContainers(clusterResource, rackLocalResourceRequest, 
-              node, application, priority, reservedContainer);
-      if (Resources.greaterThan(resourceCalculator, clusterResource, 
-          assigned, Resources.none())) {
-    	  
-    	  System.out.println("\n\n>>>> in Rack-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
-    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
-    	  {
-    		  fifoCMsList.add(node.getHttpAddress());
-    	  }    	  
-        return new CSAssignment(assigned, NodeType.RACK_LOCAL);
-      }
-    }
-    
+//    // Data-local
+//    ResourceRequest nodeLocalResourceRequest =
+//        application.getResourceRequest(priority, node.getNodeName());
+//    if (nodeLocalResourceRequest != null) {
+//      assigned = 
+//          assignNodeLocalContainers(clusterResource, nodeLocalResourceRequest, 
+//              node, application, priority, reservedContainer); 
+//      if (Resources.greaterThan(resourceCalculator, clusterResource, 
+//          assigned, Resources.none())) {
+//    	  
+//    	  System.out.println("\n\n>>>> in Data-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
+//    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
+//    	  {
+//    		  fifoCMsList.add(node.getHttpAddress());
+//    	  }
+//    	  
+//        return new CSAssignment(assigned, NodeType.NODE_LOCAL);
+//      }
+//    }
+//
+//    // Rack-local
+//    ResourceRequest rackLocalResourceRequest =
+//        application.getResourceRequest(priority, node.getRackName());
+//    if (rackLocalResourceRequest != null) {
+//      if (!rackLocalResourceRequest.getRelaxLocality()) {
+//        return SKIP_ASSIGNMENT;
+//      }
+//      
+//      assigned = 
+//          assignRackLocalContainers(clusterResource, rackLocalResourceRequest, 
+//              node, application, priority, reservedContainer);
+//      if (Resources.greaterThan(resourceCalculator, clusterResource, 
+//          assigned, Resources.none())) {
+//    	  
+//    	  System.out.println("\n\n>>>> in Rack-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
+//    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
+//    	  {
+//    		  fifoCMsList.add(node.getHttpAddress());
+//    	  }    	  
+//        return new CSAssignment(assigned, NodeType.RACK_LOCAL);
+//      }
+//    }
+//    
     // Off-switch
     ResourceRequest offSwitchResourceRequest =
         application.getResourceRequest(priority, ResourceRequest.ANY);

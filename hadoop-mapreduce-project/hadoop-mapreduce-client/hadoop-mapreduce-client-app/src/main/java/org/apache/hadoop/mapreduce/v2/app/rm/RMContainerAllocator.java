@@ -1167,7 +1167,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 	        	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
 	        	    		  {
 	        	    			  System.out.println("}}} entered 3 2");
-	        	    			  //check for reduces, if yes then check if there are other reduces in the same allocated container node ....
+	        	    			  //check for mappers, if yes then check if there are other reduces in the same allocated container node ....
 	        	    			  if(x.getKey().contains("m"))
 	        	    			  {
 	        	    				  if(x.getValue().equals(allocated.getNodeHttpAddress()))//here this allocated.getNodeHttpAddress() shoud be = host 
@@ -1318,7 +1318,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
 	    		  {
 	    			  System.out.println("}}} entered 3 2");
-	    			  //check for reduces, if yes then check if there are other mappers in the same allocated container node ....
+	    			  //check for mappers, if yes then check if there are other mappers in the same allocated container node ....
 	    			  if(x.getKey().contains("m"))
 	    			  {
 	    				  if(x.getValue().equals(allocated.getNodeHttpAddress()))
