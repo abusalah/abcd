@@ -1074,7 +1074,9 @@ public class RMContainerAllocator extends RMContainerRequestor
 		    				  System.out.println("}}} entered 4");
 		    				  reducer_number1=Integer.parseInt(x.getKey().split("-")[4]);
 		    				  reducer_number2=Integer.parseInt(tId.getTaskId().toString().split("-")[4]);
-		    				  if(Math.floor(reducer_number1/4)==Math.floor(reducer_number2/4))//another task replica of this reducer is running on this machine
+		    				  System.out.println(((double)reducer_number1)/4);
+		    				  System.out.println(((double)reducer_number2)/4);		    				  
+		    				  if(Math.floor(((double)reducer_number1)/4)==Math.floor(((double)reducer_number2)/4))//another task replica of this reducer is running on this machine
 		    				  {
 		    					  System.out.println("}}} entered 5");
 		    					  dontassignflag=1;
