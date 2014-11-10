@@ -46,10 +46,16 @@ public abstract class ApplicationId implements Comparable<ApplicationId> {
   @Private
   @Unstable
   public static ApplicationId newInstance(long clusterTimestamp, int id) {
+	  
+	  
+	  
     ApplicationId appId = Records.newRecord(ApplicationId.class);
     appId.setClusterTimestamp(clusterTimestamp);
     appId.setId(id);
     appId.build();
+    
+    System.out.println("ENTERED newInstance of application id and it is : "+appId.getId());
+    
     return appId;
   }
 

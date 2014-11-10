@@ -82,6 +82,8 @@ import com.google.common.annotations.VisibleForTesting;
  */
 public class RMContainerAllocator extends RMContainerRequestor
     implements ContainerAllocator {
+	
+	public static Map<String, String> taskidtomachine_map = new HashMap<String, String>();
 
   static final Log LOG = LogFactory.getLog(RMContainerAllocator.class);
   
@@ -909,6 +911,9 @@ public class RMContainerAllocator extends RMContainerRequestor
     @SuppressWarnings("unchecked")
     private void containerAssigned(Container allocated, 
                                     ContainerRequest assigned) {
+    	
+    	taskidtomachine_map.put(assigned.attemptID.toString() , allocated.getNodeHttpAddress());
+    	
       // Update resource requests
       decContainerReq(assigned);
 
@@ -951,14 +956,14 @@ public class RMContainerAllocator extends RMContainerRequestor
       Iterator<Container> it = allocatedContainers.iterator();
       while (it.hasNext()) {
         Container allocated = it.next();
-        ContainerRequest assigned = assignWithoutLocality(allocated);
+        ContainerRequest assigned = assignWithoutLocality(allocated);//bft___ for reducers and fast fail mappers
         if (assigned != null) {
           containerAssigned(allocated, assigned);
           it.remove();
         }
       }
 
-      assignMapsWithLocality(allocatedContainers);
+      assignMapsWithLocality(allocatedContainers);//bft____ for mappers
     }
     
     private ContainerRequest getContainerReqToReplace(Container allocated) {
@@ -1020,11 +1025,50 @@ public class RMContainerAllocator extends RMContainerRequestor
     
     private ContainerRequest assignToReduce(Container allocated) {
       ContainerRequest assigned = null;
+      TaskAttemptId tId;
+      int reducer_number1=0;
+      int reducer_number2=0;
+      int nextloopbreakflag =0;
       //try to assign to reduces if present
       if (assigned == null && reduces.size() > 0) {
-        TaskAttemptId tId = reduces.keySet().iterator().next();
-        assigned = reduces.remove(tId);
-        LOG.info("Assigned to reduce");
+    	  
+    	  
+    	  if(taskidtomachine_map.isEmpty())
+    	  {
+    		  	tId = reduces.keySet().iterator().next();
+    	        //bft____________here add a check  
+    	        assigned = reduces.remove(tId);
+    	        LOG.info("Assigned to reduce");    		  
+    	  }
+    	  else
+    	  {
+    		  while((tId = reduces.keySet().iterator().next()) != null)
+    		  {
+	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
+	    		  {
+	    			  //check for reduces, if yes then check if there are other reduces in the same allocated container node ....
+	    			  if(x.getKey().contains("r") && x.getValue().equals(allocated.getNodeHttpAddress()))
+	    			  {	  //if yes, check if the reduce in that node is actually a replica of the task that we want to assign
+	    				  reducer_number1=Integer.parseInt(x.getKey().split("-")[4]);
+	    				  reducer_number2=Integer.parseInt(tId.getTaskId().toString().split("-")[4]);
+	    				  if(Math.floor(reducer_number1/4)==Math.floor(reducer_number2/4))//another task replica of this reducer is running on this machine
+	    				  {
+	    					  break;//the first loop, but keep iterating in the second loop because the allocated container is still empty					  
+	    				  }
+	    				  else//no other replica of this reducer is running on this machine, then do the assignment 
+	    				  {
+	    					  assigned = reduces.remove(tId);
+			    	          LOG.info("Assigned to reduce");
+			    	          nextloopbreakflag=1;
+			    	          break;//the first loop AND the second loop because the allocated container is NOT empty
+	    				  }
+	    				  
+	    			  }
+	    		  }
+	    		  if(nextloopbreakflag==1)break;
+    		  }
+    	  }
+        
       }
       return assigned;
     }

@@ -466,9 +466,14 @@ public class ApplicationMasterService extends AbstractService implements
       this.rmContext.getDispatcher().getEventHandler().handle(
           new RMAppAttemptStatusupdateEvent(appAttemptId, request
               .getProgress()));
+      
+      
+      
 
       List<ResourceRequest> ask = request.getAskList();
       List<ContainerId> release = request.getReleaseList();
+      
+      
 
       ResourceBlacklistRequest blacklistRequest =
           request.getResourceBlacklistRequest();
