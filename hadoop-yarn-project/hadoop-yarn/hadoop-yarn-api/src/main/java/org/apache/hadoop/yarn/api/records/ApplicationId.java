@@ -54,7 +54,8 @@ public abstract class ApplicationId implements Comparable<ApplicationId> {
     appId.setId(id);
     appId.build();
     
-    System.out.println("ENTERED newInstance of application id and it is : "+appId.getId());
+    System.out.println("ENTERED newInstance of application id and appId.getId() : "+appId.getId()
+    		+ " appId.getClusterTimestamp() : "+appId.getClusterTimestamp());
     
     return appId;
   }

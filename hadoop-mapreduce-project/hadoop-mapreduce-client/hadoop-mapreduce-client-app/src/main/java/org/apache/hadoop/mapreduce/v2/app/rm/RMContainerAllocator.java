@@ -912,6 +912,11 @@ public class RMContainerAllocator extends RMContainerRequestor
     private void containerAssigned(Container allocated, 
                                     ContainerRequest assigned) {
     	
+    	
+    	System.out.println("assigned.attemptID.toString() = "+assigned.attemptID.toString());
+    	
+    	System.out.println("allocated.getNodeHttpAddress() = "+allocated.getNodeHttpAddress());
+    	
     	taskidtomachine_map.put(assigned.attemptID.toString() , allocated.getNodeHttpAddress());
     	
       // Update resource requests
@@ -1032,9 +1037,11 @@ public class RMContainerAllocator extends RMContainerRequestor
       //try to assign to reduces if present
       if (assigned == null && reduces.size() > 0) {
     	  
+    	  System.out.println("}}} entered 1");
     	  
     	  if(taskidtomachine_map.isEmpty())
     	  {
+    		    System.out.println("}}} entered 2");
     		  	tId = reduces.keySet().iterator().next();
     	        //bft____________here add a check  
     	        assigned = reduces.remove(tId);
@@ -1042,6 +1049,7 @@ public class RMContainerAllocator extends RMContainerRequestor
     	  }
     	  else
     	  {
+    		  System.out.println("}}} entered 3");
     		  while((tId = reduces.keySet().iterator().next()) != null)
     		  {
 	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
@@ -1049,14 +1057,17 @@ public class RMContainerAllocator extends RMContainerRequestor
 	    			  //check for reduces, if yes then check if there are other reduces in the same allocated container node ....
 	    			  if(x.getKey().contains("r") && x.getValue().equals(allocated.getNodeHttpAddress()))
 	    			  {	  //if yes, check if the reduce in that node is actually a replica of the task that we want to assign
+	    				  System.out.println("}}} entered 3");
 	    				  reducer_number1=Integer.parseInt(x.getKey().split("-")[4]);
 	    				  reducer_number2=Integer.parseInt(tId.getTaskId().toString().split("-")[4]);
 	    				  if(Math.floor(reducer_number1/4)==Math.floor(reducer_number2/4))//another task replica of this reducer is running on this machine
 	    				  {
+	    					  System.out.println("}}} entered 4");
 	    					  break;//the first loop, but keep iterating in the second loop because the allocated container is still empty					  
 	    				  }
 	    				  else//no other replica of this reducer is running on this machine, then do the assignment 
 	    				  {
+	    					  System.out.println("}}} entered 5");
 	    					  assigned = reduces.remove(tId);
 			    	          LOG.info("Assigned to reduce");
 			    	          nextloopbreakflag=1;
