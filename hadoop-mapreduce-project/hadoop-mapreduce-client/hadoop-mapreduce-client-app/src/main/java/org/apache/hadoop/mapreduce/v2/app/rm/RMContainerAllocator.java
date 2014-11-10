@@ -1073,8 +1073,10 @@ public class RMContainerAllocator extends RMContainerRequestor
 		    				  //if yes, check if the reduce in that node is actually a replica of the task that we want to assign
 		    				  System.out.println("}}} entered 4");
 		    				  System.out.println("---+1");
-		    				  reducer_number1=Integer.parseInt(x.getKey().split("-")[4]);
-		    				  reducer_number2=Integer.parseInt(tId.getTaskId().toString().split("-")[4]);
+		    				  System.out.println("x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "
+		    				  +tId.getTaskId().toString());
+		    				  reducer_number1=Integer.parseInt(x.getKey().split("_")[4]);
+		    				  reducer_number2=Integer.parseInt(tId.getTaskId().toString().split("_")[4]);
 		    				  System.out.println("---+2");
 		    				  System.out.println("reducer_number1 = "+reducer_number1+" reducer_number2 = "+reducer_number2+
 		    						  " x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "+tId.getTaskId().toString());
