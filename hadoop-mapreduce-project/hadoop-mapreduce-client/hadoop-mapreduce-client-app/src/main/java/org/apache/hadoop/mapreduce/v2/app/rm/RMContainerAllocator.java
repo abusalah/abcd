@@ -1035,7 +1035,7 @@ public class RMContainerAllocator extends RMContainerRequestor
     }
     
     private ContainerRequest assignToReduce(Container allocated) {
-    	//System.out.println("\nin assignToReduce\n");
+    	System.out.println("\nin assignToReduce\n");
     	
       ContainerRequest assigned = null;
       TaskAttemptId tId;
