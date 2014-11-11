@@ -947,14 +947,19 @@ public class RMContainerAllocator extends RMContainerRequestor
       ContainerRequest assigned = null;
       
       Priority priority = allocated.getPriority();
+      System.out.println("w1");
       if (PRIORITY_FAST_FAIL_MAP.equals(priority)) {
+    	  System.out.println("w2");
         LOG.info("Assigning container " + allocated + " to fast fail map");
         assigned = assignToFailedMap(allocated);
       } else if (PRIORITY_REDUCE.equals(priority)) {
+    	  System.out.println("w3");
         if (LOG.isDebugEnabled()) {
           LOG.debug("Assigning container " + allocated + " to reduce");
         }
+        System.out.println("w4");
         assigned = assignToReduce(allocated);
+        System.out.println("w5");
       }
         
       return assigned;
