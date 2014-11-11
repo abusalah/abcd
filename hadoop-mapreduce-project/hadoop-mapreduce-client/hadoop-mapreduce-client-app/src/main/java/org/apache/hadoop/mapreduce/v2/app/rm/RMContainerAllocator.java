@@ -1046,11 +1046,11 @@ public class RMContainerAllocator extends RMContainerRequestor
       //try to assign to reduces if present
       if (assigned == null && reduces.size() > 0) {
     	  
-    	  //System.out.println("@@@ entered 1");
+    	  System.out.println("@@@ entered 1");
     	  
     	  if(taskidtomachine_map.isEmpty())
     	  {
-    		    //System.out.println("@@@ entered 2");
+    		    System.out.println("@@@ entered 2");
     		  	tId = reduces.keySet().iterator().next();
     	        //bft____________here add a check  
     	        assigned = reduces.remove(tId);
@@ -1058,31 +1058,31 @@ public class RMContainerAllocator extends RMContainerRequestor
     	  }
     	  else
     	  {
-    		  //System.out.println("@@@ entered 3");
+    		  System.out.println("@@@ entered 3");
     		  while((tId = reduces.keySet().iterator().next()) != null)
     		  {
     			  dontassignflag=0;
-    			  //System.out.println("@@@ entered 3 1");
+    			  System.out.println("@@@ entered 3 1");
 	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
 	    		  {
-	    			  //System.out.println("@@@ entered 3 2");
+	    			  System.out.println("@@@ entered 3 2");
 	    			  //check for reduces, if yes then check if there are other reduces in the same allocated container node ....
 	    			  if(x.getKey().contains("r"))
 	    			  {
 	    				  if(x.getValue().equals(allocated.getNodeHttpAddress()))
 	    				  {
 		    				  //if yes, check if the reduce in that node is actually a replica of the task that we want to assign
-//		    				  System.out.println("@@@ entered 4");
-//		    				  System.out.println("---+1");
-//		    				  System.out.println("x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "
-//		    				  +tId.getTaskId().toString());
+		    				  System.out.println("@@@ entered 4");
+		    				  System.out.println("---+1");
+		    				  System.out.println("x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "
+		    				  +tId.getTaskId().toString());
 		    				  reducer_number1=Integer.parseInt(x.getKey().split("_")[4]);
 		    				  reducer_number2=Integer.parseInt(tId.getTaskId().toString().split("_")[4]);
-//		    				  System.out.println("---+2");
-//		    				  System.out.println("reducer_number1 = "+reducer_number1+" reducer_number2 = "+reducer_number2+
-//		    						  " x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "+tId.getTaskId().toString());
-//		    				  System.out.println("((double)reducer_number1)/4 = "+((double)reducer_number1)/4);
-//		    				  System.out.println("((double)reducer_number1)/4 = "+((double)reducer_number2)/4);		    				  
+		    				  System.out.println("---+2");
+		    				  System.out.println("reducer_number1 = "+reducer_number1+" reducer_number2 = "+reducer_number2+
+		    						  " x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "+tId.getTaskId().toString());
+		    				  System.out.println("((double)reducer_number1)/4 = "+((double)reducer_number1)/4);
+		    				  System.out.println("((double)reducer_number1)/4 = "+((double)reducer_number2)/4);		    				  
 		    				  if(Math.floor(((double)reducer_number1)/4)==Math.floor(((double)reducer_number2)/4))//another task replica of this reducer is running on this machine
 		    				  {
 		    					  //System.out.println("@@@ entered 5");
@@ -1095,7 +1095,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 	    		  if(nextloopbreakflag==1){nextloopbreakflag=0;break;}
 	    		  if(dontassignflag==0)
 	    		  {
-				    //System.out.println("@@@ entered 6 6");
+				    System.out.println("@@@ entered 6 6");
 	    	        assigned = reduces.remove(tId);
 	    	        LOG.info("Assigned to reduce");    	
 	    	        break;
