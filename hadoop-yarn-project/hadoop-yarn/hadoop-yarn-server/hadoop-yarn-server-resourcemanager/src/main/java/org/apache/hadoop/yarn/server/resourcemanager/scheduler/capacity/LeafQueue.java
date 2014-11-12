@@ -90,6 +90,9 @@ public class LeafQueue implements CSQueue {
   
   public static LinkedList<String> fifoCMsList; //= new LinkedList<String>();
   
+  public static int bft_flag_in_RM=0;
+  public static int num_replicas_in_RM=0;
+  
   public static int globalNumCMs=0;
 
   private final String queueName;
@@ -156,6 +159,10 @@ public class LeafQueue implements CSQueue {
    
     System.out.println("\n cs.getConf().getInt(\"mapred.job.bft\", 1) = "+cs.getConf().getInt("mapred.job.bft", 1)+" \n");    
     System.out.println("\n cs.getConf().getInt(\"mapred.job.numreplicas\", 1) = "+cs.getConf().getInt("mapred.job.numreplicas", 1)+" \n");
+    
+    bft_flag_in_RM=cs.getConf().getInt("mapred.job.bft", 1);
+    num_replicas_in_RM=cs.getConf().getInt("mapred.job.numreplicas", 1);
+    
     
     this.resourceCalculator = cs.getResourceCalculator();
 
@@ -1222,83 +1229,90 @@ public class LeafQueue implements CSQueue {
     System.out.println("\n\n>>>> in assignContainersOnNode globalNumCMs = "+globalNumCMs+"<<<<\n\n");
     
     
-    //while the list is being filled, and this node is already in the list(which means there are other nodes not visited yet)
-    if(!fifoCMsList.isEmpty() && fifoCMsList.size()!=globalNumCMs && fifoCMsList.contains(node.getHttpAddress()))
-	{
-    	System.out.println("\n\n>>>> ENTERED 1 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-    	System.out.println("\n\n>>>> ENTERED 1 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-    	MyPrint(fifoCMsList);
-    	
-		return SKIP_ASSIGNMENT;
-	}
     
-    //the list is full, check if the node is NOT the first one in the queue (last one visited)
-    if(fifoCMsList.size()==globalNumCMs && !fifoCMsList.getFirst().equals(node.getHttpAddress()))
+    if(bft_flag_in_RM==2 || bft_flag_in_RM==3)
     {
-    	System.out.println("\n\n>>>> ENTERED 2 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-    	System.out.println("\n\n>>>> ENTERED 2 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-    	MyPrint(fifoCMsList);
-    	
-    	return SKIP_ASSIGNMENT;
-    }
-    
-    //the list is full, check if the node is the first one in the queue (last one visited)
-    //if yes, then remove the first element(last visited, which is now the most recent visited) and put it at the end of the queue
-    if(fifoCMsList.size()==globalNumCMs && fifoCMsList.getFirst().equals(node.getHttpAddress()))
-    {
-    	System.out.println("\n\n>>>> ENTERED 3 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-    	System.out.println("\n\n>>>> ENTERED 3 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-    	MyPrint(fifoCMsList);
-    	
-    	fifoCMsList.removeFirst();
-    	fifoCMsList.add(node.getHttpAddress());
-    	//....and keep going (no return stmt here)
+		    //while the list is being filled, and this node is already in the list(which means there are other nodes not visited yet)
+		    if(!fifoCMsList.isEmpty() && fifoCMsList.size()!=globalNumCMs && fifoCMsList.contains(node.getHttpAddress()))
+			{
+		    	System.out.println("\n\n>>>> ENTERED 1 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+		    	System.out.println("\n\n>>>> ENTERED 1 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+		    	MyPrint(fifoCMsList);
+		    	
+				return SKIP_ASSIGNMENT;
+			}
+		    
+		    //the list is full, check if the node is NOT the first one in the queue (last one visited)
+		    if(fifoCMsList.size()==globalNumCMs && !fifoCMsList.getFirst().equals(node.getHttpAddress()))
+		    {
+		    	System.out.println("\n\n>>>> ENTERED 2 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+		    	System.out.println("\n\n>>>> ENTERED 2 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+		    	MyPrint(fifoCMsList);
+		    	
+		    	return SKIP_ASSIGNMENT;
+		    }
+		    
+		    //the list is full, check if the node is the first one in the queue (last one visited)
+		    //if yes, then remove the first element(last visited, which is now the most recent visited) and put it at the end of the queue
+		    if(fifoCMsList.size()==globalNumCMs && fifoCMsList.getFirst().equals(node.getHttpAddress()))
+		    {
+		    	System.out.println("\n\n>>>> ENTERED 3 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+		    	System.out.println("\n\n>>>> ENTERED 3 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+		    	MyPrint(fifoCMsList);
+		    	
+		    	fifoCMsList.removeFirst();
+		    	fifoCMsList.add(node.getHttpAddress());
+		    	//....and keep going (no return stmt here)
+		    }
     }
     
 
-//    // Data-local
-//    ResourceRequest nodeLocalResourceRequest =
-//        application.getResourceRequest(priority, node.getNodeName());
-//    if (nodeLocalResourceRequest != null) {
-//      assigned = 
-//          assignNodeLocalContainers(clusterResource, nodeLocalResourceRequest, 
-//              node, application, priority, reservedContainer); 
-//      if (Resources.greaterThan(resourceCalculator, clusterResource, 
-//          assigned, Resources.none())) {
-//    	  
-//    	  System.out.println("\n\n>>>> in Data-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
-//    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
-//    	  {
-//    		  fifoCMsList.add(node.getHttpAddress());
-//    	  }
-//    	  
-//        return new CSAssignment(assigned, NodeType.NODE_LOCAL);
-//      }
-//    }
-//
-//    // Rack-local
-//    ResourceRequest rackLocalResourceRequest =
-//        application.getResourceRequest(priority, node.getRackName());
-//    if (rackLocalResourceRequest != null) {
-//      if (!rackLocalResourceRequest.getRelaxLocality()) {
-//        return SKIP_ASSIGNMENT;
-//      }
-//      
-//      assigned = 
-//          assignRackLocalContainers(clusterResource, rackLocalResourceRequest, 
-//              node, application, priority, reservedContainer);
-//      if (Resources.greaterThan(resourceCalculator, clusterResource, 
-//          assigned, Resources.none())) {
-//    	  
-//    	  System.out.println("\n\n>>>> in Rack-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
-//    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
-//    	  {
-//    		  fifoCMsList.add(node.getHttpAddress());
-//    	  }    	  
-//        return new CSAssignment(assigned, NodeType.RACK_LOCAL);
-//      }
-//    }
-//    
+    if(bft_flag_in_RM==1)
+    {
+//	    // Data-local
+//	    ResourceRequest nodeLocalResourceRequest =
+//	        application.getResourceRequest(priority, node.getNodeName());
+//	    if (nodeLocalResourceRequest != null) {
+//	      assigned = 
+//	          assignNodeLocalContainers(clusterResource, nodeLocalResourceRequest, 
+//	              node, application, priority, reservedContainer); 
+//	      if (Resources.greaterThan(resourceCalculator, clusterResource, 
+//	          assigned, Resources.none())) {
+//	    	  
+//	    	  System.out.println("\n\n>>>> in Data-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
+//	    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
+//	    	  {
+//	    		  fifoCMsList.add(node.getHttpAddress());
+//	    	  }
+//	    	  
+//	        return new CSAssignment(assigned, NodeType.NODE_LOCAL);
+//	      }
+//	    }
+//	
+//	    // Rack-local
+//	    ResourceRequest rackLocalResourceRequest =
+//	        application.getResourceRequest(priority, node.getRackName());
+//	    if (rackLocalResourceRequest != null) {
+//	      if (!rackLocalResourceRequest.getRelaxLocality()) {
+//	        return SKIP_ASSIGNMENT;
+//	      }
+//	      
+//	      assigned = 
+//	          assignRackLocalContainers(clusterResource, rackLocalResourceRequest, 
+//	              node, application, priority, reservedContainer);
+//	      if (Resources.greaterThan(resourceCalculator, clusterResource, 
+//	          assigned, Resources.none())) {
+//	    	  
+//	    	  System.out.println("\n\n>>>> in Rack-local and node = "+node.getHttpAddress()+"  <<<<\n\n");
+//	    	  if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
+//	    	  {
+//	    		  fifoCMsList.add(node.getHttpAddress());
+//	    	  }    	  
+//	        return new CSAssignment(assigned, NodeType.RACK_LOCAL);
+//	      }
+//	    }
+    }
+    
     // Off-switch
     ResourceRequest offSwitchResourceRequest =
         application.getResourceRequest(priority, ResourceRequest.ANY);
