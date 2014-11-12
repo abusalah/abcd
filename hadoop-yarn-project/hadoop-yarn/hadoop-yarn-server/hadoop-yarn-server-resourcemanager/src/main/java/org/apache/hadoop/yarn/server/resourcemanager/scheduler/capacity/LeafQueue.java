@@ -154,7 +154,9 @@ public class LeafQueue implements CSQueue {
     this.queueName = queueName;
     this.parent = parent;
    
-        
+    System.out.println("\n cs.getConf().getInt(\"mapred.job.bft\", 1) = "+cs.getConf().getInt("mapred.job.bft", 1)+" \n");    
+    System.out.println("\n cs.getConf().getInt(\"mapred.job.numreplicas\", 1) = "+cs.getConf().getInt("mapred.job.numreplicas", 1)+" \n");
+    
     this.resourceCalculator = cs.getResourceCalculator();
 
     // must be after parent and queueName are initialized
