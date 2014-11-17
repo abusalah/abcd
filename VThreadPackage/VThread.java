@@ -390,7 +390,7 @@ public static PrintWriter writer;
 				    
 				    //TODO : should be ==local_NUM_REDUCES*local_NUM_REPLICAS in case you have different replication factors
 				    //if(Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberBase)==4) 
-				    if(ApplicationNumberBase_Touch.get(ApplicationNumberBase_withOutputName)==local_NUM_REDUCES*4)
+				    if(ApplicationNumberBase_Touch.get(ApplicationNumberBase_withOutputName)==local_NUM_REDUCES*4)//TODO: make it generic to num_replicas
 				    {
 				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase_withOutputName);
 				    	int q=0;//hash_sum_per_App loop variable
@@ -416,6 +416,7 @@ public static PrintWriter writer;
 				    			{
 				    				System.out.println("ENTERED if(q==0)");
 				    				tempEntry=hash_sum_per_App_Entery;
+				    				num_verified_apps++;//TODO: make it per application, cuz assume that you have mutiple independent applications running in the cluster
 				    				q++;
 				    			}
 				    			else//tempEntry has the prev value
@@ -425,6 +426,14 @@ public static PrintWriter writer;
 				    				{
 				    					System.out.println("ENTERED if(tempEntry.getValue().equals(hash_sum_per_App_Entery.getValue()))");
 				    					tempEntry=hash_sum_per_App_Entery;//for next iteration
+				    					num_verified_apps++;//TODO: make it per application, cuz assume that you have mutiple independent applications running in the cluster
+							    		if(num_verified_apps>=3)//TODO: make it generic to num_replicas - 1
+							    		{
+							    			System.out.println("\n\nRECEIVED AT LEAST 3 CORRECT APPLICATIONS\n\n");
+							    			elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
+							    			  System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
+							    			num_verified_apps=0;//for next set of application replicas				    			
+							    		}				   
 				    					allofthem=true;
 				    				}
 				    				else
@@ -438,15 +447,7 @@ public static PrintWriter writer;
 				    	}
 				    	
 				    	if (allofthem==true)
-						{
-				    		num_verified_apps++;//TODO: make it per application, cuz assume that you have mutiple independent applications running in the cluster
-				    		if(num_verified_apps>=3)//TODO: make it generic to num_replicas - 1
-				    		{
-				    			System.out.println("\n\nRECEIVED 3 CORRECT APPLICATIONS\n\n");
-				    			elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
-				    			  System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
-				    			num_verified_apps=0;//for next set of application replicas				    			
-				    		}
+						{ 		
 						    System.out.println("ALL CORRECT FOR APPLICATION "+ApplicationNumberBase_withOutputName);
 						    for(clientThread x:client_Threads_List)
 							{
