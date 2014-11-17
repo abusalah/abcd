@@ -28,7 +28,7 @@ public static PrintWriter writer;
     //private static String[] applicationsNames;
     //private static Map<String, List<Long>> AMsMap = new HashMap<String, List<Long>>();
     private static Map<String, Map<Integer, String>> AMsMap = new HashMap<String, Map<Integer, String>>();//new HashMap<String, Map<Integer, Long>>();
-    private static Map<String, String> hash_sum_per_App_replica = new HashMap<String, String>();//new HashMap<String, Long>();
+    private static Map<String, Integer> hash_sum_per_App_replica = new HashMap<String, Integer>();//new HashMap<String, Long>();
     private static Map<String, Integer> ApplicationNumberBase_Touch = new HashMap<String, Integer>();
 
     private static int local_BFT_flag=0;
@@ -321,7 +321,7 @@ public static PrintWriter writer;
 					    {
 						//temp_replicasHashes_forbft2_MAP = AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 						AMsMap.get(ApplicationNumberwithReplicaNumber_withOutputName).put(receivedReducerNumber, receivedHash);
-						hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber_withOutputName, hash_sum_per_App_replica.get(ApplicationNumberwithReplicaNumber_withOutputName)+receivedHash);
+						hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber_withOutputName, hash_sum_per_App_replica.get(ApplicationNumberwithReplicaNumber_withOutputName)+receivedHash.hashCode());
 						System.out.println("---22");
 						System.out.println("AMsMap.get(ApplicationName).size() = "+AMsMap.get(ApplicationNumberwithReplicaNumber_withOutputName).size());
 						//temp_replicasHashes_forbft2_MAP.put(receivedReducerNumber, receivedHash);
@@ -347,7 +347,7 @@ public static PrintWriter writer;
 					    //temp_replicasHashes_forbft2[receivedReducerNumber]=receivedHash;
 					    System.out.println("---2");
 					    AMsMap.put(ApplicationNumberwithReplicaNumber_withOutputName, new_replicasHashes_forbft2_MAP);
-					    hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber_withOutputName, receivedHash);
+					    hash_sum_per_App_replica.put(ApplicationNumberwithReplicaNumber_withOutputName, receivedHash.hashCode());//.hashCode() just to change string to int to be able to sum it above
 					    //AMsMap.get(ApplicationName).put(receivedReducerNumber, receivedHash);
 					    //temp_replicasHashes_forbft2_MAP=AMsMap.get(ApplicationName);
 					    System.out.println("AMsMap.get(ApplicationNumberwithReplicaNumber).size() = "
@@ -377,7 +377,7 @@ public static PrintWriter writer;
 						}
 					    //temp_replicasHashes_forbft2_MAP.clear();          					    
 					}
-				    for (Map.Entry<String, String> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
+				    for (Map.Entry<String, Integer> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    {
 				    	System.out.println("hash_sum_per_App_Entery.getKey() = "+hash_sum_per_App_Entery.getKey()+" hash_sum_per_App_Entery.getValue() = "+hash_sum_per_App_Entery.getValue());
 				    }
@@ -395,11 +395,11 @@ public static PrintWriter writer;
 				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase_withOutputName);
 				    	int q=0;//hash_sum_per_App loop variable
 				    	//Map.Entry<String,int> entry = new AbstractMap.SimpleEntry<String, int>("exmpleString", 42);
-				    	Map.Entry<String,String> tempEntry = new AbstractMap.SimpleEntry<String, String>(" ",(String) " ");//("exmpleString", (long)42);
+				    	Map.Entry<String,Integer> tempEntry = new AbstractMap.SimpleEntry<String, Integer>(" ",0);//("exmpleString", (long)42);
 				    	allofthem=false;
 				    	System.out.println("-----");
 				    	System.out.println("hash_sum_per_App_replica.size() = "+hash_sum_per_App_replica.size());
-				    	for (Map.Entry<String, String> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
+				    	for (Map.Entry<String, Integer> hash_sum_per_App_Entery: hash_sum_per_App_replica.entrySet())
 				    	{//in case we have many applications running in parallel; check for the ApplicationNumberBase first
 				    		
 				    		System.out.println("hash_sum_per_App_Entery.getKey().split(\"_\")[0] = "+hash_sum_per_App_Entery.getKey().split("_")[0]);
