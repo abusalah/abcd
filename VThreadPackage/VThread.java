@@ -17,6 +17,9 @@ public static PrintWriter writer;
     private static int[] replicasHashes_set;
     public static int resetArraysFlagCount=0;//a count to know when to reset replicasHashes and replicasHashes_set arrays
     public static int resetArraysFlag=0;
+    public static int num_verified_apps=0;
+    public static long startTime=0;
+    public static long elapsedTime=0L;    		
     private static Long[] temp_replicasHashes_forbft2 = new Long[2];
     private static List<Long> temp_replicasHashes_forbft2_LIST = new ArrayList<Long>();
     private static Map<Integer, Long> temp_replicasHashes_forbft2_MAP = new HashMap<Integer, Long>();
@@ -436,6 +439,14 @@ public static PrintWriter writer;
 				    	
 				    	if (allofthem==true)
 						{
+				    		num_verified_apps++;//TODO: make it per application, cuz assume that you have mutiple independent applications running in the cluster
+				    		if(num_verified_apps>=3)//TODO: make it generic to num_replicas - 1
+				    		{
+				    			System.out.println("\n\nRECEIVED 3 CORRECT APPLICATIONS\n\n");
+				    			elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
+				    			  System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
+				    			num_verified_apps=0;//for next set of application replicas				    			
+				    		}
 						    System.out.println("ALL CORRECT FOR APPLICATION "+ApplicationNumberBase_withOutputName);
 						    for(clientThread x:client_Threads_List)
 							{
@@ -481,6 +492,10 @@ public static PrintWriter writer;
 	public static void main(String[] args) {
 		
 		System.out.println("------ENTERED VThread--------");
+		startTime = System.currentTimeMillis()/1000;
+	    
+	  
+	  
 		
 		
 	  //if(bft2VerifierThreadFlag==0)//just to launch one Verifier Thread
