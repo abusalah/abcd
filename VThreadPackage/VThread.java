@@ -493,6 +493,7 @@ public static PrintWriter writer;
 		
 		System.out.println("------ENTERED VThread--------");
 		startTime = System.currentTimeMillis()/1000;
+		System.out.println("------Timer Started--------");
 	    
 	  
 	  
