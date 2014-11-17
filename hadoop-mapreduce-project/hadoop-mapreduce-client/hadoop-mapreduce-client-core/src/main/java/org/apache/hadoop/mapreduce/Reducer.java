@@ -227,7 +227,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    */
   public void run(Context context) throws IOException, InterruptedException {
 	  
-	  if(context.getTaskAttemptID().toString().equals("attempt_1416251187760_0006_m_000001_0"))
+	  if(context.getTaskAttemptID().toString().contains("m_000001"))
 	  {
 		  System.out.println("ENTERED THE INF LOOP");
 		  while(true){}
