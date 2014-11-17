@@ -514,7 +514,7 @@ public static PrintWriter writer;
 		
 		System.out.println("------ENTERED VThread--------");
 		startTime = System.currentTimeMillis()/1000;
-		System.out.println("------Timer Started--------");
+		System.out.println("------|Timer Started|--------");
 		
 		try {//---- mapred-site.xml parser // new for bft
 	      	File fXmlFile = new File("etc/hadoop/mapred-site.xml");
