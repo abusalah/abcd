@@ -210,7 +210,7 @@ public static PrintWriter writer;
 				    if(replicasHashes_set[unreplicatedReducerNumber]>=3)
 				    {
 				    	allreducers+="\nRECEIVED AT LEAST 3 CORRECT hashes for reducer "+unreplicatedReducerNumber+" \n";
-				    	System.out.println("\n\n allreducers \n\n");
+				    	System.out.println("\n\n "+allreducers+" \n\n");
 				    	elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
 		    			System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
 				    }
