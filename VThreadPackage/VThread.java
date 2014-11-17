@@ -417,6 +417,7 @@ public static PrintWriter writer;
 				    				System.out.println("ENTERED if(q==0)");
 				    				tempEntry=hash_sum_per_App_Entery;
 				    				num_verified_apps++;//TODO: make it per application, cuz assume that you have mutiple independent applications running in the cluster
+				    				System.out.println("\nnum_verified_apps++\n");
 				    				q++;
 				    			}
 				    			else//tempEntry has the prev value
@@ -427,11 +428,12 @@ public static PrintWriter writer;
 				    					System.out.println("ENTERED if(tempEntry.getValue().equals(hash_sum_per_App_Entery.getValue()))");
 				    					tempEntry=hash_sum_per_App_Entery;//for next iteration
 				    					num_verified_apps++;//TODO: make it per application, cuz assume that you have mutiple independent applications running in the cluster
-							    		if(num_verified_apps>=3)//TODO: make it generic to num_replicas - 1
+				    					System.out.println("\nnum_verified_apps++\n");
+				    					if(num_verified_apps>=3)//TODO: make it generic to num_replicas - 1
 							    		{
 							    			System.out.println("\n\nRECEIVED AT LEAST 3 CORRECT APPLICATIONS\n\n");
 							    			elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
-							    			  System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
+							    			System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
 							    			num_verified_apps=0;//for next set of application replicas				    			
 							    		}				   
 				    					allofthem=true;
