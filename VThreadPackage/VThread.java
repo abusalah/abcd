@@ -19,7 +19,8 @@ public static PrintWriter writer;
     public static int resetArraysFlag=0;
     public static int num_verified_apps=0;
     public static long startTime=0;
-    public static long elapsedTime=0L;    		
+    public static long elapsedTime=0L;    
+    public static String allreducers ="";
     private static Long[] temp_replicasHashes_forbft2 = new Long[2];
     private static List<Long> temp_replicasHashes_forbft2_LIST = new ArrayList<Long>();
     private static Map<Integer, Long> temp_replicasHashes_forbft2_MAP = new HashMap<Integer, Long>();
@@ -205,7 +206,15 @@ public static PrintWriter writer;
 				    System.out.println("replicasHashes_set.length = "+replicasHashes_set.length);
 				    replicasHashes[receivedReducerNumber]=receivedHash;
 				    replicasHashes_set[unreplicatedReducerNumber]+=1;
-				                    
+				    //--- This is just for testing received 3 hashes
+				    if(replicasHashes_set[unreplicatedReducerNumber]>=3)
+				    {
+				    	allreducers+="\nRECEIVED AT LEAST 3 CORRECT hashes for reducer "+unreplicatedReducerNumber+" \n";
+				    	System.out.println("\n\n allreducers \n\n");
+				    	elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
+		    			System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
+				    }
+			    	//--- End                 
 				   
 				    System.out.println("---------------------------------PRINTING------------------------------------------");
 				    System.out.println("receivedReducerNumber = "+receivedReducerNumber+
@@ -225,7 +234,7 @@ public static PrintWriter writer;
 				    System.out.println("---------------------------------------------------------------------------");
 				                    
 				    if(replicasHashes_set[unreplicatedReducerNumber]==local_NUM_REPLICAS)//TODO make >=local_NUM_REPLICAS in case it is restarted from HeartBeats
-					{
+					{//Note that the above line should be == local_NUM_REPLICAS if you want 4/4 replicas to be correct. >=local_NUM_REPLICAS-1 to make it 3/4 replicas are enough
 				    	resetArraysFlagCount++;
 				    	System.out.println("resetArraysFlagCount = "+resetArraysFlagCount);
 				    	System.out.println("local_NUM_REDUCES/local_NUM_REPLICAS = "+local_NUM_REDUCES/local_NUM_REPLICAS);
