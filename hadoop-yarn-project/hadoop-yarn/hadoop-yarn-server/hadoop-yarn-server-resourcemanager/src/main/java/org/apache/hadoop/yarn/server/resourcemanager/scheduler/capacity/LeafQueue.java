@@ -248,7 +248,8 @@ public class LeafQueue implements CSQueue {
     
     System.out.println("before .....");
     
-    File file = new File("/scratch/babusala/apache-hadoop-bft/hadoop-dist/target/hadoop-3.0.0-SNAPSHOT/etc/hadoop/slaves");
+    //File file = new File("/scratch/babusala/apache-hadoop-bft/hadoop-dist/target/hadoop-3.0.0-SNAPSHOT/etc/hadoop/slaves");
+    File file = new File("etc/hadoop/slaves");
     try {
 		FileReader fr = new FileReader(file);
 		LineNumberReader lnr = new LineNumberReader(fr);
