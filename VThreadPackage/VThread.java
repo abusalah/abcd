@@ -81,7 +81,7 @@ public static PrintWriter writer;
 		System.out.println(e);
 	    }
 	      
-	    System.out.println("after serverSocket = new ServerSocket(2226);");
+	    System.out.println("after serverSocket = new ServerSocket(Global_Socket_Port);");
 	    
 	    while (true) {//!Thread.currentThread().isInterrupted()
 		try {
