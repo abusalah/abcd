@@ -5,6 +5,14 @@ import java.net.*;
 import java.nio.*;
 import java.util.*;
 
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 public class VThread {
 	
 
@@ -21,6 +29,7 @@ public static PrintWriter writer;
     public static long startTime=0;
     public static long elapsedTime=0L;    
     public static String allreducers ="";
+    public static int Global_Socket_Port =0;
     private static Long[] temp_replicasHashes_forbft2 = new Long[2];
     private static List<Long> temp_replicasHashes_forbft2_LIST = new ArrayList<Long>();
     private static Map<Integer, Long> temp_replicasHashes_forbft2_MAP = new HashMap<Integer, Long>();
@@ -66,7 +75,7 @@ public static PrintWriter writer;
 	    System.out.println("inside run()");
 	    //temp_replicasHashes_forbft2_LIST = new ArrayList<Long>(local_NUM_REDUCES);
 	    try {
-		serverSocket = new ServerSocket(2226);
+		serverSocket = new ServerSocket(Global_Socket_Port);
 	    } catch (IOException e) {
 		System.out.println("\n\n\n\nserverSocket Exception\n\n\n");
 		System.out.println(e);
@@ -506,6 +515,29 @@ public static PrintWriter writer;
 		System.out.println("------ENTERED VThread--------");
 		startTime = System.currentTimeMillis()/1000;
 		System.out.println("------Timer Started--------");
+		
+		try {//---- mapred-site.xml parser // new for bft
+	      	File fXmlFile = new File("etc/hadoop/mapred-site.xml");
+	      	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	      	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	      	Document doc = dBuilder.parse(fXmlFile);
+	       	doc.getDocumentElement().normalize();
+	       	NodeList nList = doc.getElementsByTagName("property");
+	       	for (int temp = 0; temp < nList.getLength(); temp++) {
+	       		Node nNode = nList.item(temp);
+	       		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+	       			Element eElement = (Element) nNode;
+	      			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.vaddress"))
+	      			{
+	      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+	      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+	      				Global_Socket_Port=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString().split(":")[1]);
+	      			}
+	      		}
+	      	}
+	          } catch (Exception e) {
+	      	e.printStackTrace();
+	          }
 	    
 	  
 	  
