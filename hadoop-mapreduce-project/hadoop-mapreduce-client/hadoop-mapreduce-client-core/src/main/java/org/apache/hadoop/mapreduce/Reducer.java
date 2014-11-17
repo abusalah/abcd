@@ -382,8 +382,10 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
     	  
     	  try {
     		System.out.println("--0");
-  			clientSocket = new Socket("mc07.cs.purdue.edu", 2226);//("mc07.cs.purdue.edu", 2222);
-  			System.out.println("--1");
+  			//clientSocket = new Socket("mc07.cs.purdue.edu", 2226);//("mc07.cs.purdue.edu", 2222);
+    		clientSocket = new Socket(context.getConfiguration().get("mapred.job.vaddress").split(":")[0],
+    				Integer.parseInt(context.getConfiguration().get("mapred.job.vaddress").split(":")[1]));
+    		System.out.println("--1");
   			inputLine = new BufferedReader(new InputStreamReader(System.in));
   			System.out.println("--2");
   			os = new PrintStream(clientSocket.getOutputStream());

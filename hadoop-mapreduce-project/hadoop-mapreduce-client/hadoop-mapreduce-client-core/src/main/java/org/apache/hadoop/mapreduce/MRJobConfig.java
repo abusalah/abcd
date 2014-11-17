@@ -35,6 +35,8 @@ public interface MRJobConfig {
   
   //public static final String numApps_forbft2 = "0";//---new for bft
 	
+  public static final String Verifier_Address = "mapred.job.vaddress";//---new for bft
+	
   public static final String BFT_FLAG = "mapred.job.bft";//---new for bft
   
   public static final String NUM_REPLICAS = "mapred.job.numreplicas";//---new for bft
