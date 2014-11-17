@@ -227,6 +227,15 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
    */
   public void run(Context context) throws IOException, InterruptedException {
 	  
+	  if(context.getTaskAttemptID().toString().equals("attempt_1416251187760_0006_m_000001_0"))
+	  {
+		  System.out.println("ENTERED THE INF LOOP");
+		  while(true){}
+	  }
+	  
+	  
+	  
+	  
 	  
 	  System.out.println("(should be task ID ) ReduceTask.globalVString = "+ReduceTask.globalVString);
 	  
@@ -295,6 +304,7 @@ if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getIn
     try {
     	String KV=""; int i=0; long totalHash=0; String stringToSend=""; String stringReceived="";
     	System.out.println("+++ entered try");
+    	
     	while (context.nextKey()) {
     		
     		//System.out.println("context.nextKeyValue = "+context.nextKeyValue());
