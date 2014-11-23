@@ -172,9 +172,9 @@ public class RMContainerAllocator extends RMContainerRequestor
   protected void serviceInit(Configuration conf) throws Exception {
     super.serviceInit(conf);
     
-    System.out.println("in RMContianerALlocator conf.getInt(\"mapred.job.bft\", 1) = "+conf.getInt("mapred.job.bft", 1));
+    //System.out.println("in RMContianerALlocator conf.getInt(\"mapred.job.bft\", 1) = "+conf.getInt("mapred.job.bft", 1));
     
-    System.out.println("in RMContianerALlocator conf.getInt(\"mapred.job.numreplicas\", 1) = "+conf.getInt("mapred.job.numreplicas", 1));
+    //System.out.println("in RMContianerALlocator conf.getInt(\"mapred.job.numreplicas\", 1) = "+conf.getInt("mapred.job.numreplicas", 1));
     
     bft_flag_in_AppMas=conf.getInt("mapred.job.bft", 1);
     num_replicas_in_AppMas=conf.getInt("mapred.job.numreplicas", 1);
@@ -925,9 +925,9 @@ public class RMContainerAllocator extends RMContainerRequestor
                                     ContainerRequest assigned) {
     	
     	
-    	System.out.println("assigned.attemptID.toString() = "+assigned.attemptID.toString());
+    	//System.out.println("assigned.attemptID.toString() = "+assigned.attemptID.toString());
     	
-    	System.out.println("allocated.getNodeHttpAddress() = "+allocated.getNodeHttpAddress());
+    	//System.out.println("allocated.getNodeHttpAddress() = "+allocated.getNodeHttpAddress());
     	
     	taskidtomachine_map.put(assigned.attemptID.toString() , allocated.getNodeHttpAddress());
     	
@@ -954,24 +954,24 @@ public class RMContainerAllocator extends RMContainerRequestor
     
     private ContainerRequest assignWithoutLocality(Container allocated) {
     	
-    	System.out.println("\nin assignWithoutLocality\n");
+    	//System.out.println("\nin assignWithoutLocality\n");
     	
       ContainerRequest assigned = null;
       
       Priority priority = allocated.getPriority();
-      System.out.println("w1");
+      //System.out.println("w1");
       if (PRIORITY_FAST_FAIL_MAP.equals(priority)) {
-    	  System.out.println("w2");
+    	  //System.out.println("w2");
         LOG.info("Assigning container " + allocated + " to fast fail map");
         assigned = assignToFailedMap(allocated);
       } else if (PRIORITY_REDUCE.equals(priority)) {
-    	  System.out.println("w3");
+    	  //System.out.println("w3");
         if (LOG.isDebugEnabled()) {
           LOG.debug("Assigning container " + allocated + " to reduce");
         }
-        System.out.println("w4");
+        //System.out.println("w4");
         assigned = assignToReduce(allocated);
-        System.out.println("w5");
+        //System.out.println("w5");
       }
         
       return assigned;
@@ -979,7 +979,7 @@ public class RMContainerAllocator extends RMContainerRequestor
         
     private void assignContainers(List<Container> allocatedContainers) {
     	
-    	System.out.println("\nin assignContainers\n");
+    	//System.out.println("\nin assignContainers\n");
     	
       Iterator<Container> it = allocatedContainers.iterator();
       while (it.hasNext()) {
@@ -1052,7 +1052,7 @@ public class RMContainerAllocator extends RMContainerRequestor
     }
     
     private ContainerRequest assignToReduce(Container allocated) {
-    	System.out.println("\nin assignToReduce\n");
+    	//System.out.println("\nin assignToReduce\n");
     	
       ContainerRequest assigned = null;
       
@@ -1076,11 +1076,11 @@ public class RMContainerAllocator extends RMContainerRequestor
       //try to assign to reduces if present
       if (assigned == null && reduces.size() > 0) {
     	  
-    	  System.out.println("@@@ entered 1");
+    	  //System.out.println("@@@ entered 1");
     	  
     	  if(taskidtomachine_map.isEmpty())
     	  {
-    		    System.out.println("@@@ entered 2");
+    		    //System.out.println("@@@ entered 2");
     		  	tId = reduces.keySet().iterator().next();
     	        //bft____________here add a check  
     	        assigned = reduces.remove(tId);
@@ -1088,37 +1088,37 @@ public class RMContainerAllocator extends RMContainerRequestor
     	  }
     	  else
     	  {
-    		  System.out.println("@@@ entered 3");
+    		  //System.out.println("@@@ entered 3");
     		  while((tId = reduces.keySet().iterator().next()) != null)
     		  {
     			  
-    			  System.out.println("reduces.size() = "+reduces.size());
+    			  //System.out.println("reduces.size() = "+reduces.size());
     			  
     			  dontassignflag=0;
-    			  System.out.println("@@@ entered 3 1");
+    			  //System.out.println("@@@ entered 3 1");
 	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
 	    		  {
-	    			  System.out.println("@@@ entered 3 2");
+	    			  //System.out.println("@@@ entered 3 2");
 	    			  //check for reduces, if yes then check if there are other reduces in the same allocated container node ....
 	    			  if(x.getKey().contains("r"))
 	    			  {
 	    				  if(x.getValue().equals(allocated.getNodeHttpAddress()))
 	    				  {
 		    				  //if yes, check if the reduce in that node is actually a replica of the task that we want to assign
-		    				  System.out.println("@@@ entered 4");
-		    				  System.out.println("---+1");
-		    				  System.out.println("x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "
-		    				  +tId.getTaskId().toString());
+		    				  //System.out.println("@@@ entered 4");
+		    				  //System.out.println("---+1");
+//		    				  System.out.println("x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "
+//		    				  +tId.getTaskId().toString());
 		    				  reducer_number1=Integer.parseInt(x.getKey().split("_")[4]);
 		    				  reducer_number2=Integer.parseInt(tId.getTaskId().toString().split("_")[4]);
-		    				  System.out.println("---+2");
-		    				  System.out.println("reducer_number1 = "+reducer_number1+" reducer_number2 = "+reducer_number2+
-		    						  " x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "+tId.getTaskId().toString());
-		    				  System.out.println("((double)reducer_number1)/num_replicas_in_AppMas = "+((double)reducer_number1)/num_replicas_in_AppMas);
-		    				  System.out.println("((double)reducer_number1)/num_replicas_in_AppMas = "+((double)reducer_number2)/num_replicas_in_AppMas);		    				  
+//		    				  System.out.println("---+2");
+//		    				  System.out.println("reducer_number1 = "+reducer_number1+" reducer_number2 = "+reducer_number2+
+//		    						  " x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "+tId.getTaskId().toString());
+//		    				  System.out.println("((double)reducer_number1)/num_replicas_in_AppMas = "+((double)reducer_number1)/num_replicas_in_AppMas);
+//		    				  System.out.println("((double)reducer_number1)/num_replicas_in_AppMas = "+((double)reducer_number2)/num_replicas_in_AppMas);		    				  
 		    				  if(Math.floor(((double)reducer_number1)/num_replicas_in_AppMas)==Math.floor(((double)reducer_number2)/num_replicas_in_AppMas))//another task replica of this reducer is running on this machine
 		    				  {
-		    					  System.out.println("@@@ entered 5");
+//		    					  System.out.println("@@@ entered 5");
 		    					  dontassignflag=1;
 		    					  break;//the first loop, but keep iterating in the second loop because the allocated container is still empty					  
 		    				  }
@@ -1128,7 +1128,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 	    		  if(nextloopbreakflag==1){nextloopbreakflag=0;break;}
 	    		  if(dontassignflag==0)
 	    		  {
-				    System.out.println("@@@ entered 6 6");
+//				    System.out.println("@@@ entered 6 6");
 	    	        assigned = reduces.remove(tId);
 	    	        LOG.info("Assigned to reduce");    	
 	    	        break;
@@ -1242,9 +1242,9 @@ public class RMContainerAllocator extends RMContainerRequestor
       it = allocatedContainers.iterator();
       while(it.hasNext() && maps.size() > 0){
     	  
-    	  System.out.println("allocatedContainers.size() = "+allocatedContainers.size());
+//    	  System.out.println("allocatedContainers.size() = "+allocatedContainers.size());
     	  
-    	  System.out.println("entered assignMapsWithLocality third while");
+//    	  System.out.println("entered assignMapsWithLocality third while");
     	  
     	  
     		
@@ -1282,10 +1282,10 @@ public class RMContainerAllocator extends RMContainerRequestor
   		  while((tId = maps.keySet().iterator().next()) != null)
   		  {
   			  
-  			System.out.println("maps.keySet().size() = "+maps.keySet().size());
+//  			System.out.println("maps.keySet().size() = "+maps.keySet().size());
   			  
   			dontassignflag=0;
-  			  System.out.println("}}} entered 3 1");
+//  			  System.out.println("}}} entered 3 1");
 	    		  for(Map.Entry<String, String> x : taskidtomachine_map.entrySet())
 	    		  {
 	    			  System.out.println("}}} entered 3 2");
@@ -1295,17 +1295,17 @@ public class RMContainerAllocator extends RMContainerRequestor
 	    				  if(x.getValue().equals(allocated.getNodeHttpAddress()))
 	    				  {
 		    				  //if yes, check if the mapper in that node is actually a replica of the task that we want to assign
-		    				  System.out.println("}}} entered 4");
+//		    				  System.out.println("}}} entered 4");
 		    				  mapper_number1=Integer.parseInt(x.getKey().split("_")[4]);
 		    				  mapper_number2=Integer.parseInt(tId.getTaskId().toString().split("_")[4]);
-		    				  System.out.println("---+2");
-		    				  System.out.println("mapper_number1 = "+mapper_number1+" mapper_number2 = "+mapper_number2+
-		    						  " x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "+tId.getTaskId().toString());
-		    				  System.out.println("((double)mapper_number1)/num_replicas_in_AppMas = "+((double)mapper_number1)/num_replicas_in_AppMas);
-		    				  System.out.println("((double)mapper_number2)/num_replicas_in_AppMas = "+((double)mapper_number2)/num_replicas_in_AppMas);		    				  
+//		    				  System.out.println("---+2");
+//		    				  System.out.println("mapper_number1 = "+mapper_number1+" mapper_number2 = "+mapper_number2+
+//		    						  " x.getKey() = "+x.getKey()+" tId.getTaskId().toString() = "+tId.getTaskId().toString());
+//		    				  System.out.println("((double)mapper_number1)/num_replicas_in_AppMas = "+((double)mapper_number1)/num_replicas_in_AppMas);
+//		    				  System.out.println("((double)mapper_number2)/num_replicas_in_AppMas = "+((double)mapper_number2)/num_replicas_in_AppMas);		    				  
 		    				  if(Math.floor(((double)mapper_number1)/num_replicas_in_AppMas)==Math.floor(((double)mapper_number2)/num_replicas_in_AppMas))//another task replica of this reducer is running on this machine
 		    				  {
-		    					  System.out.println("}}} entered 5");
+//		    					  System.out.println("}}} entered 5");
 		    					  dontassignflag=1;
 		    					  break;//the first loop, but keep iterating in the second loop because the allocated container is still empty					  
 		    				  }
@@ -1315,7 +1315,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 	    		  if(nextloopbreakflag==1){nextloopbreakflag=0;break;}
 	    		  if(dontassignflag==0)
 	    		  {
-				    System.out.println("}}} entered 6 6");
+//				    System.out.println("}}} entered 6 6");
 				    ContainerRequest assigned = maps.remove(tId);
 			        containerAssigned(allocated, assigned);
 			        it.remove();

@@ -246,7 +246,7 @@ public class LeafQueue implements CSQueue {
         new TreeSet<FiCaSchedulerApp>(applicationComparator);
     this.activeApplications = new TreeSet<FiCaSchedulerApp>(applicationComparator);
     
-    System.out.println("before .....");
+    //System.out.println("before .....");
     
     //File file = new File("/scratch/babusala/apache-hadoop-bft/hadoop-dist/target/hadoop-3.0.0-SNAPSHOT/etc/hadoop/slaves");
     File file = new File("etc/hadoop/slaves");
@@ -254,7 +254,7 @@ public class LeafQueue implements CSQueue {
 		FileReader fr = new FileReader(file);
 		LineNumberReader lnr = new LineNumberReader(fr);
 		 while (lnr.readLine() != null){
-			 		System.out.println("inside .....");
+			 		//System.out.println("inside .....");
 			 		globalNumCMs++;
 	            }
 	} catch (FileNotFoundException e1) {
@@ -265,7 +265,7 @@ public class LeafQueue implements CSQueue {
 		e.printStackTrace();
 	}
     
- 	System.out.println("after .....");
+ 	//System.out.println("after .....");
     
     fifoCMsList = new LinkedList<String>();
     
@@ -1213,7 +1213,7 @@ public class LeafQueue implements CSQueue {
 	  
 	  
 	  
-	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("assignContainersOnNode = "+ste);}
+	  //for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("assignContainersOnNode = "+ste);}
 	  
 //	  this.
 //	  
@@ -1225,9 +1225,9 @@ public class LeafQueue implements CSQueue {
 
     Resource assigned = Resources.none();
     
-    System.out.println("this.scheduler.getNumClusterNodes() = "+this.scheduler.getNumClusterNodes());
+    //System.out.println("this.scheduler.getNumClusterNodes() = "+this.scheduler.getNumClusterNodes());
     
-    System.out.println("\n\n>>>> in assignContainersOnNode globalNumCMs = "+globalNumCMs+"<<<<\n\n");
+    //System.out.println("\n\n>>>> in assignContainersOnNode globalNumCMs = "+globalNumCMs+"<<<<\n\n");
     
     
     
@@ -1236,9 +1236,9 @@ public class LeafQueue implements CSQueue {
 		    //while the list is being filled, and this node is already in the list(which means there are other nodes not visited yet)
 		    if(!fifoCMsList.isEmpty() && fifoCMsList.size()!=globalNumCMs && fifoCMsList.contains(node.getHttpAddress()))
 			{
-		    	System.out.println("\n\n>>>> ENTERED 1 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-		    	System.out.println("\n\n>>>> ENTERED 1 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-		    	MyPrint(fifoCMsList);
+		    	//System.out.println("\n\n>>>> ENTERED 1 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+		    	//System.out.println("\n\n>>>> ENTERED 1 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+		    	//MyPrint(fifoCMsList);
 		    	
 				return SKIP_ASSIGNMENT;
 			}
@@ -1246,9 +1246,9 @@ public class LeafQueue implements CSQueue {
 		    //the list is full, check if the node is NOT the first one in the queue (last one visited)
 		    if(fifoCMsList.size()==globalNumCMs && !fifoCMsList.getFirst().equals(node.getHttpAddress()))
 		    {
-		    	System.out.println("\n\n>>>> ENTERED 2 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-		    	System.out.println("\n\n>>>> ENTERED 2 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-		    	MyPrint(fifoCMsList);
+		    	//System.out.println("\n\n>>>> ENTERED 2 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+		    	//System.out.println("\n\n>>>> ENTERED 2 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+		    	//MyPrint(fifoCMsList);
 		    	
 		    	return SKIP_ASSIGNMENT;
 		    }
@@ -1257,9 +1257,9 @@ public class LeafQueue implements CSQueue {
 		    //if yes, then remove the first element(last visited, which is now the most recent visited) and put it at the end of the queue
 		    if(fifoCMsList.size()==globalNumCMs && fifoCMsList.getFirst().equals(node.getHttpAddress()))
 		    {
-		    	System.out.println("\n\n>>>> ENTERED 3 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
-		    	System.out.println("\n\n>>>> ENTERED 3 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
-		    	MyPrint(fifoCMsList);
+		    	//System.out.println("\n\n>>>> ENTERED 3 	fifoCMsList.size() = "+fifoCMsList.size()+"<<<<\n\n");
+		    	//System.out.println("\n\n>>>> ENTERED 3 	node.getHttpAddress() = "+node.getHttpAddress()+"<<<<\n\n");
+		    	//MyPrint(fifoCMsList);
 		    	
 		    	fifoCMsList.removeFirst();
 		    	fifoCMsList.add(node.getHttpAddress());
@@ -1322,7 +1322,7 @@ public class LeafQueue implements CSQueue {
         return SKIP_ASSIGNMENT;
       }
 
-      System.out.println("\n\n>>>> in off-switch and node = "+node.getHttpAddress()+"  <<<<\n\n");
+      //System.out.println("\n\n>>>> in off-switch and node = "+node.getHttpAddress()+"  <<<<\n\n");
       if(fifoCMsList.size()!=globalNumCMs)//so fifoCMsList is not full yet
 	  {
 		  fifoCMsList.add(node.getHttpAddress());
