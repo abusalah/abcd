@@ -70,7 +70,7 @@ public class VoteCountApplication extends Configured implements Tool {
 
 
 	
-	public class VoteCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+	public static class VoteCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
 
 	    @Override
 	    public void reduce(Text key, Iterable<IntWritable> values, Context output)
