@@ -74,6 +74,8 @@ public class ExampleDriver {
       //bft--------my new examples:
       pgd.addClass("votecountapplication", VoteCountApplication.class, 
               "bla bla bla ...");
+      pgd.addClass("medianweather", MedianWeather.class, 
+              "bla bla bla ...");
       exitCode = pgd.run(argv);
     }
     catch(Throwable e){
