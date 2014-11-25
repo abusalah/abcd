@@ -70,7 +70,7 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 public class MedianWeather {
 	
-	public class MedianWeatherMapper extends Mapper<LongWritable, Text, Text, Text> {
+	public static class MedianWeatherMapper extends Mapper<LongWritable, Text, Text, Text> {
 		
 		Text day = new Text();
 		Text outVal = new Text();
@@ -111,7 +111,7 @@ public class MedianWeather {
 	
 	
 	
-	public class MedianWeatherReducer extends Reducer<Text, Text, Text, Text> {
+	public static class MedianWeatherReducer extends Reducer<Text, Text, Text, Text> {
 
 		final int SAMPLE_SIZE = 1000;
 		FloatWritable outputTemp = new FloatWritable();
