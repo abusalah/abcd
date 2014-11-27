@@ -87,6 +87,7 @@ public class RMContainerAllocator extends RMContainerRequestor
 	
 	public static int bft_flag_in_AppMas =0;
 	public static int num_replicas_in_AppMas =0;
+	public static int allowReplicasOnSameMachine =1;//0 don't allow, 1 allow
 
   static final Log LOG = LogFactory.getLog(RMContainerAllocator.class);
   
@@ -178,6 +179,7 @@ public class RMContainerAllocator extends RMContainerRequestor
     
     bft_flag_in_AppMas=conf.getInt("mapred.job.bft", 1);
     num_replicas_in_AppMas=conf.getInt("mapred.job.numreplicas", 1);
+    allowReplicasOnSameMachine=conf.getInt("mapred.job.allowReplicasOnSameMachine", 1);
     
     
     reduceSlowStart = conf.getFloat(
@@ -1056,7 +1058,7 @@ public class RMContainerAllocator extends RMContainerRequestor
     	
       ContainerRequest assigned = null;
       
-      if(bft_flag_in_AppMas==1 || bft_flag_in_AppMas==2)
+      if(bft_flag_in_AppMas==1 || bft_flag_in_AppMas==2 || (bft_flag_in_AppMas==3 && allowReplicasOnSameMachine==1))
       {
     	//try to assign to reduces if present
           if (assigned == null && reduces.size() > 0) {
@@ -1066,7 +1068,7 @@ public class RMContainerAllocator extends RMContainerRequestor
           }
       }
       
-      if(bft_flag_in_AppMas==3)
+      if(bft_flag_in_AppMas==3 && allowReplicasOnSameMachine==0)
       {
       TaskAttemptId tId;
       int reducer_number1=0;
@@ -1146,8 +1148,8 @@ public class RMContainerAllocator extends RMContainerRequestor
     	// try to assign to all nodes first to match node local
         Iterator<Container> it = allocatedContainers.iterator();
         
-        if(bft_flag_in_AppMas==1 || bft_flag_in_AppMas==2)
-        {
+        if(bft_flag_in_AppMas==1 || bft_flag_in_AppMas==2 || (bft_flag_in_AppMas==3 && allowReplicasOnSameMachine==1))
+        {//treate it as normal schedular
             // try to assign to all nodes first to match node local
             it = allocatedContainers.iterator();
             while(it.hasNext() && maps.size() > 0){
@@ -1236,7 +1238,7 @@ public class RMContainerAllocator extends RMContainerRequestor
     
     	
     	
-    	if(bft_flag_in_AppMas==3)
+    	if(bft_flag_in_AppMas==3 && allowReplicasOnSameMachine==0)
     	{
       // assign remaining
       it = allocatedContainers.iterator();
