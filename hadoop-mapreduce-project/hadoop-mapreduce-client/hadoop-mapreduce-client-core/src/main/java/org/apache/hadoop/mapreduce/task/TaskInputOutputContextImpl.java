@@ -119,13 +119,16 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
   public void write(KEYOUT key, VALUEOUT value
                     ) throws IOException, InterruptedException {
 	  
+	  int disableHashing_flag=0;
+	  
+	  disableHashing_flag = this.getConfiguration().getInt("mapred.job.disableHashing", 0);
 	  
 //	  System.out.println("___________inside write() in TaskInputOutputContextImpl.java_______________Thread.currentThread().getStackTrace() = ");
 //	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 //	  
 	  String reducerORmapper = this.local_taskID.split("_")[3];
 	  
-	  if(reducerORmapper.equals("r"))
+	  if(reducerORmapper.equals("r") && disableHashing_flag==0 )
 	  {
 		  KV=key.toString()+value.toString();
 		  //total_hash+=KV.hashCode();//This was the old way of doing the hashes and it worked perfectly

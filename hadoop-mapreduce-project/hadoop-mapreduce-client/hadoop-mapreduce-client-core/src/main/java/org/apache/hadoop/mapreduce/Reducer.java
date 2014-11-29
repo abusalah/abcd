@@ -235,7 +235,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	  
 	  
 	  
-	  
+	  int disableHashing_flag =0; //0 enable hashing, 1 disable hashing
 	  
 	  System.out.println("(should be task ID ) ReduceTask.globalVString = "+ReduceTask.globalVString);
 	  
@@ -244,6 +244,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	  System.out.println("(should be 2) ReduceTask.globalVString = "+ReduceTask.globalVString);
 	  
 	 int local_BFT_flag = context.getConfiguration().getInt("mapred.job.bft", 1);//Integer.parseInt(conf.getInt("mapred.job.bft", 1);
+	 disableHashing_flag = context.getConfiguration().getInt("mapred.job.disableHashing", 0);
 	 int local_NUM_REPLICAS = context.getConfiguration().getInt("mapred.job.numreplicas",4);//Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
 	 int local_NUM_REDUCES = context.getConfiguration().getInt("mapreduce.job.reduces",4);//conf.getInt("mapreduce.job.reduces",1); 
 	 String flags_to_send=Integer.toString(local_BFT_flag)+"-"+Integer.toString(local_NUM_REPLICAS)
@@ -257,7 +258,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	 
 	 //eventHandler2.handle(new TaskAttemptEvent(context.getTaskAttemptID(),TaskAttemptEventType.TA_TIMED_OUT));
 	  
-if(local_BFT_flag==1)	 
+if(disableHashing_flag==1)//if(local_BFT_flag==1)	 
 {
 	    setup(context);
 	    try {
@@ -276,7 +277,7 @@ if(local_BFT_flag==1)
 	  
 	  
 	  
-if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
+if(disableHashing_flag==0)//if(local_BFT_flag==3 || local_BFT_flag==2) //|| context.getConfiguration().getInt(MRJobConfig.BFT_FLAG, 1)==2)
 {
 	
 	int unreplicatedReducerNumber =0;
