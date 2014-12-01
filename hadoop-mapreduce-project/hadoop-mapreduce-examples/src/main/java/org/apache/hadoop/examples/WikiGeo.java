@@ -16,7 +16,7 @@ import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
 import org.apache.hadoop.io.Text;
-import org.apache.hadoop.mapred.OutputCollector;
+//import org.apache.hadoop.mapred.OutputCollector;
 import org.apache.hadoop.mapred.Reporter;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.MRJobConfig;
@@ -61,6 +61,8 @@ import org.apache.hadoop.io.Text;
 
 
 
+
+
 import java.io.*;
 import java.util.*;
 
@@ -86,9 +88,10 @@ private Text geoLocationKey = new Text();
 private Text geoLocationName = new Text();
 
 
-public void map(LongWritable key, Text value,
-            OutputCollector<Text, Text> outputCollector, Reporter reporter)
-            throws IOException {
+public void map(LongWritable key, Text value,Context context,
+            //OutputCollector<Text, Text> outputCollector, 
+            Reporter reporter)
+            throws IOException, InterruptedException {
 
     String dataRow = value.toString();
 
@@ -114,7 +117,8 @@ public void map(LongWritable key, Text value,
             locationName = locationName + ":(" + lat + "," + lang + ")";
             geoLocationKey.set(locationKey);
             geoLocationName.set(locationName);
-            outputCollector.collect(geoLocationKey, geoLocationName);
+            //outputCollector.collect(geoLocationKey, geoLocationName);
+            context.write(geoLocationKey, geoLocationName);
     }
 
 }
@@ -130,8 +134,10 @@ private Text outputValue = new Text();
 
 
 public void reduce(Text geoLocationKey, Iterator<Text> geoLocationValues,
-            OutputCollector<Text, Text> results, Reporter reporter)
-            throws IOException {
+            //OutputCollector<Text, Text> results,
+		    Context context,
+            Reporter reporter)
+            throws IOException, InterruptedException {
     // in this case the reducer just creates a list so that the data can
     // used later
     String outputText = "";
@@ -141,7 +147,8 @@ public void reduce(Text geoLocationKey, Iterator<Text> geoLocationValues,
     }
     outputKey.set(geoLocationKey.toString());
     outputValue.set(outputText);
-    results.collect(outputKey, outputValue);
+    //results.collect(outputKey, outputValue);
+    context.write(outputKey, outputValue);
 }
 
 }
