@@ -218,7 +218,7 @@ public class MedianWeather {
 		
 		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
 		if (otherArgs.length != 2) {
-		  System.err.println("Usage: wordcount <in> <out>");
+		  System.err.println("Usage: medianweather <in> <out>");
 		  System.exit(2);
 		}
 		

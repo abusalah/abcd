@@ -76,7 +76,7 @@ public class ExampleDriver {
               "bla bla bla ...");
       pgd.addClass("medianweather", MedianWeather.class, 
               "bla bla bla ...");
-      pgd.addClass("wikigeo", MedianWeather.class, 
+      pgd.addClass("wikigeo", WikiGeo.class, 
               "bla bla bla ...");      
       exitCode = pgd.run(argv);
     }
