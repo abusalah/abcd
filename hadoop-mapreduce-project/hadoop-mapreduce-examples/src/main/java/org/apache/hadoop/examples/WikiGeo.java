@@ -168,6 +168,9 @@ public void reduce(Text geoLocationKey, Iterator<Text> geoLocationValues,
 		job.setOutputValueClass(Text.class);
 		job.setInputFormatClass(TextInputFormat.class);
         job.setOutputFormatClass(TextOutputFormat.class);
+        
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(Text.class);
 		
 		FileInputFormat.setInputPaths(job, new Path(otherArgs[0]));
 		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
