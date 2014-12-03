@@ -59,6 +59,10 @@ import org.apache.hadoop.util.ToolRunner;
 
 
 
+
+
+
+
 import java.io.IOException;
 
 import org.apache.hadoop.io.FloatWritable;
@@ -214,30 +218,153 @@ public class MedianWeather {
 
 	public static void main(String[] args) throws IOException, ClassNotFoundException, InterruptedException {
 		
-		Configuration conf = new Configuration();	
+		int r3=0;//default//number of AM replicas
+		int BFT_FLAG_LOCAL = 0;
+		  
+		try {//---- mapred-site.xml parser // new for bft
+	      	File fXmlFile = new File("etc/hadoop/mapred-site.xml");
+	      	DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+	      	DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+	      	Document doc = dBuilder.parse(fXmlFile);
+	       	doc.getDocumentElement().normalize();
+	       	NodeList nList = doc.getElementsByTagName("property");
+	       	for (int temp = 0; temp < nList.getLength(); temp++) {
+	       		Node nNode = nList.item(temp);
+	       		if (nNode.getNodeType() == Node.ELEMENT_NODE) {
+	       			Element eElement = (Element) nNode;
+	      			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.bft"))
+	      			{
+	      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+	      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+	      				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
+	      			}
+	      		}
+	      	}
+	          } catch (Exception e) {
+	      	e.printStackTrace();
+	          }
+		  
 		
-		String[] otherArgs = new GenericOptionsParser(conf, args).getRemainingArgs();
+		switch (BFT_FLAG_LOCAL) 
+		{
+	        case 1://No BFT
+	        {
+	        	System.out.println("------ENTERED case 1---------");
+	        	r3=1;
+	        	break;
+	        }
+	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+	        {
+	        	System.out.println("------ENTERED case 2---------");
+	        	r3=4;
+	        	break;	        
+	        }
+	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+	        {
+	        	System.out.println("------ENTERED case 3---------");
+	        	r3=1;
+	        	break;
+	        }
+	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+	        {
+	        	System.out.println("------ENTERED case 4---------");
+	        	r3=4;
+	        	break;	        
+	        }
+	        default://deal with it as No BFT
+	        {
+	        	System.out.println("------ENTERED default---------");
+	        	r3=1;
+	        	break;
+	        }
+		}
+	    
+	    
+		
+		Configuration[] conf = new Configuration[r3];
+	    for( int i=0; i<r3; i++ )
+	    {
+	    	conf[i] = new Configuration();
+	    		
+	    }
+		
+		
+		//Configuration conf = new Configuration();	
+		
+		String[] otherArgs = new GenericOptionsParser(conf[0], args).getRemainingArgs();
 		if (otherArgs.length != 2) {
 		  System.err.println("Usage: medianweather <in> <out>");
 		  System.exit(2);
 		}
 		
-		Job job = new Job(conf, "MedianWeather");
 		
-		job.setJarByClass(MedianWeather.class);
-		job.setMapperClass(MedianWeatherMapper.class);
-		//job.setCombinerClass(MedianWeatherReducer.class);
-		job.setReducerClass(MedianWeatherReducer.class);
-		job.setOutputKeyClass(Text.class);
-		job.setOutputValueClass(Text.class);
+		
+		for (int i=0;i<r3;i++)
+		  {
+			
+			 System.out.println("------INSIDE the for loop , r3 = --------- "+r3+" -------------- ");
+			  
+			  Job job = new Job(conf[i], "MedianWeather");
+			  
+			  System.out.println("job.getJobID() = "+job.getJobID()+" job.getJobName() = "+job.getJobName());
+			  
+			    job.setJarByClass(MedianWeather.class);
+				job.setMapperClass(MedianWeatherMapper.class);
+				//job.setCombinerClass(MedianWeatherReducer.class);
+				job.setReducerClass(MedianWeatherReducer.class);
+				job.setOutputKeyClass(Text.class);
+				job.setOutputValueClass(Text.class);
+				
+				FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
+				FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
+				
+				job.setJarByClass(MedianWeather.class);
+				
+				
+				switch (BFT_FLAG_LOCAL) 
+				{
+			        case 1://No BFT
+			        {
+			        	System.out.println("------in MedianWeather.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+			        	job.waitForCompletion(true);
+			        	break;
+			        }
+			        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
+			        {
+			        	System.out.println("------in MedianWeather.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+			        	job.submit();
+			        	break;	        
+			        }
+			        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
+			        {
+			        	System.out.println("------in MedianWeather.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+			        	job.waitForCompletion(true);
+			        	break;
+			        }
+			        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
+			        {
+			        	//Not used
+			        	break;	        
+			        }
+			        default://deal with it as No BFT
+			        {
+			        	System.out.println("------in MedianWeather.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
+			        	job.waitForCompletion(true);
+			        	break;
+			        }
+				}
+				
+				//System.exit(job.waitForCompletion(true) ? 0 : 1);
+			
+		  }
+		
+		//Job job = new Job(conf, "MedianWeather");
+		
+		
 //		job.setInputFormatClass(TextInputFormat.class);
 //      job.setOutputFormatClass(TextOutputFormat.class);
 		
-		FileInputFormat.addInputPath(job, new Path(otherArgs[0]));
-		FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));
 		
-		job.setJarByClass(MedianWeather.class);
-		System.exit(job.waitForCompletion(true) ? 0 : 1);
 
 		//return 0;
 		
