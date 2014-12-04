@@ -144,6 +144,15 @@ public class Dictionary
 		for (int i=0;i<r3;i++)
 		  {
 			
+//			// Set the outputs for the Map
+//	        conf[i].setMapOutputKeyClass(Text.class);
+//	        conf.setMapOutputValueClass(IntWritable.class);
+//
+//	        // Set the outputs for the Job
+//	        conf.setOutputKeyClass(Text.class);
+//	        conf.setOutputValueClass(ArrayWritable.class);
+//
+			
 			 System.out.println("------INSIDE the for loop , r3 = --------- "+r3+" -------------- ");
 			  
 			  Job job = new Job(conf[i], "dictionary");
@@ -162,6 +171,7 @@ public class Dictionary
 		        
 		        job.setInputFormatClass(KeyValueTextInputFormat.class);
 		        job.setOutputFormatClass(TextOutputFormat.class);
+		        
 		        
 		        FileInputFormat.addInputPath(job, new Path(otherArgs[0]));//"/tmp/hadoop-cscarioni/dfs/name/file"
 		        FileOutputFormat.setOutputPath(job, new Path(otherArgs[1]));//"output"

@@ -78,7 +78,7 @@ public class ExampleDriver {
               "bla bla bla ...");
       pgd.addClass("wikigeo", WikiGeo.class, 
               "bla bla bla ...");    
-      pgd.addClass("dictionary", WikiGeo.class, 
+      pgd.addClass("dictionary", Dictionary.class, 
               "bla bla bla ...");  
       exitCode = pgd.run(argv);
     }
