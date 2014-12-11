@@ -242,8 +242,8 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	  ReduceTask.globalVString="2";
 	  
 	  System.out.println("(should be 2) ReduceTask.globalVString = "+ReduceTask.globalVString);
-	  //int reducer_delay =0; 
-	  //reducer_delay =  context.getConfiguration().getInt("mapred.job.reducer_delay", 0);
+	  int reducer_delay =0; 
+	  reducer_delay =  context.getConfiguration().getInt("mapred.job.reducer_delay", 0);
 	 int local_BFT_flag = context.getConfiguration().getInt("mapred.job.bft", 1);//Integer.parseInt(conf.getInt("mapred.job.bft", 1);
 	 disableHashing_flag = context.getConfiguration().getInt("mapred.job.disableHashing", 0);
 	 int local_NUM_REPLICAS = context.getConfiguration().getInt("mapred.job.numreplicas",4);//Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
@@ -360,7 +360,7 @@ if(disableHashing_flag==0)//if(local_BFT_flag==3 || local_BFT_flag==2) //|| cont
     	  //System.out.println("Reducer is sleeping for 10000 milli seconds just for testing the ping checker");
     		//Thread.sleep(10000);//just for testing the ping checker
     		  
-    	  //Thread.sleep(reducer_delay);
+    	  Thread.sleep(reducer_delay);
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
     	  
@@ -376,10 +376,9 @@ if(disableHashing_flag==0)//if(local_BFT_flag==3 || local_BFT_flag==2) //|| cont
 				
 				StringBuffer sb = new StringBuffer();
 				
-				//uncomment 1
-			    //for(byte b : external_total_hash_byteArray) {
-			    //    sb.append(Integer.toHexString(b & 0xff));
-			    //}
+			    for(byte b : external_total_hash_byteArray) {
+			        sb.append(Integer.toHexString(b & 0xff));
+			    }
 
 				
 		  external_total_hash_string=sb.toString();
