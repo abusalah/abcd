@@ -242,8 +242,8 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	  ReduceTask.globalVString="2";
 	  
 	  System.out.println("(should be 2) ReduceTask.globalVString = "+ReduceTask.globalVString);
-	  
-	 int reducer_delay =  context.getConfiguration().getInt("mapred.job.reducer_delay", 0);
+	  //int reducer_delay =0; 
+	  //reducer_delay =  context.getConfiguration().getInt("mapred.job.reducer_delay", 0);
 	 int local_BFT_flag = context.getConfiguration().getInt("mapred.job.bft", 1);//Integer.parseInt(conf.getInt("mapred.job.bft", 1);
 	 disableHashing_flag = context.getConfiguration().getInt("mapred.job.disableHashing", 0);
 	 int local_NUM_REPLICAS = context.getConfiguration().getInt("mapred.job.numreplicas",4);//Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
