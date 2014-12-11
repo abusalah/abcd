@@ -360,7 +360,7 @@ if(disableHashing_flag==0)//if(local_BFT_flag==3 || local_BFT_flag==2) //|| cont
     	  //System.out.println("Reducer is sleeping for 10000 milli seconds just for testing the ping checker");
     		//Thread.sleep(1000);//just for testing the ping checker
     		  
-    	  Thread.sleep(reducerdelay);
+    	  //Thread.sleep(reducerdelay);
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
     	  
