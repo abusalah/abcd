@@ -375,9 +375,11 @@ if(disableHashing_flag==0)//if(local_BFT_flag==3 || local_BFT_flag==2) //|| cont
 				+JobSubmitter.numApps_forbft2);
 				
 				StringBuffer sb = new StringBuffer();
-			    for(byte b : external_total_hash_byteArray) {
-			        sb.append(Integer.toHexString(b & 0xff));
-			    }
+				
+				//uncomment 1
+			    //for(byte b : external_total_hash_byteArray) {
+			    //    sb.append(Integer.toHexString(b & 0xff));
+			    //}
 
 				
 		  external_total_hash_string=sb.toString();
