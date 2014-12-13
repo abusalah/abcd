@@ -1461,6 +1461,11 @@ public static final Object lock = new Object();
 	     new Thread(r).start();//---bft: Thread(r).start() will make sure to run on a separate thread 
 	  */   
 	  
+	  //int injectReducerFault = context.getConfiguration().getInt("mapred.job.injectReducerFault", 0);
+	  
+	  //Configuration
+	  
+	  
 	  System.out.println("_________________________________________Entered main of MRAppMaster.java");
 	  System.out.println("__________inside main(String[] args) MRAppMaster.java________________Thread.currentThread().getStackTrace() = ");
 			  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
@@ -1513,6 +1518,18 @@ public static final Object lock = new Object();
         new MRAppMasterShutdownHook(appMaster), SHUTDOWN_HOOK_PRIORITY);
       JobConf conf = new JobConf(new YarnConfiguration());
       conf.addResource(new Path(MRJobConfig.JOB_CONF_FILE));
+      
+      
+      int injectAMFault = conf.getInt("mapred.job.injectAMFault", 0);//0 no faults, 1 yes faults
+      int AMdelay =  conf.getInt("mapred.job.AMdelay", 1);
+      
+      System.out.println("\n\n\n\n\n\n\n\n\n applicationAttemptId = "+applicationAttemptId);
+      
+      if(injectAMFault==1 && applicationAttemptId.getApplicationId().toString().split("_")[2].equals("0001")) 
+      {
+    	  Thread.sleep(AMdelay);
+    	  
+      }
       
       MRWebAppUtil.initialize(conf);
       // log the system properties

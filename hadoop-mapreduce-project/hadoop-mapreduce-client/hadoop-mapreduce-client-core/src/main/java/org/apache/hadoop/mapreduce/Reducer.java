@@ -245,6 +245,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	  int reducerdelay =1; 
 	  reducerdelay =  context.getConfiguration().getInt("mapred.job.reducerdelay", 1);
 	 int local_BFT_flag = context.getConfiguration().getInt("mapred.job.bft", 1);//Integer.parseInt(conf.getInt("mapred.job.bft", 1);
+	 int injectReducerFault = context.getConfiguration().getInt("mapred.job.injectReducerFault", 0);//0 no fault, 1 yes fault
 	 disableHashing_flag = context.getConfiguration().getInt("mapred.job.disableHashing", 0);
 	 int local_NUM_REPLICAS = context.getConfiguration().getInt("mapred.job.numreplicas",4);//Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
 	 int local_NUM_REDUCES = context.getConfiguration().getInt("mapreduce.job.reduces",4);//conf.getInt("mapreduce.job.reduces",1); 
@@ -359,8 +360,11 @@ if(disableHashing_flag==0)//if(local_BFT_flag==3 || local_BFT_flag==2) //|| cont
     	  
     	  //System.out.println("Reducer is sleeping for 10000 milli seconds just for testing the ping checker");
     		//Thread.sleep(1000);//just for testing the ping checker
-    		  
-    	  Thread.sleep(reducerdelay);
+    	  
+    	  if(injectReducerFault==1 && reducerNumber%local_NUM_REPLICAS==0)//this is will delay 1 replica of each reducer (the first replica) 
+    	  {    		  
+    		  	Thread.sleep(reducerdelay);
+    	  }
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
     	  
