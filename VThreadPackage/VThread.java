@@ -408,7 +408,7 @@ public static PrintWriter writer;
 				    
 				    //TODO : should be ==local_NUM_REDUCES*local_NUM_REPLICAS in case you have different replication factors
 				    //if(Collections.frequency(new ArrayList<String>(hash_sum_per_App_replica.keySet()), ApplicationNumberBase)==4) 
-				    if(ApplicationNumberBase_Touch.get(ApplicationNumberBase_withOutputName)>=(local_NUM_REDUCES-1)*4)//TODO: make it generic to num_replicas
+				    if(ApplicationNumberBase_Touch.get(ApplicationNumberBase_withOutputName)>=(local_NUM_REDUCES-1)*local_NUM_REPLICAS)//was 4 Dec14//TODO: make it generic to num_replicas
 				    {//the above line was ==local_NUM_REDUCES*4 . We made it >=(local_NUM_REDUCES-1)*4 to take the majority 3/4 instead of 4/4/
 				    	System.out.println("ALL hashes received, start comparing and sending ... for Application = "+ApplicationNumberBase_withOutputName);
 				    	int q=0;//hash_sum_per_App loop variable
