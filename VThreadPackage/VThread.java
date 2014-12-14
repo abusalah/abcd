@@ -216,9 +216,9 @@ public static PrintWriter writer;
 				    replicasHashes[receivedReducerNumber]=receivedHash;
 				    replicasHashes_set[unreplicatedReducerNumber]+=1;
 				    //--- This is just for testing received 3 hashes
-				    if(replicasHashes_set[unreplicatedReducerNumber]>=3)
+				    if(replicasHashes_set[unreplicatedReducerNumber]>=2)
 				    {
-				    	allreducers+="\nRECEIVED AT LEAST 3 CORRECT hashes for reducer "+unreplicatedReducerNumber+" \n";
+				    	allreducers+="\nRECEIVED AT LEAST "+replicasHashes_set[unreplicatedReducerNumber]+" CORRECT hashes for reducer "+unreplicatedReducerNumber+" \n";
 				    	System.out.println("\n\n "+allreducers+" \n\n");
 				    	elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
 		    			System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
@@ -447,12 +447,12 @@ public static PrintWriter writer;
 				    					tempEntry=hash_sum_per_App_Entery;//for next iteration
 				    					num_verified_apps++;//TODO: make it per application, cuz assume that you have mutiple independent applications running in the cluster
 				    					System.out.println("\nnum_verified_apps++\n");
-				    					if(num_verified_apps>=3)//TODO: make it generic to num_replicas - 1
+				    					if(num_verified_apps>=2)//TODO: make it generic to num_replicas - 1
 							    		{
-							    			System.out.println("\n\nRECEIVED AT LEAST 3 CORRECT APPLICATIONS\n\n");
+							    			System.out.println("\n\nRECEIVED AT LEAST "+num_verified_apps+" CORRECT APPLICATIONS\n\n");
 							    			elapsedTime = System.currentTimeMillis()/1000 - startTime;//elapsedTime = (new Date()).getTime() - startTime;	  
 							    			System.out.println("\n\n----------- elapsedTime in seconds = "+elapsedTime+"\n\n");
-							    			num_verified_apps=0;//for next set of application replicas				    			
+							    			//num_verified_apps=0;//for next set of application replicas				    			
 							    		}				   
 				    					allofthem=true;
 				    				}
