@@ -55,18 +55,18 @@ import org.apache.hadoop.yarn.util.Records;
 @Stable
 public abstract class AllocateRequest {
 	
-	public String taskAttemptID_IN_AllocateRequest_abstract ="";
+	//public String taskAttemptID_IN_AllocateRequest_abstract ="";
 	
 	
 
-  public String getTaskAttemptID_IN_AllocateRequest_abstract() {
-		return this.taskAttemptID_IN_AllocateRequest_abstract;
-	}
-
-	public void setTaskAttemptID_IN_AllocateRequest_abstract(
-			String taskAttemptID_IN_AllocateRequest_abstract) {
-		this.taskAttemptID_IN_AllocateRequest_abstract = taskAttemptID_IN_AllocateRequest_abstract;
-	}
+//  public String getTaskAttemptID_IN_AllocateRequest_abstract() {
+//		return this.taskAttemptID_IN_AllocateRequest_abstract;
+//	}
+//
+//	public void setTaskAttemptID_IN_AllocateRequest_abstract(
+//			String taskAttemptID_IN_AllocateRequest_abstract) {
+//		this.taskAttemptID_IN_AllocateRequest_abstract = taskAttemptID_IN_AllocateRequest_abstract;
+//	}
 
 @Public
   @Stable

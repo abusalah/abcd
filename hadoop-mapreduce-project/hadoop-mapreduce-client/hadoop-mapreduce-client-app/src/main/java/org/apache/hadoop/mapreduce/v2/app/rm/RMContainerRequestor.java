@@ -56,7 +56,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
   
   private static final Log LOG = LogFactory.getLog(RMContainerRequestor.class);
 
-  public static String taskAttemptID_from_RMContainerRequestor="";
+  //public static String taskAttemptID_from_RMContainerRequestor="";
   
   private int lastResponseID;
   private Resource availableResources;
@@ -112,7 +112,7 @@ public abstract class RMContainerRequestor extends RMCommunicator {
       
       System.out.println("INSIDE 1 ContainerRequest and attemptID = "+attemptID);
       
-      taskAttemptID_from_RMContainerRequestor=attemptID.toString();
+      //taskAttemptID_from_RMContainerRequestor=attemptID.toString();
       
     }
     
@@ -173,16 +173,16 @@ public abstract class RMContainerRequestor extends RMCommunicator {
           new ArrayList<ContainerId>(release), blacklistRequest);
     AllocateResponse allocateResponse;
     
-    System.out.println("in makeRemoteRequest taskAttemptID_from_RMContainerRequestor = "
-    +taskAttemptID_from_RMContainerRequestor);
+//    System.out.println("in makeRemoteRequest taskAttemptID_from_RMContainerRequestor = "
+//    +taskAttemptID_from_RMContainerRequestor);
+//    
+    //allocateRequest.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_from_RMContainerRequestor;
     
-    allocateRequest.taskAttemptID_IN_AllocateRequest_abstract=taskAttemptID_from_RMContainerRequestor;
+    //allocateRequest.setTaskAttemptID_IN_AllocateRequest_abstract(taskAttemptID_from_RMContainerRequestor);
     
-    allocateRequest.setTaskAttemptID_IN_AllocateRequest_abstract(taskAttemptID_from_RMContainerRequestor);
-    
-    System.out.println("allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract() = "
-    +allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract());
-    
+//    System.out.println("allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract() = "
+//    +allocateRequest.getTaskAttemptID_IN_AllocateRequest_abstract());
+//    
     //allocateRequest.setTaskAttemptID_IN_AllocateRequest_abstract222(taskAttemptID_from_RMContainerRequestor);
     
     
