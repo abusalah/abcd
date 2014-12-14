@@ -77,7 +77,7 @@ public class ApplicationMasterProtocolPBClientImpl implements ApplicationMasterP
 	  
 	  System.out.println("---------- aaabbbccc1 "+request.taskAttemptID_IN_AllocateRequest_abstract 
 			  +request.getTaskAttemptID_IN_AllocateRequest_abstract());
-	  request.getTaskAttemptID_IN_AllocateRequest_abstract222()
+	  request.getTaskAttemptID_IN_AllocateRequest_abstract222();
 	  
     AllocateRequestProto requestProto =
         ((AllocateRequestPBImpl) request).getProto();
