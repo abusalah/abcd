@@ -108,19 +108,19 @@ public class TeraSort extends Configured implements Tool {
       
       InnerTrieNode(int level) {
         super(level);
-        System.out.println("in InnerTrieNode level = "+level);
+        //System.out.println("in InnerTrieNode level = "+level);
       }
       int findPartition(Text key) {
-    	  System.out.println("\n\nENTERED findPartition 1 in TeraSort.java \n\n");
+    	  //System.out.println("\n\nENTERED findPartition 1 in TeraSort.java \n\n");
         int level = getLevel();
-        System.out.println("in findPartition in InnerTrieNode level = "+level);
+        //System.out.println("in findPartition in InnerTrieNode level = "+level);
         if (key.getLength() <= level) {
         	int ret1 = child[0].findPartition(key);
-        	System.out.println("ret1 = "+ret1);
+        	//System.out.println("ret1 = "+ret1);
           return ret1;
         }
         int ret2 = child[key.getBytes()[level] & 0xff].findPartition(key); 
-        System.out.println("ret2 = "+ret2);
+        //System.out.println("ret2 = "+ret2);
         return ret2;
       }
       void setChild(int idx, TrieNode child) {
@@ -153,19 +153,19 @@ public class TeraSort extends Configured implements Tool {
         this.splitPoints = splitPoints;
         this.lower = lower;
         this.upper = upper;
-        System.out.println("in LeafTrieNode constructor in LeafTrieNode level = "+level+
-        		" splitPoints.length = "+splitPoints.length+" lower = "+lower+" upper = "+upper);
+        //System.out.println("in LeafTrieNode constructor in LeafTrieNode level = "+level+
+        //		" splitPoints.length = "+splitPoints.length+" lower = "+lower+" upper = "+upper);
       }
       int findPartition(Text key) {
-    	  System.out.println("\n\nENTERED findPartition 2 in TeraSort.java lower = "+lower+" upper = "+upper+"\n\n");
+    	  //System.out.println("\n\nENTERED findPartition 2 in TeraSort.java lower = "+lower+" upper = "+upper+"\n\n");
     	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
         for(int i=lower; i<upper; ++i) {
           if (splitPoints[i].compareTo(key) > 0) {
-        	  System.out.println("ret3 = "+i);
+        	  //System.out.println("ret3 = "+i);
             return i;
           }
         }
-        System.out.println("ret4 = "+upper);
+        //System.out.println("ret4 = "+upper);
         return upper;
       }
       void print(PrintStream strm) throws IOException {
@@ -198,7 +198,7 @@ public class TeraSort extends Configured implements Tool {
       
       
       
-      System.out.println("\n\nENTERED readPartitions in TeraSort.java and reduces = "+reduces+"\n\n ");
+      //System.out.println("\n\nENTERED readPartitions in TeraSort.java and reduces = "+reduces+"\n\n ");
       
       Text[] result = new Text[reduces - 1];
       DataInputStream reader = fs.open(p);
@@ -222,10 +222,10 @@ public class TeraSort extends Configured implements Tool {
      */
     private static TrieNode buildTrie(Text[] splits, int lower, int upper, 
                                       Text prefix, int maxDepth) {
-    	System.out.println("lower = "+lower+" upper = "+upper+" maxDepth = "+maxDepth);
+    	//System.out.println("lower = "+lower+" upper = "+upper+" maxDepth = "+maxDepth);
       int depth = prefix.getLength();
       if (depth >= maxDepth || lower == upper) {
-    	  System.out.println("ENETERD lower = "+lower+" upper = "+upper+" depth = "+depth+" maxDepth = "+maxDepth); 
+    	  //System.out.println("ENETERD lower = "+lower+" upper = "+upper+" depth = "+depth+" maxDepth = "+maxDepth); 
         return new LeafTrieNode(depth, splits, lower, upper);
       }
       InnerTrieNode result = new InnerTrieNode(depth);
@@ -246,16 +246,16 @@ public class TeraSort extends Configured implements Tool {
         result.child[ch] = buildTrie(splits, lower, currentBound, trial, 
                                      maxDepth);
         
-        System.out.println("~~~~INSIDE buildTrie insdie the while splits = "+splits+" lower = "+lower+" currentBound = "
-        +currentBound+" maxDepth = "+maxDepth);
+        //System.out.println("~~~~INSIDE buildTrie insdie the while splits = "+splits+" lower = "+lower+" currentBound = "
+        //+currentBound+" maxDepth = "+maxDepth);
       }
       // pick up the rest
       trial.getBytes()[depth] = (byte) 255;
       result.child[255] = buildTrie(splits, currentBound, upper, trial,
                                     maxDepth);
       
-      System.out.println("++++INSIDE buildTrie outside the while splits = "+splits+" upper = "+upper+" currentBound = "
-    	        +currentBound+" maxDepth = "+maxDepth);
+      //System.out.println("++++INSIDE buildTrie outside the while splits = "+splits+" upper = "+upper+" currentBound = "
+    	//        +currentBound+" maxDepth = "+maxDepth);
       
       return result;
     }
@@ -266,7 +266,7 @@ public class TeraSort extends Configured implements Tool {
         this.conf = conf;
         Path partFile = new Path(TeraInputFormat.PARTITION_FILENAME);
         splitPoints = readPartitions(fs, partFile, conf);
-        System.out.println("----------- splitPoints.length = "+splitPoints.length);
+        //System.out.println("----------- splitPoints.length = "+splitPoints.length);
         trie = buildTrie(splitPoints, 0, splitPoints.length, new Text(), 2);
       } catch (IOException ie) {
         throw new IllegalArgumentException("can't read partitions file", ie);
@@ -281,11 +281,11 @@ public class TeraSort extends Configured implements Tool {
     }
 
     public int getPartition(Text key, Text value, int numPartitions) {
-    	System.out.println("in getPartition in TeraSort.java BFT_FLAG_LOCAL = "+BFT_FLAG_LOCAL);
-    	System.out.println("in getPartition in TeraSort.java Globals.BFT_FLAG_LOCAL_global = "+Globals.BFT_FLAG_LOCAL_global);
-    	System.out.println("in getPartition in TeraSort.java conf.getInt(\"mapred.job.bft\", 1) = "+conf.getInt("mapred.job.bft", 1));
-    	
-    	System.out.println("numPartitions = "+numPartitions);
+//    	System.out.println("in getPartition in TeraSort.java BFT_FLAG_LOCAL = "+BFT_FLAG_LOCAL);
+//    	System.out.println("in getPartition in TeraSort.java Globals.BFT_FLAG_LOCAL_global = "+Globals.BFT_FLAG_LOCAL_global);
+//    	System.out.println("in getPartition in TeraSort.java conf.getInt(\"mapred.job.bft\", 1) = "+conf.getInt("mapred.job.bft", 1));
+//    	
+//    	System.out.println("numPartitions = "+numPartitions);
     	
     	
     	if(conf.getInt("mapred.job.bft", 1)==3)
@@ -294,9 +294,9 @@ public class TeraSort extends Configured implements Tool {
     		//numPartitions=numPartitions/conf.getInt("mapred.job.numreplicas", 1);
     		//System.out.println("numPartitions = "+numPartitions);
 		}
-    	System.out.println("\n\nENTERED getPartition 1 in TeraSort.java \n\n");
+    	//System.out.println("\n\nENTERED getPartition 1 in TeraSort.java \n\n");
     	int partitionReturnValue=trie.findPartition(key);
-    	System.out.println("partitionReturnValue = "+partitionReturnValue);
+    	//System.out.println("partitionReturnValue = "+partitionReturnValue);
     	return partitionReturnValue;
       //return trie.findPartition(key);
     }
@@ -328,7 +328,7 @@ public class TeraSort extends Configured implements Tool {
       prefixesPerReduce = (int) Math.ceil((1 << (8 * PREFIX_LENGTH)) / 
         (float) newNumReduces);
       
-      System.out.println("prefixesPerReduce = "+prefixesPerReduce);
+      //System.out.println("prefixesPerReduce = "+prefixesPerReduce);
     }
     
     public Configuration getConf() {
@@ -337,7 +337,7 @@ public class TeraSort extends Configured implements Tool {
     
     @Override
     public int getPartition(Text key, Text value, int numPartitions) {
-    	System.out.println("\n\nENTERED getPartition 2 in TeraSort.java \n\n");
+    	//System.out.println("\n\nENTERED getPartition 2 in TeraSort.java \n\n");
     	//if(conf.getInt("mapred.job.bft", 1)==3){numPartitions=numPartitions/conf.getInt("mapred.job.numreplicas", 1);}
       byte[] bytes = key.getBytes();
       int len = Math.min(PREFIX_LENGTH, key.getLength());
@@ -347,7 +347,7 @@ public class TeraSort extends Configured implements Tool {
       }
       int retValue = prefix / prefixesPerReduce;
       
-      System.out.println("==== retValue = "+retValue);
+      //System.out.println("==== retValue = "+retValue);
       
       return retValue;
     }
@@ -370,9 +370,9 @@ public class TeraSort extends Configured implements Tool {
   }
 
   public int run(String[] args) throws Exception {
-	  System.out.println("\n\nENTERED run in TeraSort.java\n\n");
+	  //System.out.println("\n\nENTERED run in TeraSort.java\n\n");
 	  
-	  System.out.println("------------who calls run in TeraSort.java : --------------");
+	  //System.out.println("------------who calls run in TeraSort.java : --------------");
 	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 	  
     LOG.info("starting");
@@ -391,13 +391,13 @@ public class TeraSort extends Configured implements Tool {
     TeraInputFormat.setInputPaths(job, inputDir);
     FileOutputFormat.setOutputPath(job, outputDir);
     
-    System.out.println("\n\n job.getNumReduceTasks() = "+job.getNumReduceTasks()+"\n\n");
+    //System.out.println("\n\n job.getNumReduceTasks() = "+job.getNumReduceTasks()+"\n\n");
     
     if(job.getConfiguration().getInt("mapred.job.bft", 1)==3)
     {
     	job.setNumReduceTasks(job.getNumReduceTasks()/job.getConfiguration().getInt("mapred.job.numreplicas", 1));
     	
-    	System.out.println("\n\n new job.getNumReduceTasks() = "+job.getNumReduceTasks()+"\n\n");
+    	//System.out.println("\n\n new job.getNumReduceTasks() = "+job.getNumReduceTasks()+"\n\n");
 	}
     
     job.setJobName("TeraSort");
@@ -436,19 +436,19 @@ public class TeraSort extends Configured implements Tool {
 	{
         case 1://No BFT
         {
-        	System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	//System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
         	job.waitForCompletion(true);
         	break;
         }
         case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
         {
-        	System.out.println("------in TeraSort.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	//System.out.println("------in TeraSort.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
         	job.submit();
         	break;	        
         }
         case 3://BFT: replicate mappers and reducers (both r times ?), single AM
         {
-        	System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+        	//System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
         	job.waitForCompletion(true);
         	break;
         }
@@ -459,7 +459,7 @@ public class TeraSort extends Configured implements Tool {
         }
         default://deal with it as No BFT
         {
-        	System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
+        	//System.out.println("------in TeraSort.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
         	job.waitForCompletion(true);
         	break;
         }
@@ -478,7 +478,7 @@ public class TeraSort extends Configured implements Tool {
    * @param args
    */
   public static void main(String[] args) throws Exception {
-	  System.out.println("\n\nENTERED main in TeraSort.java\n\n");
+	  //System.out.println("\n\nENTERED main in TeraSort.java\n\n");
 	  
 	  
 	  //int r3=0;//default//number of AM replicas
@@ -497,8 +497,8 @@ public class TeraSort extends Configured implements Tool {
        			Element eElement = (Element) nNode;
       			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.bft"))
       			{
-      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
-      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+      				//System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+      				//System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
       				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
       				Globals.BFT_FLAG_LOCAL_global=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
       			}
@@ -512,31 +512,31 @@ public class TeraSort extends Configured implements Tool {
 		{
 	        case 1://No BFT
 	        {
-	        	System.out.println("------ENTERED case 1---------");
+	        	//System.out.println("------ENTERED case 1---------");
 	        	r3=1;
 	        	break;
 	        }
 	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
 	        {
-	        	System.out.println("------ENTERED case 2---------");
+	        	//System.out.println("------ENTERED case 2---------");
 	        	r3=4;
 	        	break;	        
 	        }
 	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
 	        {
-	        	System.out.println("------ENTERED case 3---------");
+	        	//System.out.println("------ENTERED case 3---------");
 	        	r3=1;
 	        	break;
 	        }
 	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
 	        {
-	        	System.out.println("------ENTERED case 4---------");
+	        	//System.out.println("------ENTERED case 4---------");
 	        	r3=4;
 	        	break;	        
 	        }
 	        default://deal with it as No BFT
 	        {
-	        	System.out.println("------ENTERED default---------");
+	        	//System.out.println("------ENTERED default---------");
 	        	r3=1;
 	        	break;
 	        }
