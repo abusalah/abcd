@@ -121,12 +121,12 @@ public class MedianWeather {
 		FloatWritable outputTemp = new FloatWritable();
 		Text outputValue = new Text();
 
-		public void reduce(Text key, Iterable<Text> values, Context context)
+		public void reduce(Text key, Iterable<FloatWritable> values, Context context)//Iterable<Text>
 				throws IOException, InterruptedException {
-			// FloatWritable median = findMedian(values);
+			FloatWritable median = this.findMedian(values);
 			long count = 0;
 			double tempavg = 0.0, dewpointavg = 0.0;
-			for (Text val : values) {
+			for (FloatWritable val : values) {
 				count++;
 				String valArrp[] = val.toString().split("\t");
 				try {
@@ -142,7 +142,7 @@ public class MedianWeather {
 			context.write(key, outputValue);
 		}
 
-		private FloatWritable findMedian(Iterable<FloatWritable> values) {
+		public FloatWritable findMedian(Iterable<FloatWritable> values) {//Iterable<FloatWritable> values
 			List<FloatWritable> sortedValues = sort(values);
 			int medianPos = sortedValues.size() / 2 + 1;
 			return sortedValues.get(medianPos - 1);
