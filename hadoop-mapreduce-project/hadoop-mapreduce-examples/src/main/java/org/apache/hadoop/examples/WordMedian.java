@@ -129,34 +129,34 @@ public class WordMedian extends Configured implements Tool {
   private double readAndFindMedian(String path, int medianIndex1,
       int medianIndex2, Configuration conf) throws IOException {
 	  
-	  System.out.println("----_0");
+//	  System.out.println("----_0");
 	  
     FileSystem fs = FileSystem.get(conf);
     Path file = new Path(path, "part-r-00000"); 
     
-    System.out.println("----_1");
+//    System.out.println("----_1");
 
     if (!fs.exists(file))
       throw new IOException("Output not found!");
 
-    System.out.println("----_2");
+//    System.out.println("----_2");
     
     BufferedReader br = null;
 
     try {
     	
-    	System.out.println("----_3");
+//    	System.out.println("----_3");
     	
       br = new BufferedReader(new InputStreamReader(fs.open(file), Charsets.UTF_8));
       int num = 0;
       
-  	 System.out.println("----_4");
+//  	 System.out.println("----_4");
 
    
       String line;  
       while ((line = br.readLine()) != null) {
     	  
-      	System.out.println("----_5");
+//      	System.out.println("----_5");
 
         StringTokenizer st = new StringTokenizer(line);
 
@@ -169,17 +169,17 @@ public class WordMedian extends Configured implements Tool {
         int prevNum = num;
         num += Integer.parseInt(lengthFreq);
 
-    	System.out.println("----_5");
+//    	System.out.println("----_5");
 
         
         if (medianIndex2 >= prevNum && medianIndex1 <= num) {
-        	System.out.println("----_6 1");
+//        	System.out.println("----_6 1");
 
           System.out.println("The median is: " + currLen);
           br.close();
           return Double.parseDouble(currLen);
         } else if (medianIndex2 >= prevNum && medianIndex1 < num) {
-        	System.out.println("----_6 2");
+//        	System.out.println("----_6 2");
 
           String nextCurrLen = st.nextToken();
           double theMedian = (Integer.parseInt(currLen) + Integer
@@ -244,31 +244,31 @@ public class WordMedian extends Configured implements Tool {
 		{
 	        case 1://No BFT
 	        {
-	        	System.out.println("------ENTERED case 1---------");
+//	        	System.out.println("------ENTERED case 1---------");
 	        	r3=1;
 	        	break;
 	        }
 	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
 	        {
-	        	System.out.println("------ENTERED case 2---------");
+//	        	System.out.println("------ENTERED case 2---------");
 	        	r3=4;
 	        	break;	        
 	        }
 	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
 	        {
-	        	System.out.println("------ENTERED case 3---------");
+//	        	System.out.println("------ENTERED case 3---------");
 	        	r3=1;
 	        	break;
 	        }
 	        case 4://BFT: replicate the AM (r3 times in WordCount.java) and replicate mappers and reducers (both r times)
 	        {
-	        	System.out.println("------ENTERED case 4---------");
+//	        	System.out.println("------ENTERED case 4---------");
 	        	r3=4;
 	        	break;	        
 	        }
 	        default://deal with it as No BFT
 	        {
-	        	System.out.println("------ENTERED default---------");
+//	        	System.out.println("------ENTERED default---------");
 	        	r3=1;
 	        	break;
 	        }
@@ -285,14 +285,14 @@ public class WordMedian extends Configured implements Tool {
 		    		
 		    
 		    
-		    System.out.println("------INSIDE the for loop , r3 = --------- "+r3+" -------------- ");
+//		    System.out.println("------INSIDE the for loop , r3 = --------- "+r3+" -------------- ");
 		    	
 
 
     @SuppressWarnings("deprecation")
     Job job = new Job(conf[i], "word median");
     
-	  System.out.println("job.getJobID() = "+job.getJobID()+" job.getJobName() = "+job.getJobName());
+//	  System.out.println("job.getJobID() = "+job.getJobID()+" job.getJobName() = "+job.getJobName());
 
     
     job.setJarByClass(WordMedian.class);
@@ -309,19 +309,19 @@ public class WordMedian extends Configured implements Tool {
 	{
         case 1://No BFT
         {
-        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+//        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
         	job.waitForCompletion(true);
         	break;
         }
         case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
         {
-        	System.out.println("------in WordMedian.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+//        	System.out.println("------in WordMedian.java----job.submit();-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
         	job.submit();
         	break;	        
         }
         case 3://BFT: replicate mappers and reducers (both r times ?), single AM
         {
-        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
+//        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL  = "+BFT_FLAG_LOCAL);
         	job.waitForCompletion(true);
         	break;
         }
@@ -332,7 +332,7 @@ public class WordMedian extends Configured implements Tool {
         }
         default://deal with it as No BFT
         {
-        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
+//        	System.out.println("------in WordMedian.java----job.waitForCompletion(true);-----cuz BFT_FLAG_LOCAL is in default case");
         	job.waitForCompletion(true);
         	break;
         }
@@ -357,7 +357,7 @@ public class WordMedian extends Configured implements Tool {
 
    median = readAndFindMedian(args[1], medianIndex1, medianIndex2, conf[0]);
 
-   System.out.println("my median = "+median + " totalWords = "+totalWords + " medianIndex1 = "+medianIndex1 +" medianIndex2 = "+medianIndex2 );
+//   System.out.println("my median = "+median + " totalWords = "+totalWords + " medianIndex1 = "+medianIndex1 +" medianIndex2 = "+medianIndex2 );
 
     
     
