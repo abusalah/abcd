@@ -158,7 +158,7 @@ public class TeraSort extends Configured implements Tool {
       }
       int findPartition(Text key) {
     	  //System.out.println("\n\nENTERED findPartition 2 in TeraSort.java lower = "+lower+" upper = "+upper+"\n\n");
-    	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+    	  //for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
         for(int i=lower; i<upper; ++i) {
           if (splitPoints[i].compareTo(key) > 0) {
         	  //System.out.println("ret3 = "+i);
@@ -373,7 +373,7 @@ public class TeraSort extends Configured implements Tool {
 	  //System.out.println("\n\nENTERED run in TeraSort.java\n\n");
 	  
 	  //System.out.println("------------who calls run in TeraSort.java : --------------");
-	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  //for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
 	  
     LOG.info("starting");
     
