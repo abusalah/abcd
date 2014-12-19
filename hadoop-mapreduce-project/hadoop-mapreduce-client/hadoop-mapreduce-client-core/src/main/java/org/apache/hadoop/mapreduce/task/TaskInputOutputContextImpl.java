@@ -123,10 +123,22 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 	  
 	  disableHashing_flag = this.getConfiguration().getInt("mapred.job.disableHashing", 0);
 	  
-//	  System.out.println("___________inside write() in TaskInputOutputContextImpl.java_______________Thread.currentThread().getStackTrace() = ");
-//	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
-//	  
+	  System.out.println("___________inside write() in TaskInputOutputContextImpl.java_______________Thread.currentThread().getStackTrace() = ");
+	  for (StackTraceElement ste : Thread.currentThread().getStackTrace()) {System.out.println("ste = "+ste);}
+	  
 	  String reducerORmapper = this.local_taskID.split("_")[3];
+	  
+	  System.out.println("\n\n\n\nENTERED write\n\n\n\n\n");
+	  
+	  if(key !=null)
+	  {
+		  System.out.println("key = "+key);  
+	  }
+	  if(value !=null)
+	  {
+		  System.out.println("value = "+value); 
+	  }
+	  
 	  
 	  if(reducerORmapper.equals("r") && disableHashing_flag==0 && key !=null && value !=null )
 	  {
