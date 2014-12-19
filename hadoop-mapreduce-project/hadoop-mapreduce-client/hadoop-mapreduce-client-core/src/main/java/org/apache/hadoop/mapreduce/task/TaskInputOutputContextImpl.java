@@ -128,7 +128,7 @@ public abstract class TaskInputOutputContextImpl<KEYIN,VALUEIN,KEYOUT,VALUEOUT>
 //	  
 	  String reducerORmapper = this.local_taskID.split("_")[3];
 	  
-	  if(reducerORmapper.equals("r") && disableHashing_flag==0 )
+	  if(reducerORmapper.equals("r") && disableHashing_flag==0 && key !=null && value !=null )
 	  {
 		  KV=key.toString()+value.toString();
 		  //total_hash+=KV.hashCode();//This was the old way of doing the hashes and it worked perfectly
