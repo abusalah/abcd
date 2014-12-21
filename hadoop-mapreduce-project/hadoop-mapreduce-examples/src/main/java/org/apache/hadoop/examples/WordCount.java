@@ -124,6 +124,7 @@ public class WordCount {
   public static void main(String[] args) throws Exception {
 	  int r3=0;//default//number of AM replicas
 	  int BFT_FLAG_LOCAL = 0;
+	  int NUM_REPLICAS_LOCAL = 0;
 	  
 	  try {//---- mapred-site.xml parser // new for bft
       	File fXmlFile = new File("etc/hadoop/mapred-site.xml");
@@ -142,6 +143,12 @@ public class WordCount {
       				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
       				BFT_FLAG_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
       			}
+      			if(eElement.getElementsByTagName("name").item(0).getTextContent().equals("mapred.job.numreplicas"))
+      			{
+      				System.out.println(".........name : " + eElement.getElementsByTagName("name").item(0).getTextContent());
+      				System.out.println(".........value : " + eElement.getElementsByTagName("value").item(0).getTextContent());
+      				NUM_REPLICAS_LOCAL=Integer.parseInt(eElement.getElementsByTagName("value").item(0).getTextContent().toString());
+      			}
       		}
       	}
           } catch (Exception e) {
@@ -159,7 +166,7 @@ public class WordCount {
 	        case 2://BFT: replicate the AM(it should replicate the mappers and reducers by itself)   //deal with it as No BFT
 	        {
 	        	System.out.println("------ENTERED case 2---------");
-	        	r3=4;
+	        	r3=NUM_REPLICAS_LOCAL;//r3=4;
 	        	break;	        
 	        }
 	        case 3://BFT: replicate mappers and reducers (both r times ?), single AM
