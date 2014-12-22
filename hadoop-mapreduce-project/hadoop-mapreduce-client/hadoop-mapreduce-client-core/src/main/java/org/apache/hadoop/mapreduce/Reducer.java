@@ -246,6 +246,7 @@ public class Reducer<KEYIN,VALUEIN,KEYOUT,VALUEOUT> {
 	  reducerdelay =  context.getConfiguration().getInt("mapred.job.reducerdelay", 1);
 	 int local_BFT_flag = context.getConfiguration().getInt("mapred.job.bft", 1);//Integer.parseInt(conf.getInt("mapred.job.bft", 1);
 	 int injectReducerFault = context.getConfiguration().getInt("mapred.job.injectReducerFault", 0);//0 no fault, 1 yes fault
+	 int injectAppFault = context.getConfiguration().getInt("mapred.job.injectAppFault", 0);
 	 disableHashing_flag = context.getConfiguration().getInt("mapred.job.disableHashing", 0);
 	 int local_NUM_REPLICAS = context.getConfiguration().getInt("mapred.job.numreplicas",4);//Integer.parseInt(lineReceived.split(" ")[0].split("-")[1]);//conf.getInt("mapred.job.numreplicas",4);
 	 int local_NUM_REDUCES = context.getConfiguration().getInt("mapreduce.job.reduces",4);//conf.getInt("mapreduce.job.reduces",1); 
@@ -364,6 +365,11 @@ if(disableHashing_flag==0)//if(local_BFT_flag==3 || local_BFT_flag==2) //|| cont
     	  if(injectReducerFault==1 && reducerNumber%local_NUM_REPLICAS==0)//this is will delay 1 replica of each reducer (the first replica) 
     	  {    		  
     		  	Thread.sleep(reducerdelay);
+    	  }
+    	  
+    	  if(injectAppFault==1 && applicationNumber_2%2==0)
+    	  {
+    		  Thread.sleep(reducerdelay);
     	  }
 	      
     	  System.out.println("ENTERED if(reducerORmapper.equals(\"r\"))");
